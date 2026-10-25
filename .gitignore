@@ -1,0 +1,21 @@
+# secrets
+.env
+.env.local
+# python
+backend/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+backend/*.db
+backend/test_finsight.db
+*.egg-info/
+# node
+node_modules/
+frontend/dist/
+frontend-v2/dist/
+*.tsbuildinfo
+services/hmem-sidecar/vendor/
+services/hmem-sidecar/.hmem-state/
+# caches
+.cache/
+.DS_Store

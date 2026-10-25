@@ -1,0 +1,34 @@
+# docker compose up --build   ->  http://localhost:8080
+# Reads ./.env (copy .env.example). Sample mode works with no credentials.
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment: { POSTGRES_USER: finsight, POSTGRES_PASSWORD: finsight, POSTGRES_DB: finsight }
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck: { test: ["CMD", "pg_isready", "-U", "finsight"], interval: 3s, retries: 20 }
+
+  hmem:
+    build: { context: ., dockerfile: docker/hmem.Dockerfile }
+    volumes: [hmemdata:/data]
+
+  backend:
+    build: { context: ., dockerfile: docker/backend.Dockerfile }
+    env_file: [{ path: .env, required: false }]
+    environment:
+      DATABASE_URL: postgresql://finsight:finsight@postgres:5432/finsight
+      HMEM_URL: http://hmem:8765
+      FINSIGHT_CACHE_DIR: /cache
+      # A Zetaris or Meterless Runtime on your host machine is reachable at host.docker.internal.
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    volumes: [cache:/cache]
+    depends_on:
+      postgres: { condition: service_healthy }
+      hmem: { condition: service_started }
+    ports: ["8000:8000"]
+
+  frontend:
+    build: { context: ., dockerfile: docker/frontend.Dockerfile }
+    depends_on: [backend]
+    ports: ["8080:80"]
+
+volumes: { pgdata: {}, hmemdata: {}, cache: {} }

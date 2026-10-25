@@ -1,0 +1,8 @@
+{"fields": ["cik", "name", "ticker", "exchange"], "data": [
+  [320193, "Apple Inc.", "AAPL", "Nasdaq"],
+  [1321655, "Palantir Technologies Inc.", "PLTR", "Nasdaq"],
+  [1067983, "BERKSHIRE HATHAWAY INC", "BRK-B", "NYSE"],
+  [1652044, "Alphabet Inc.", "GOOGL", "Nasdaq"],
+  [1652044, "Alphabet Inc.", "GOOG", "Nasdaq"],
+  [9999999, "Palantir Lookalike Holdings", "PLTX", "OTC"]
+]}

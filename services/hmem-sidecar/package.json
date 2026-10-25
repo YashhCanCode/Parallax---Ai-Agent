@@ -1,0 +1,16 @@
+{
+  "name": "finsight-hmem-sidecar",
+  "version": "0.1.0",
+  "description": "FinSight AI memory service: a small HTTP wrapper around the Meterless H-MEM reference engine.",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "setup": "npx --yes degit meterless/meterless/engines/hmem/reference vendor/hmem --force && cd vendor/hmem && npm install --no-audit --no-fund",
+    "start": "tsx server.ts",
+    "test": "tsx --test test/*.test.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0"
+  }
+}

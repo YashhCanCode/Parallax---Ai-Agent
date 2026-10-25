@@ -1,0 +1,10 @@
+**/node_modules
+**/.venv
+**/vendor
+**/.hmem-state
+frontend-v2/dist
+.cache
+.env
+*.db
+.git
+frontend/

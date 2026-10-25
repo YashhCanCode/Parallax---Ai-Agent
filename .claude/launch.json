@@ -1,0 +1,32 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "backend",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-c",
+        "cd backend && .venv/bin/uvicorn app.main:app --port 8000"
+      ],
+      "port": 8000
+    },
+    {
+      "name": "hmem",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-c",
+        "cd services/hmem-sidecar && npm start"
+      ],
+      "port": 8765
+    },
+    {
+      "name": "frontend-v2",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-c",
+        "cd frontend-v2 && npm run dev -- --host 127.0.0.1"
+      ],
+      "port": 5174
+    }
+  ]
+}

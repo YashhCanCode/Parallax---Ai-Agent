@@ -1,0 +1,1024 @@
+{
+  "created_at": "2026-10-24T10:46:37.322653+00:00",
+  "updated_at": "2026-10-24T12:05:23.018706+00:00",
+  "zetaris_base_url": "http://localhost:3000",
+  "lightning_db": "FINSIGHT_SEC",
+  "container": "finsight",
+  "views": [
+    {
+      "ticker": "AAPL",
+      "metric": "current_assets",
+      "tag": "AssetsCurrent",
+      "view": "aapl_assets_current",
+      "zetaris_rows": 144,
+      "sec_rows": 144,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "AAPL",
+      "metric": "current_liabilities",
+      "tag": "LiabilitiesCurrent",
+      "view": "aapl_liabilities_current",
+      "zetaris_rows": 144,
+      "sec_rows": 144,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "AAPL",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebt",
+      "view": "aapl_ltd",
+      "zetaris_rows": 54,
+      "sec_rows": 54,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "AAPL",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebtNoncurrent",
+      "view": "aapl_ltd_noncurrent",
+      "zetaris_rows": 90,
+      "sec_rows": 90,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "AAPL",
+      "metric": "net_income",
+      "tag": "NetIncomeLoss",
+      "view": "aapl_net_income",
+      "zetaris_rows": 338,
+      "sec_rows": 338,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "AAPL",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivities",
+      "view": "aapl_ocf",
+      "zetaris_rows": 134,
+      "sec_rows": 134,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "AAPL",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations",
+      "view": "aapl_ocf_cont",
+      "zetaris_rows": 30,
+      "sec_rows": 30,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "AAPL",
+      "metric": "revenue",
+      "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "view": "aapl_rev_asc606",
+      "zetaris_rows": 117,
+      "sec_rows": 117,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "AAPL",
+      "metric": "revenue",
+      "tag": "Revenues",
+      "view": "aapl_revenues",
+      "zetaris_rows": 11,
+      "sec_rows": 11,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "AAPL",
+      "metric": "revenue",
+      "tag": "SalesRevenueNet",
+      "view": "aapl_sales_revenue_net",
+      "zetaris_rows": 210,
+      "sec_rows": 210,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "F",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebtNoncurrent",
+      "view": "f_ltd_noncurrent",
+      "zetaris_rows": 4,
+      "sec_rows": 4,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "F",
+      "metric": "net_income",
+      "tag": "NetIncomeLoss",
+      "view": "f_net_income",
+      "zetaris_rows": 187,
+      "sec_rows": 187,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "F",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations",
+      "view": "f_ocf_cont",
+      "zetaris_rows": 91,
+      "sec_rows": 91,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "F",
+      "metric": "revenue",
+      "tag": "Revenues",
+      "view": "f_revenues",
+      "zetaris_rows": 231,
+      "sec_rows": 231,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "F",
+      "metric": "revenue",
+      "tag": "SalesRevenueNet",
+      "view": "f_sales_revenue_net",
+      "zetaris_rows": 104,
+      "sec_rows": 104,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "GOOGL",
+      "metric": "current_assets",
+      "tag": "AssetsCurrent",
+      "view": "googl_assets_current",
+      "zetaris_rows": 90,
+      "sec_rows": 90,
+      "verified_at": "2026-10-24T12:05:23.018706+00:00"
+    },
+    {
+      "ticker": "GOOGL",
+      "metric": "current_liabilities",
+      "tag": "LiabilitiesCurrent",
+      "view": "googl_liabilities_current",
+      "zetaris_rows": 90,
+      "sec_rows": 90,
+      "verified_at": "2026-10-24T12:05:23.018706+00:00"
+    },
+    {
+      "ticker": "GOOGL",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebt",
+      "view": "googl_ltd",
+      "zetaris_rows": 13,
+      "sec_rows": 13,
+      "verified_at": "2026-10-24T12:05:23.018706+00:00"
+    },
+    {
+      "ticker": "GOOGL",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebtNoncurrent",
+      "view": "googl_ltd_noncurrent",
+      "zetaris_rows": 56,
+      "sec_rows": 56,
+      "verified_at": "2026-10-24T12:05:23.018706+00:00"
+    },
+    {
+      "ticker": "GOOGL",
+      "metric": "net_income",
+      "tag": "NetIncomeLoss",
+      "view": "googl_net_income",
+      "zetaris_rows": 152,
+      "sec_rows": 152,
+      "verified_at": "2026-10-24T12:05:23.018706+00:00"
+    },
+    {
+      "ticker": "GOOGL",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivities",
+      "view": "googl_ocf",
+      "zetaris_rows": 102,
+      "sec_rows": 102,
+      "verified_at": "2026-10-24T12:05:23.018706+00:00"
+    },
+    {
+      "ticker": "GOOGL",
+      "metric": "revenue",
+      "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "view": "googl_rev_asc606",
+      "zetaris_rows": 87,
+      "sec_rows": 87,
+      "verified_at": "2026-10-24T12:05:23.018706+00:00"
+    },
+    {
+      "ticker": "GOOGL",
+      "metric": "revenue",
+      "tag": "Revenues",
+      "view": "googl_revenues",
+      "zetaris_rows": 77,
+      "sec_rows": 77,
+      "verified_at": "2026-10-24T12:05:23.018706+00:00"
+    },
+    {
+      "ticker": "IBM",
+      "metric": "current_assets",
+      "tag": "AssetsCurrent",
+      "view": "ibm_assets_current",
+      "zetaris_rows": 142,
+      "sec_rows": 142,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "IBM",
+      "metric": "current_liabilities",
+      "tag": "LiabilitiesCurrent",
+      "view": "ibm_liabilities_current",
+      "zetaris_rows": 142,
+      "sec_rows": 142,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "IBM",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebt",
+      "view": "ibm_ltd",
+      "zetaris_rows": 54,
+      "sec_rows": 54,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "IBM",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebtNoncurrent",
+      "view": "ibm_ltd_noncurrent",
+      "zetaris_rows": 120,
+      "sec_rows": 120,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "IBM",
+      "metric": "net_income",
+      "tag": "NetIncomeLoss",
+      "view": "ibm_net_income",
+      "zetaris_rows": 127,
+      "sec_rows": 127,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "IBM",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivities",
+      "view": "ibm_ocf",
+      "zetaris_rows": 107,
+      "sec_rows": 107,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "IBM",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations",
+      "view": "ibm_ocf_cont",
+      "zetaris_rows": 53,
+      "sec_rows": 53,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "IBM",
+      "metric": "revenue",
+      "tag": "Revenues",
+      "view": "ibm_revenues",
+      "zetaris_rows": 235,
+      "sec_rows": 235,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "KO",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebt",
+      "view": "ko_ltd",
+      "zetaris_rows": 118,
+      "sec_rows": 118,
+      "verified_at": "2026-10-24T11:10:52.410086+00:00"
+    },
+    {
+      "ticker": "KO",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebtNoncurrent",
+      "view": "ko_ltd_noncurrent",
+      "zetaris_rows": 126,
+      "sec_rows": 126,
+      "verified_at": "2026-10-24T11:10:52.410086+00:00"
+    },
+    {
+      "ticker": "KO",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations",
+      "view": "ko_ocf_cont",
+      "zetaris_rows": 10,
+      "sec_rows": 10,
+      "verified_at": "2026-10-24T11:10:52.410086+00:00"
+    },
+    {
+      "ticker": "MSFT",
+      "metric": "current_assets",
+      "tag": "AssetsCurrent",
+      "view": "msft_assets_current",
+      "zetaris_rows": 142,
+      "sec_rows": 142,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "MSFT",
+      "metric": "current_liabilities",
+      "tag": "LiabilitiesCurrent",
+      "view": "msft_liabilities_current",
+      "zetaris_rows": 142,
+      "sec_rows": 142,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "MSFT",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebt",
+      "view": "msft_ltd",
+      "zetaris_rows": 130,
+      "sec_rows": 130,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "MSFT",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebtNoncurrent",
+      "view": "msft_ltd_noncurrent",
+      "zetaris_rows": 142,
+      "sec_rows": 142,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "MSFT",
+      "metric": "net_income",
+      "tag": "NetIncomeLoss",
+      "view": "msft_net_income",
+      "zetaris_rows": 345,
+      "sec_rows": 345,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "MSFT",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivities",
+      "view": "msft_ocf",
+      "zetaris_rows": 170,
+      "sec_rows": 170,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "MSFT",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations",
+      "view": "msft_ocf_cont",
+      "zetaris_rows": 62,
+      "sec_rows": 62,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "MSFT",
+      "metric": "revenue",
+      "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "view": "msft_rev_asc606",
+      "zetaris_rows": 134,
+      "sec_rows": 134,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "MSFT",
+      "metric": "revenue",
+      "tag": "Revenues",
+      "view": "msft_revenues",
+      "zetaris_rows": 31,
+      "sec_rows": 31,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "MSFT",
+      "metric": "revenue",
+      "tag": "SalesRevenueNet",
+      "view": "msft_sales_revenue_net",
+      "zetaris_rows": 173,
+      "sec_rows": 173,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "current_assets",
+      "tag": "AssetsCurrent",
+      "view": "nvda_assets_current",
+      "zetaris_rows": 138,
+      "sec_rows": 138,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "current_liabilities",
+      "tag": "LiabilitiesCurrent",
+      "view": "nvda_liabilities_current",
+      "zetaris_rows": 138,
+      "sec_rows": 138,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebt",
+      "view": "nvda_ltd",
+      "zetaris_rows": 98,
+      "sec_rows": 98,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebtNoncurrent",
+      "view": "nvda_ltd_noncurrent",
+      "zetaris_rows": 48,
+      "sec_rows": 48,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "net_income",
+      "tag": "NetIncomeLoss",
+      "view": "nvda_net_income",
+      "zetaris_rows": 314,
+      "sec_rows": 314,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivities",
+      "view": "nvda_ocf",
+      "zetaris_rows": 161,
+      "sec_rows": 161,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "revenue",
+      "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "view": "nvda_rev_asc606",
+      "zetaris_rows": 28,
+      "sec_rows": 28,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "revenue",
+      "tag": "Revenues",
+      "view": "nvda_revenues",
+      "zetaris_rows": 280,
+      "sec_rows": 280,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "ORCL",
+      "metric": "current_assets",
+      "tag": "AssetsCurrent",
+      "view": "orcl_assets_current",
+      "zetaris_rows": 138,
+      "sec_rows": 138,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "ORCL",
+      "metric": "current_liabilities",
+      "tag": "LiabilitiesCurrent",
+      "view": "orcl_liabilities_current",
+      "zetaris_rows": 138,
+      "sec_rows": 138,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "ORCL",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebt",
+      "view": "orcl_ltd",
+      "zetaris_rows": 1,
+      "sec_rows": 1,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "ORCL",
+      "metric": "net_income",
+      "tag": "NetIncomeLoss",
+      "view": "orcl_net_income",
+      "zetaris_rows": 195,
+      "sec_rows": 195,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "ORCL",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivities",
+      "view": "orcl_ocf",
+      "zetaris_rows": 113,
+      "sec_rows": 113,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "ORCL",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations",
+      "view": "orcl_ocf_cont",
+      "zetaris_rows": 42,
+      "sec_rows": 42,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "ORCL",
+      "metric": "revenue",
+      "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "view": "orcl_rev_asc606",
+      "zetaris_rows": 106,
+      "sec_rows": 106,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "ORCL",
+      "metric": "revenue",
+      "tag": "Revenues",
+      "view": "orcl_revenues",
+      "zetaris_rows": 141,
+      "sec_rows": 141,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "ORCL",
+      "metric": "revenue",
+      "tag": "SalesRevenueNet",
+      "view": "orcl_sales_revenue_net",
+      "zetaris_rows": 19,
+      "sec_rows": 19,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "PLTR",
+      "metric": "current_assets",
+      "tag": "AssetsCurrent",
+      "view": "pltr_assets_current",
+      "zetaris_rows": 48,
+      "sec_rows": 48,
+      "verified_at": "2026-10-24T11:05:35.480864+00:00"
+    },
+    {
+      "ticker": "PLTR",
+      "metric": "current_liabilities",
+      "tag": "LiabilitiesCurrent",
+      "view": "pltr_liabilities_current",
+      "zetaris_rows": 48,
+      "sec_rows": 48,
+      "verified_at": "2026-10-24T11:05:35.480864+00:00"
+    },
+    {
+      "ticker": "PLTR",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebtNoncurrent",
+      "view": "pltr_ltd_noncurrent",
+      "zetaris_rows": 10,
+      "sec_rows": 10,
+      "verified_at": "2026-10-24T11:05:35.480864+00:00"
+    },
+    {
+      "ticker": "PLTR",
+      "metric": "net_income",
+      "tag": "NetIncomeLoss",
+      "view": "pltr_net_income",
+      "zetaris_rows": 83,
+      "sec_rows": 83,
+      "verified_at": "2026-10-24T11:05:35.480864+00:00"
+    },
+    {
+      "ticker": "PLTR",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivities",
+      "view": "pltr_ocf",
+      "zetaris_rows": 54,
+      "sec_rows": 54,
+      "verified_at": "2026-10-24T11:05:35.480864+00:00"
+    },
+    {
+      "ticker": "PLTR",
+      "metric": "revenue",
+      "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "view": "pltr_rev_asc606",
+      "zetaris_rows": 74,
+      "sec_rows": 74,
+      "verified_at": "2026-10-24T11:05:35.480864+00:00"
+    },
+    {
+      "ticker": "TGT",
+      "metric": "current_assets",
+      "tag": "AssetsCurrent",
+      "view": "tgt_assets_current",
+      "zetaris_rows": 192,
+      "sec_rows": 192,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TGT",
+      "metric": "current_liabilities",
+      "tag": "LiabilitiesCurrent",
+      "view": "tgt_liabilities_current",
+      "zetaris_rows": 192,
+      "sec_rows": 192,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TGT",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebt",
+      "view": "tgt_ltd",
+      "zetaris_rows": 20,
+      "sec_rows": 20,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TGT",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebtNoncurrent",
+      "view": "tgt_ltd_noncurrent",
+      "zetaris_rows": 6,
+      "sec_rows": 6,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TGT",
+      "metric": "net_income",
+      "tag": "NetIncomeLoss",
+      "view": "tgt_net_income",
+      "zetaris_rows": 171,
+      "sec_rows": 171,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TGT",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivities",
+      "view": "tgt_ocf",
+      "zetaris_rows": 129,
+      "sec_rows": 129,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TGT",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations",
+      "view": "tgt_ocf_cont",
+      "zetaris_rows": 87,
+      "sec_rows": 87,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TGT",
+      "metric": "revenue",
+      "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "view": "tgt_rev_asc606",
+      "zetaris_rows": 126,
+      "sec_rows": 126,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TGT",
+      "metric": "revenue",
+      "tag": "Revenues",
+      "view": "tgt_revenues",
+      "zetaris_rows": 101,
+      "sec_rows": 101,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TGT",
+      "metric": "revenue",
+      "tag": "SalesRevenueNet",
+      "view": "tgt_sales_revenue_net",
+      "zetaris_rows": 180,
+      "sec_rows": 180,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TSLA",
+      "metric": "current_assets",
+      "tag": "AssetsCurrent",
+      "view": "tsla_assets_current",
+      "zetaris_rows": 126,
+      "sec_rows": 126,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TSLA",
+      "metric": "current_liabilities",
+      "tag": "LiabilitiesCurrent",
+      "view": "tsla_liabilities_current",
+      "zetaris_rows": 126,
+      "sec_rows": 126,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TSLA",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebt",
+      "view": "tsla_ltd",
+      "zetaris_rows": 82,
+      "sec_rows": 82,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TSLA",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebtNoncurrent",
+      "view": "tsla_ltd_noncurrent",
+      "zetaris_rows": 28,
+      "sec_rows": 28,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TSLA",
+      "metric": "net_income",
+      "tag": "NetIncomeLoss",
+      "view": "tsla_net_income",
+      "zetaris_rows": 294,
+      "sec_rows": 294,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TSLA",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivities",
+      "view": "tsla_ocf",
+      "zetaris_rows": 106,
+      "sec_rows": 106,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TSLA",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations",
+      "view": "tsla_ocf_cont",
+      "zetaris_rows": 36,
+      "sec_rows": 36,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TSLA",
+      "metric": "revenue",
+      "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "view": "tsla_rev_asc606",
+      "zetaris_rows": 49,
+      "sec_rows": 49,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TSLA",
+      "metric": "revenue",
+      "tag": "Revenues",
+      "view": "tsla_revenues",
+      "zetaris_rows": 286,
+      "sec_rows": 286,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "current_assets",
+      "tag": "AssetsCurrent",
+      "view": "wmt_assets_current",
+      "zetaris_rows": 193,
+      "sec_rows": 193,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "current_liabilities",
+      "tag": "LiabilitiesCurrent",
+      "view": "wmt_liabilities_current",
+      "zetaris_rows": 193,
+      "sec_rows": 193,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebt",
+      "view": "wmt_ltd",
+      "zetaris_rows": 52,
+      "sec_rows": 52,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebtNoncurrent",
+      "view": "wmt_ltd_noncurrent",
+      "zetaris_rows": 193,
+      "sec_rows": 193,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "net_income",
+      "tag": "NetIncomeLoss",
+      "view": "wmt_net_income",
+      "zetaris_rows": 319,
+      "sec_rows": 319,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivities",
+      "view": "wmt_ocf",
+      "zetaris_rows": 157,
+      "sec_rows": 157,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "revenue",
+      "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "view": "wmt_rev_asc606",
+      "zetaris_rows": 120,
+      "sec_rows": 120,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "revenue",
+      "tag": "Revenues",
+      "view": "wmt_revenues",
+      "zetaris_rows": 293,
+      "sec_rows": 293,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "revenue",
+      "tag": "SalesRevenueNet",
+      "view": "wmt_sales_revenue_net",
+      "zetaris_rows": 189,
+      "sec_rows": 189,
+      "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    }
+  ],
+  "rejected": [],
+  "no_data": [
+    {
+      "ticker": "F",
+      "metric": "current_assets",
+      "tag": "AssetsCurrent",
+      "checked_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "F",
+      "metric": "current_liabilities",
+      "tag": "LiabilitiesCurrent",
+      "checked_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "F",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebt",
+      "checked_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "F",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivities",
+      "checked_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "F",
+      "metric": "revenue",
+      "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "checked_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "GOOGL",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations",
+      "checked_at": "2026-10-24T12:05:23.018706+00:00"
+    },
+    {
+      "ticker": "GOOGL",
+      "metric": "revenue",
+      "tag": "SalesRevenueNet",
+      "checked_at": "2026-10-24T12:05:23.018706+00:00"
+    },
+    {
+      "ticker": "IBM",
+      "metric": "revenue",
+      "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "checked_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "IBM",
+      "metric": "revenue",
+      "tag": "SalesRevenueNet",
+      "checked_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "KO",
+      "metric": "revenue",
+      "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "checked_at": "2026-10-24T11:10:52.410086+00:00"
+    },
+    {
+      "ticker": "KO",
+      "metric": "revenue",
+      "tag": "SalesRevenueNet",
+      "checked_at": "2026-10-24T11:10:52.410086+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations",
+      "checked_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "revenue",
+      "tag": "SalesRevenueNet",
+      "checked_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "ORCL",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebtNoncurrent",
+      "checked_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "PLTR",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebt",
+      "checked_at": "2026-10-24T11:05:35.480864+00:00"
+    },
+    {
+      "ticker": "PLTR",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations",
+      "checked_at": "2026-10-24T11:05:35.480864+00:00"
+    },
+    {
+      "ticker": "PLTR",
+      "metric": "revenue",
+      "tag": "Revenues",
+      "checked_at": "2026-10-24T11:05:35.480864+00:00"
+    },
+    {
+      "ticker": "PLTR",
+      "metric": "revenue",
+      "tag": "SalesRevenueNet",
+      "checked_at": "2026-10-24T11:05:35.480864+00:00"
+    },
+    {
+      "ticker": "TSLA",
+      "metric": "revenue",
+      "tag": "SalesRevenueNet",
+      "checked_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations",
+      "checked_at": "2026-10-24T10:57:00.352274+00:00"
+    }
+  ],
+  "concept_api_empty": [
+    {
+      "ticker": "KO",
+      "metric": "current_assets",
+      "tag": "AssetsCurrent",
+      "companyfacts_rows": 144,
+      "checked_at": "2026-10-24T11:10:52.410086+00:00"
+    },
+    {
+      "ticker": "KO",
+      "metric": "current_liabilities",
+      "tag": "LiabilitiesCurrent",
+      "companyfacts_rows": 144,
+      "checked_at": "2026-10-24T11:10:52.410086+00:00"
+    },
+    {
+      "ticker": "KO",
+      "metric": "net_income",
+      "tag": "NetIncomeLoss",
+      "companyfacts_rows": 233,
+      "checked_at": "2026-10-24T11:10:52.410086+00:00"
+    },
+    {
+      "ticker": "KO",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivities",
+      "companyfacts_rows": 155,
+      "checked_at": "2026-10-24T11:10:52.410086+00:00"
+    },
+    {
+      "ticker": "KO",
+      "metric": "revenue",
+      "tag": "Revenues",
+      "companyfacts_rows": 106,
+      "checked_at": "2026-10-24T11:10:52.410086+00:00"
+    }
+  ]
+}

@@ -1,0 +1,617 @@
+{
+  "_notice": "SYNTHETIC SAMPLE DATA. Northwind Motors and Contoso Retail are fictional companies. Every figure in this file was invented to exercise FinSight AI's reconciliation and risk checks reproducibly offline. Nothing here describes a real company or a real filing.",
+  "_cases": {
+    "quarterly_vs_annual": "NWM 2024: the 10-Q reports Q3 (13.6B) and nine-month YTD (38.9B) revenue; the 10-K reports annual (52.4B). A secondary 'news' source quotes 13.6B as if it were annual.",
+    "standalone_vs_consolidated": "NWM 2024: a parent-only (standalone) statement reports 31.8B revenue versus consolidated 52.4B.",
+    "different_units": "NWM 2024: market-data site A reports 52,400 in USD millions, which equals the 10-K after scaling.",
+    "stale_vs_newer": "NWM 2023: market-data site B (published March 2024) shows the original 48.9B; the FY2024 10-K revised FY2023 to 48.3B.",
+    "profit_up_cash_down": "NWM 2021-2024: net income rises every year while operating cash flow falls every year.",
+    "missing_and_unresolved": "CSR: no long-term debt facts at all; market-data site C reports FY2025 revenue 27.9B against the 10-K's 27.1B with no unit, period or basis explanation.",
+    "tag_change": "NWM: revenue is tagged us-gaap:Revenues through FY2021, then RevenueFromContractWithCustomerExcludingAssessedTax from FY2021 (overlap year differs by 0.2B).",
+    "amendment": "Applied only after 'Publish fictional amended filing' in the Watchlist: a NWM 10-K/A (filed 2025-06-16) revises FY2024 revenue 52.4B -> 51.9B and net income 4.4B -> 4.1B, and a Q1 2025 10-Q adds revenue 13.1B, net income 1.0B, operating cash flow 0.5B."
+  },
+  "companies": {
+    "NWM": {
+      "filings": {
+        "revenue": [
+          {
+            "tag": "Revenues",
+            "facts": [
+              {
+                "start": "2020-01-01",
+                "end": "2020-12-31",
+                "val": 37600000000,
+                "accn": "SAMPLE-NWM-2021-10K",
+                "fy": 2020,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2021-02-15"
+              },
+              {
+                "start": "2021-01-01",
+                "end": "2021-12-31",
+                "val": 41200000000,
+                "accn": "SAMPLE-NWM-2022-10K",
+                "fy": 2021,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2022-02-14"
+              }
+            ]
+          },
+          {
+            "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+            "facts": [
+              {
+                "start": "2021-01-01",
+                "end": "2021-12-31",
+                "val": 41000000000,
+                "accn": "SAMPLE-NWM-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-02-13"
+              },
+              {
+                "start": "2022-01-01",
+                "end": "2022-12-31",
+                "val": 44700000000,
+                "accn": "SAMPLE-NWM-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-02-13"
+              },
+              {
+                "start": "2022-01-01",
+                "end": "2022-12-31",
+                "val": 44700000000,
+                "accn": "SAMPLE-NWM-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-02-12"
+              },
+              {
+                "start": "2023-01-01",
+                "end": "2023-12-31",
+                "val": 48900000000,
+                "accn": "SAMPLE-NWM-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-02-12"
+              },
+              {
+                "start": "2023-01-01",
+                "end": "2023-12-31",
+                "val": 48300000000,
+                "accn": "SAMPLE-NWM-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-02-10"
+              },
+              {
+                "start": "2024-07-01",
+                "end": "2024-09-30",
+                "val": 13600000000,
+                "accn": "SAMPLE-NWM-2024-10Q3",
+                "fy": 2024,
+                "fp": "Q3",
+                "form": "10-Q",
+                "filed": "2024-10-28"
+              },
+              {
+                "start": "2024-01-01",
+                "end": "2024-09-30",
+                "val": 38900000000,
+                "accn": "SAMPLE-NWM-2024-10Q3",
+                "fy": 2024,
+                "fp": "Q3",
+                "form": "10-Q",
+                "filed": "2024-10-28"
+              },
+              {
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "val": 52400000000,
+                "accn": "SAMPLE-NWM-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-02-10"
+              }
+            ]
+          }
+        ],
+        "net_income": [
+          {
+            "tag": "NetIncomeLoss",
+            "facts": [
+              {
+                "start": "2021-01-01",
+                "end": "2021-12-31",
+                "val": 2100000000,
+                "accn": "SAMPLE-NWM-2022-10K",
+                "fy": 2021,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2022-02-14"
+              },
+              {
+                "start": "2022-01-01",
+                "end": "2022-12-31",
+                "val": 2900000000,
+                "accn": "SAMPLE-NWM-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-02-13"
+              },
+              {
+                "start": "2023-01-01",
+                "end": "2023-12-31",
+                "val": 3600000000,
+                "accn": "SAMPLE-NWM-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-02-12"
+              },
+              {
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "val": 4400000000,
+                "accn": "SAMPLE-NWM-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-02-10"
+              }
+            ]
+          }
+        ],
+        "operating_cash_flow": [
+          {
+            "tag": "NetCashProvidedByUsedInOperatingActivities",
+            "facts": [
+              {
+                "start": "2021-01-01",
+                "end": "2021-12-31",
+                "val": 5000000000,
+                "accn": "SAMPLE-NWM-2022-10K",
+                "fy": 2021,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2022-02-14"
+              },
+              {
+                "start": "2022-01-01",
+                "end": "2022-12-31",
+                "val": 4600000000,
+                "accn": "SAMPLE-NWM-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-02-13"
+              },
+              {
+                "start": "2023-01-01",
+                "end": "2023-12-31",
+                "val": 3900000000,
+                "accn": "SAMPLE-NWM-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-02-12"
+              },
+              {
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "val": 2700000000,
+                "accn": "SAMPLE-NWM-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-02-10"
+              }
+            ]
+          }
+        ],
+        "long_term_debt": [
+          {
+            "tag": "LongTermDebtNoncurrent",
+            "facts": [
+              {
+                "end": "2021-12-31",
+                "val": 12000000000,
+                "accn": "SAMPLE-NWM-2022-10K",
+                "fy": 2021,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2022-02-14"
+              },
+              {
+                "end": "2022-12-31",
+                "val": 14100000000,
+                "accn": "SAMPLE-NWM-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-02-13"
+              },
+              {
+                "end": "2023-12-31",
+                "val": 16800000000,
+                "accn": "SAMPLE-NWM-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-02-12"
+              },
+              {
+                "end": "2024-12-31",
+                "val": 19500000000,
+                "accn": "SAMPLE-NWM-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-02-10"
+              }
+            ]
+          }
+        ],
+        "current_assets": [
+          {
+            "tag": "AssetsCurrent",
+            "facts": [
+              {
+                "end": "2023-12-31",
+                "val": 22400000000,
+                "accn": "SAMPLE-NWM-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-02-12"
+              },
+              {
+                "end": "2024-12-31",
+                "val": 21000000000,
+                "accn": "SAMPLE-NWM-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-02-10"
+              }
+            ]
+          }
+        ],
+        "current_liabilities": [
+          {
+            "tag": "LiabilitiesCurrent",
+            "facts": [
+              {
+                "end": "2023-12-31",
+                "val": 19800000000,
+                "accn": "SAMPLE-NWM-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-02-12"
+              },
+              {
+                "end": "2024-12-31",
+                "val": 23000000000,
+                "accn": "SAMPLE-NWM-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-02-10"
+              }
+            ]
+          }
+        ]
+      },
+      "secondary_sources": [
+        {
+          "source_name": "Sample market-data site A (fictional)",
+          "published_at": "2025-02-20",
+          "metric": "revenue",
+          "start": "2024-01-01",
+          "end": "2024-12-31",
+          "value": 52400,
+          "unit_scale": 1000000,
+          "unit_label": "USD millions",
+          "reporting_basis": "consolidated",
+          "definition": "Total revenue"
+        },
+        {
+          "source_name": "Sample parent-only statement (fictional)",
+          "published_at": "2025-02-10",
+          "metric": "revenue",
+          "start": "2024-01-01",
+          "end": "2024-12-31",
+          "value": 31800000000,
+          "unit_scale": 1,
+          "unit_label": "USD",
+          "reporting_basis": "standalone",
+          "definition": "Parent company revenue, excludes subsidiaries"
+        },
+        {
+          "source_name": "Sample news article (fictional)",
+          "published_at": "2024-10-29",
+          "metric": "revenue",
+          "start": "2024-01-01",
+          "end": "2024-12-31",
+          "value": 13.6,
+          "unit_scale": 1000000000,
+          "unit_label": "USD billions",
+          "reporting_basis": "consolidated",
+          "definition": "Article says 'revenue of $13.6 billion' without naming the period"
+        },
+        {
+          "source_name": "Sample market-data site B (fictional)",
+          "published_at": "2024-03-01",
+          "metric": "revenue",
+          "start": "2023-01-01",
+          "end": "2023-12-31",
+          "value": 48.9,
+          "unit_scale": 1000000000,
+          "unit_label": "USD billions",
+          "reporting_basis": "consolidated",
+          "definition": "Total revenue"
+        }
+      ],
+      "profile": {
+        "industry": "Motor vehicles (fictional)",
+        "exchange": "Sample",
+        "fiscal_year_end": "1231"
+      }
+    },
+    "CSR": {
+      "filings": {
+        "revenue": [
+          {
+            "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+            "facts": [
+              {
+                "start": "2022-02-01",
+                "end": "2023-01-31",
+                "val": 24800000000,
+                "accn": "SAMPLE-CSR-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-03-20"
+              },
+              {
+                "start": "2023-02-01",
+                "end": "2024-01-31",
+                "val": 25900000000,
+                "accn": "SAMPLE-CSR-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-03-18"
+              },
+              {
+                "start": "2024-02-01",
+                "end": "2025-01-31",
+                "val": 27100000000,
+                "accn": "SAMPLE-CSR-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-03-17"
+              }
+            ]
+          }
+        ],
+        "net_income": [
+          {
+            "tag": "NetIncomeLoss",
+            "facts": [
+              {
+                "start": "2022-02-01",
+                "end": "2023-01-31",
+                "val": 1050000000,
+                "accn": "SAMPLE-CSR-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-03-20"
+              },
+              {
+                "start": "2023-02-01",
+                "end": "2024-01-31",
+                "val": 1120000000,
+                "accn": "SAMPLE-CSR-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-03-18"
+              },
+              {
+                "start": "2024-02-01",
+                "end": "2025-01-31",
+                "val": 1190000000,
+                "accn": "SAMPLE-CSR-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-03-17"
+              }
+            ]
+          }
+        ],
+        "operating_cash_flow": [
+          {
+            "tag": "NetCashProvidedByUsedInOperatingActivities",
+            "facts": [
+              {
+                "start": "2022-02-01",
+                "end": "2023-01-31",
+                "val": 1600000000,
+                "accn": "SAMPLE-CSR-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-03-20"
+              },
+              {
+                "start": "2023-02-01",
+                "end": "2024-01-31",
+                "val": 1710000000,
+                "accn": "SAMPLE-CSR-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-03-18"
+              },
+              {
+                "start": "2024-02-01",
+                "end": "2025-01-31",
+                "val": 1830000000,
+                "accn": "SAMPLE-CSR-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-03-17"
+              }
+            ]
+          }
+        ],
+        "current_assets": [
+          {
+            "tag": "AssetsCurrent",
+            "facts": [
+              {
+                "end": "2025-01-31",
+                "val": 6800000000,
+                "accn": "SAMPLE-CSR-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-03-17"
+              }
+            ]
+          }
+        ],
+        "current_liabilities": [
+          {
+            "tag": "LiabilitiesCurrent",
+            "facts": [
+              {
+                "end": "2025-01-31",
+                "val": 8000000000,
+                "accn": "SAMPLE-CSR-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-03-17"
+              }
+            ]
+          }
+        ]
+      },
+      "secondary_sources": [
+        {
+          "source_name": "Sample market-data site C (fictional)",
+          "published_at": "2025-04-02",
+          "metric": "revenue",
+          "start": "2024-02-01",
+          "end": "2025-01-31",
+          "value": 27.9,
+          "unit_scale": 1000000000,
+          "unit_label": "USD billions",
+          "reporting_basis": "consolidated",
+          "definition": "Total revenue"
+        }
+      ],
+      "profile": {
+        "industry": "General merchandise retail (fictional)",
+        "exchange": "Sample",
+        "fiscal_year_end": "0131"
+      }
+    }
+  },
+  "amendments": {
+    "NWM": {
+      "label": "Northwind Motors 10-K/A and Q1 2025 10-Q (SAMPLE, fictional)",
+      "filings": {
+        "revenue": [
+          {
+            "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+            "facts": [
+              {
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "val": 51900000000,
+                "accn": "SAMPLE-NWM-2025-10KA",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K/A",
+                "filed": "2025-06-16"
+              },
+              {
+                "start": "2025-01-01",
+                "end": "2025-03-31",
+                "val": 13100000000,
+                "accn": "SAMPLE-NWM-2025-10Q1",
+                "fy": 2025,
+                "fp": "Q1",
+                "form": "10-Q",
+                "filed": "2025-04-28"
+              }
+            ]
+          }
+        ],
+        "net_income": [
+          {
+            "tag": "NetIncomeLoss",
+            "facts": [
+              {
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "val": 4100000000,
+                "accn": "SAMPLE-NWM-2025-10KA",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K/A",
+                "filed": "2025-06-16"
+              },
+              {
+                "start": "2025-01-01",
+                "end": "2025-03-31",
+                "val": 1000000000,
+                "accn": "SAMPLE-NWM-2025-10Q1",
+                "fy": 2025,
+                "fp": "Q1",
+                "form": "10-Q",
+                "filed": "2025-04-28"
+              }
+            ]
+          }
+        ],
+        "operating_cash_flow": [
+          {
+            "tag": "NetCashProvidedByUsedInOperatingActivities",
+            "facts": [
+              {
+                "start": "2025-01-01",
+                "end": "2025-03-31",
+                "val": 500000000,
+                "accn": "SAMPLE-NWM-2025-10Q1",
+                "fy": 2025,
+                "fp": "Q1",
+                "form": "10-Q",
+                "filed": "2025-04-28"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
