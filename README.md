@@ -57,7 +57,7 @@ What `dev.sh` does:
 3. Runs `npm run setup` in `services/hmem-sidecar`, which vendors the Meterless H-MEM engine.
 4. Starts the backend (:8000), the H-MEM sidecar (:8765) and the frontend (`frontend-v2/`, :5174). The frontend proxies `/api` to the backend; set `VITE_BACKEND_URL` to point it elsewhere.
 
-Or with Docker (written but **not tested here**, because Docker isn't installed on the build machine):
+Or with Docker (tested: images build, and an investigation and a watchlist check run end to end with Postgres and H-MEM):
 
 ```bash
 cp .env.example .env
@@ -129,10 +129,16 @@ Full details, including what is verified and what is not: [`docs/INTEGRATIONS.md
 ## Tests
 
 ```bash
-cd backend && .venv/bin/pytest -q              # 90 tests: reconciliation, risk, scenarios, claims, watchlist, Zetaris, Meterless, API
+cd backend && .venv/bin/pytest -q              # 100 tests: reconciliation, risk, scenarios, claims, answers, watchlist, Zetaris, Meterless, API
 cd services/hmem-sidecar && npm test           # 4 tests against the real vendored H-MEM engine
+cd frontend-v2 && npm test                     # 12 unit tests: names, times, money, feed, Key Insights, tripwire units
+cd frontend-v2 && npm run test:e2e             # 14 browser tests of real user flows (first time: npx playwright install chromium)
 cd frontend-v2 && npm run build                # typecheck + production build
 ```
+
+The browser tests start their own private backend, H-MEM sidecar and frontend on ports 8767, 8011 and 5177, in sample mode with no AI model and a temporary database. They never read your `.env` keys, database or memory, and they need no internet. They cover asking a question, every investigation tab, claim checks, glossary pop-ups, the Home dashboard, Compare, Check a post, the savings simulator, watchlist change detection, the decision diary, the Pre-Mortem, Data Sources and the phone layout. A failed run leaves a screenshot and trace in `frontend-v2/test-results/`.
+
+GitHub Actions (`.github/workflows/ci.yml`) runs all of the above, plus a Docker image build, on every push and pull request. No secrets are needed.
 
 The brief's evaluation cases are covered in `backend/tests/test_reconciliation.py` and `test_risk_and_scenarios.py`:
 1. quarterly vs annual
@@ -207,7 +213,6 @@ docker/, docker-compose.yml
 - **SEC-side gap:** for a few filers (seen for Coca-Cola), the SEC's per-concept endpoint returns an empty list while its companyfacts endpoint has the data. FinSight then reads that figure from companyfacts and doesn't register it in Zetaris, because a Zetaris table on the empty endpoint would be empty. The app labels those figures "Not via Zetaris".
 - **The Meterless Runtime provider has not been run against a live runtime** (no Nightshift install on the build machine). It is tested against the published contract with mocks. **H-MEM is exercised for real**, against the vendored engine.
 - **Gemini has not been called:** no key was available. NVIDIA Nemotron is the verified model provider.
-- **The Docker setup is untested.** Docker isn't installed on the build machine.
 - **Coverage is limited.** Only 9 live companies and 6 metrics are supported. XBRL facts are as filed. Some companies don't use the standard concepts; for example, Ford has no current assets/liabilities split. In that case FinSight reports *insufficient evidence* rather than zero.
 - **Claim extraction** is rule-based. It handles company names, tickers, revenue/profit/cash-flow/debt figures, amounts with units and years. It doesn't read percentages, growth rates or forecasts, and it lists anything it skipped. A relative phrase like "last year" is checked against the latest fiscal year and flagged.
 - **H-MEM conflict detection:** the reference engine's generic detector flags similar texts with different numbers, which would wrongly pair different fiscal years. So FinSight keys conflicts by company, metric and period, and records them through H-MEM's own ledger and `supersededBy` mechanism.

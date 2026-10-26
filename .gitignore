@@ -19,3 +19,6 @@ services/hmem-sidecar/.hmem-state/
 # caches
 .cache/
 .DS_Store
+# test output
+frontend-v2/test-results/
+frontend-v2/playwright-report/
