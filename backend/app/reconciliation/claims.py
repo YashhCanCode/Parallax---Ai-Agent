@@ -9,13 +9,24 @@ import re
 from dataclasses import dataclass
 from typing import Optional
 
+# Order matters: earlier patterns win where they overlap ("gross profit" before "profit", "operating cash flow"
+# before "cash"). DERIVED catches ratios and computed figures so they are never checked as the wrong figure.
+DERIVED = "_derived"
 METRIC_PATTERNS: list[tuple[str, str]] = [
+    (DERIVED, r"free cash ?flow|\bfcf\b|(gross|operating|net|profit) margins?|cash conversion|current ratio"),
     ("operating_cash_flow", r"operating cash ?flow|cash (?:flow )?from operations|\bocf\b"),
+    ("gross_profit", r"gross profits?"),
+    ("operating_income", r"operating (?:income|profits?)"),
     ("net_income", r"net income|net profit|\bprofits?\b|\bearnings\b|net loss"),
     ("revenue", r"revenues?|\bsales\b|top[- ]line|turnover"),
     ("long_term_debt", r"long[- ]term debt|\bdebt\b|borrowings"),
     ("current_assets", r"current assets"),
     ("current_liabilities", r"current liabilities"),
+    ("rnd", r"\br ?& ?d\b|research and development"),
+    ("capex", r"capital (?:spending|expenditures?)|\bcapex\b"),
+    ("buybacks", r"buy ?-?backs?|share repurchases?|repurchased"),
+    ("dividends", r"dividends?"),
+    ("cash", r"\bcash(?: and (?:cash )?equivalents)?\b"),
 ]
 
 _SCALE_WORDS = {
@@ -82,6 +93,8 @@ def parse_question(text: str) -> ParsedQuestion:
 
     wants_risk = bool(re.search(r"risk|warning|red flag|concern|safe|healthy|debt|cash ?flow|liquidity", lowered))
     wants_scenario = bool(re.search(r"invest|scenario|what if|return|retire|compound|contribut", lowered))
+    if metric == DERIVED:
+        metric = None  # a ratio or computed figure: answered from key figures, not checked as a filed value
     return ParsedQuestion(
         metric=metric,
         fiscal_year=fiscal_year,

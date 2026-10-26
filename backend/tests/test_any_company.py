@@ -136,3 +136,58 @@ def test_registration_skips_concepts_whose_companyconcept_is_empty(tmp_path):
     assert [v["tag"] for v in reg.api_empty] == ["NetIncomeLoss"]
     assert "NetIncomeLoss" not in {v["tag"] for v in reg.no_data}
     assert not any("CREATE LIGHTNING REST TABLE" in q for q in sent)  # nothing registered for an empty endpoint
+
+
+def _pltr_known_manifest() -> dict:
+    # PLTR registered before gross profit existed in FinSight: a revenue view, and the rest probed as no-data.
+    from app.financial_data.companies import METRIC_BY_KEY
+    old = ("revenue", "net_income", "operating_cash_flow", "long_term_debt", "current_assets", "current_liabilities")
+    return {"container": "finsight",
+            "views": [{"ticker": "PLTR", "metric": "revenue", "tag": "Revenues", "view": "pltr_revenues"}],
+            "no_data": [{"ticker": "PLTR", "metric": k, "tag": t} for k in old for t in METRIC_BY_KEY[k].tags if t != "Revenues"]}
+
+
+@respx.mock
+def test_known_company_registers_only_figures_added_later(tmp_path):
+    from app.financial_data.companies import METRIC_BY_KEY
+
+    s = dataclasses.replace(Settings(), zetaris_base_url=ZBASE, zetaris_org_id="1", zetaris_api_key="k",
+                            sec_user_agent="finsight-test test@example.com", cache_dir=tmp_path)
+    gp = [{"start": "2024-01-01", "end": "2024-12-31", "val": 2.3e9, "accn": "A-1", "form": "10-K", "filed": "2025-02-18"}]
+    respx.get(url__regex=r".*/companyconcept/CIK0001321655/us-gaap/GrossProfit\.json").mock(
+        return_value=httpx.Response(200, json={"units": {"USD": gp}}))
+    respx.get(url__regex=r".*/companyconcept/CIK0001321655/us-gaap/(?!GrossProfit\.json).*").mock(return_value=httpx.Response(404))
+    sent = []
+
+    def zetaris(request):
+        sql = json.loads(request.content)["sql"]
+        sent.append(sql)
+        if sql.startswith("SELECT") and "gross" in sql:
+            return httpx.Response(200, json={"data": [{"period_start": "2024-01-01", "period_end": "2024-12-31", "value_usd": "2300000000",
+                                                       "accession_number": "A-1", "form_type": "10-K", "filed_date": "2025-02-18"}], "headers": []})
+        return httpx.Response(200, json={"data": [], "headers": []})
+
+    respx.post(f"{ZBASE}/api/proxy/sql-editor/sqls/run-query").mock(side_effect=zetaris)
+    p = ZetarisProvider(s, manifest=_pltr_known_manifest(), auto_register=True)
+    res = asyncio.run(p.fetch(find_company("PLTR"), [METRIC_BY_KEY["revenue"], METRIC_BY_KEY["gross_profit"]]))
+    creates = [q for q in sent if q.startswith("CREATE LIGHTNING REST TABLE")]
+    assert len(creates) == 1 and "GrossProfit" in creates[0]  # the existing revenue view is not recreated
+    assert [o.value for o in res.observations if o.metric == "gross_profit"] == [2.3e9]
+    assert all(o.retrieval_channel == "zetaris" for o in res.observations)
+
+
+@respx.mock
+def test_figure_without_a_zetaris_view_comes_from_sec_and_is_labeled(tmp_path):
+    from app.financial_data.companies import METRIC_BY_KEY
+
+    s = dataclasses.replace(Settings(), zetaris_base_url=ZBASE, zetaris_org_id="1", zetaris_api_key="k",
+                            sec_user_agent="finsight-test test@example.com", cache_dir=tmp_path)
+    gp = [{"start": "2024-01-01", "end": "2024-12-31", "val": 2.3e9, "accn": "A-1", "form": "10-K", "filed": "2025-02-18"}]
+    respx.get(url__regex=r".*/companyconcept/CIK0001321655/us-gaap/GrossProfit\.json").mock(
+        return_value=httpx.Response(200, json={"units": {"USD": gp}}))
+    respx.get(url__regex=r".*/companyconcept/CIK0001321655/us-gaap/(?!GrossProfit\.json).*").mock(return_value=httpx.Response(404))
+    respx.post(f"{ZBASE}/api/proxy/sql-editor/sqls/run-query").mock(return_value=httpx.Response(200, json={"data": [], "headers": []}))
+    p = ZetarisProvider(s, manifest=_pltr_known_manifest(), auto_register=False)
+    res = asyncio.run(p.fetch(find_company("PLTR"), [METRIC_BY_KEY["gross_profit"]]))
+    assert [(o.value, o.retrieval_channel) for o in res.observations] == [(2.3e9, "sec_direct")]
+    assert any(l.startswith("Not via Zetaris: gross profit for PLTR") for l in res.limitations)

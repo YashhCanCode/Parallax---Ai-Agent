@@ -33,7 +33,7 @@ test.describe.serial("FinSight AI", () => {
     await expect(page.getByText(/Sample data \(fictional\)/).first()).toBeVisible();
     await expect(page.getByText("Your answer")).toBeVisible();
     // No model in this run: the answer is computed from the verified filings, and says so.
-    await expect(page.getByText(/^(Yes|No): revenue (rose|fell) in the latest fiscal year/)).toBeVisible();
+    await expect(page.getByText(/^Yes: Revenue was \$52\.40B in FY2024, up 8\.5% from \$48\.30B in FY2023/)).toBeVisible();
     await expect(page.getByText(/Answer computed by FinSight from the verified filings/)).toBeVisible();
     await expect(rail(page)).toHaveCount(0); // the rail is for Home only
   });
@@ -47,6 +47,18 @@ test.describe.serial("FinSight AI", () => {
     }
     await page.getByRole("tab", { name: "Overview" }).click();
     await expect(page.getByRole("region", { name: "Ask about a company" })).toContainText("Ask another question about Northwind Motors");
+  });
+
+  test("questions about the new figures get answers computed from the filings", async ({ page }) => {
+    await askNorthwind(page, "Is Northwind Motors' free cash flow positive?");
+    await expect(page.getByText(/^No: Free cash flow was -\$1\.90B in FY2024/)).toBeVisible();
+    await page.getByRole("tab", { name: "Financials" }).click();
+    const table = page.locator("main table").first();
+    await expect(page.getByRole("heading", { name: "Key figures" })).toBeVisible();
+    for (const label of ["Gross margin", "Free cash flow", "Capital spending", "Share buybacks"]) {
+      await expect(table.locator("tr", { hasText: label }).first()).toBeVisible();
+    }
+    await expect(table.locator("tr", { hasText: "Gross margin" }).first()).toContainText("16.4%");
   });
 
   test("a wrong claim in the question is checked against the filing", async ({ page }) => {

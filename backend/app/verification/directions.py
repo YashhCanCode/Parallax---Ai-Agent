@@ -9,18 +9,17 @@ from __future__ import annotations
 import re
 from typing import Optional
 
+from app.analysis.key_figures import QUESTION_PATTERNS
 from app.models.schemas import Finding
 
-_METRICS: list[tuple[str, re.Pattern[str]]] = [
-    # Order matters: "operating cash flow" must win over a bare "cash flow".
-    ("operating_cash_flow", re.compile(r"\b(operating cash flow|cash flow from operations|ocf|cash flow)\b", re.I)),
-    ("net_income", re.compile(r"\b(net income|profits?|earnings|net profit)\b", re.I)),
-    ("revenue", re.compile(r"\b(revenues?|sales|top line)\b", re.I)),
-    ("long_term_debt", re.compile(r"\b(long-term debt|debt)\b", re.I)),
-]
-_UP = re.compile(r"\b(grew|grow|grows|growing|rose|risen|rising|increased?|increases|increasing|climbed|higher|expanded|up)\b", re.I)
+# Every figure the facts sheet tracks, most specific first, so "free cash flow" is never read as "cash".
+# "cash conversion" is named only so it is not mistaken for cash; it has no direction of its own here.
+_METRICS: list[tuple[str, re.Pattern[str]]] = [("cash_conversion", re.compile(r"cash conversion", re.I))] + [
+    (key, re.compile(pat, re.I)) for key, pat in QUESTION_PATTERNS]
+_UP = re.compile(r"\b(grew|grow|grows|growing|rose|risen|rising|increased?|increases|increasing|climbed|higher|expanded|"
+                 r"improv(e|ed|es|ing)|up)\b", re.I)
 _DOWN = re.compile(r"\b(fell|fall|falls|falling|fallen|declined?|declines|declining|decreased?|decreases|decreasing|"
-                   r"dropped|drops?|shrank|shrinking|lower|down)\b", re.I)
+                   r"dropped|drops?|shrank|shrinking|lower|worsen(ed|ing|s)?|deteriorat(e|ed|es|ing)|weaken(ed|ing|s)?|down)\b", re.I)
 # "since 2022" (multi-year), "not"/"n't" (negation flips meaning), "growth slowing" (a rate, not a level).
 _SKIP = re.compile(r"\bsince\b|\bover the (last|past)\b|\bfrom (fy)?\d{4}\b|\bnot\b|n't\b|\bno longer\b|"
                    r"\bgrowth\b|\bslow|\bpace\b|\brate\b|\bdirection\b", re.I)

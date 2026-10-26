@@ -20,6 +20,7 @@ import { api, TERMINAL } from "./lib/api";
 import { buildFeed, type FeedItem } from "./lib/feed";
 import { cleanName, loadPrefs, savePrefs, shortName, type Prefs } from "./lib/prefs";
 import { AskComposer } from "./features/investigation/AskComposer";
+import { KeyFiguresPanel } from "./features/financial-truth/KeyFigures";
 import { DataSourcesPage, ReportsPage, SettingsPage, SubTabs } from "./pages/Pages";
 import type { CompanyHit, CompaniesResponse, Decision, GlossaryEntry, IntegrationStatus, Investigation, RecentItem, WatchItem } from "./types/api";
 
@@ -177,7 +178,7 @@ export default function App() {
           {finished && !hasData && <Limitations inv={inv} />}
         </>
       )}
-      {ctab === "financials" && (hasData ? <TruthPanel inv={inv} obsById={obsById} /> : <ProgressPanel inv={inv} />)}
+      {ctab === "financials" && (hasData ? <><KeyFiguresPanel inv={inv} /><TruthPanel inv={inv} obsById={obsById} /></> : <ProgressPanel inv={inv} />)}
       {ctab === "risks" && (hasData ? <RiskPanel inv={inv} obsById={obsById} /> : <ProgressPanel inv={inv} />)}
       {ctab === "sources" && (<>{hasData && <SourcesPanel inv={inv} />}<div className="grid gap-4 lg:grid-cols-2"><TracePanel inv={inv} /><MemoryPanel inv={inv} /></div><Limitations inv={inv} /></>)}
       {ctab === "stress" && (<>{finished && inv.ticker && inv.findings.length > 0 ? <PremortemRoom key={inv.id + "-pm"} inv={inv} onDecide={() => setCtab("notes")} /> : <ProgressPanel inv={inv} />}<ScenarioSimulator /></>)}

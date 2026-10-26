@@ -137,7 +137,16 @@ export interface ScenarioResult {
 
 export interface ScenarioResponse { results: ScenarioResult[]; formula: string; assumptions: string[]; disclaimer: string }
 
+export interface KeyFigurePoint { fy: string; period_end: string; value: number; display: string; form: string | null; filed: string | null; evidence: string[] }
+export interface KeyFigure {
+  key: string; label: string; unit: "usd" | "pct" | "ratio";
+  latest: KeyFigurePoint | null; prior: KeyFigurePoint | null;
+  change: number | null; change_display: string | null; direction: "up" | "down" | null;
+  history: KeyFigurePoint[]; formula: string; sentence: string; note: string;
+}
+
 export interface Charts {
+  key_figures?: KeyFigure[];
   meta?: { unit: string; data_status: string[]; channels: string[] };
   trends?: Record<string, { label: string; unit: string; points: TrendPoint[] }>;
   quarterly?: Record<string, { label: string; unit: string; points: TrendPoint[] }>;

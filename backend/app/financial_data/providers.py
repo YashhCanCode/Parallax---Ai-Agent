@@ -213,6 +213,12 @@ class ZetarisProvider:
         return any(v["ticker"] == company.ticker
                    for k in ("views", "no_data", "rejected", "concept_api_empty") for v in self.manifest.get(k, []))
 
+    def _unseen(self, company: Company, metrics: list[MetricDef]) -> list[MetricDef]:
+        """Figures none of whose tags were ever registered or probed for this company (e.g. figures added later)."""
+        seen = {v["tag"] for k in ("views", "no_data", "rejected", "concept_api_empty")
+                for v in self.manifest.get(k, []) if v["ticker"] == company.ticker}
+        return [m for m in metrics if not any(t in seen for t in m.tags)]
+
     def _api_empty_tags(self, company: Company) -> set[str]:
         return {v["tag"] for v in self.manifest.get("concept_api_empty", []) if v["ticker"] == company.ticker}
 
@@ -225,8 +231,12 @@ class ZetarisProvider:
         pending: dict[str, int] = {}
         no_data_now: list[dict[str, Any]] = []
         api_empty_now: list[dict[str, Any]] = []
-        if self.auto_register and not self._known(company):
-            reg = await register_company(company, self.s, self.client)
+        probed: list[tuple[str, str]] = []
+        new_figures = self._unseen(company, metrics) if self._known(company) else []
+        if self.auto_register and (not self._known(company) or new_figures):
+            # A company seen before only gets views for the figures it is missing.
+            reg = await register_company(company, self.s, self.client, metrics=new_figures or None)
+            probed = reg.probed
             result.receipts += reg.receipts
             result.events += reg.events
             result.limitations += [f"Zetaris registration problem: {e}" for e in reg.errors]
@@ -236,6 +246,7 @@ class ZetarisProvider:
         verified: list[dict[str, Any]] = []
         rejected: list[dict[str, Any]] = []
         api_empty = self._api_empty_tags(company)
+        unregistered: list[MetricDef] = []
         for metric in metrics:
             specs = self.registered_specs(company, metric) + [ViewSpec(company, metric, t) for t in metric.tags if t in pending]
             if not specs and any(t in api_empty for t in metric.tags):
@@ -248,10 +259,7 @@ class ZetarisProvider:
                         f"{metric.label.lower()} (checked against SEC during Zetaris setup)."
                     )
                 else:
-                    result.limitations.append(
-                        f"No Zetaris view is registered for {company.ticker} {metric.label.lower()}; "
-                        f"run scripts/zetaris_setup.py to register it."
-                    )
+                    unregistered.append(metric)
                 continue
             for spec in specs:
                 sql = select_sql(spec, container)
@@ -296,12 +304,22 @@ class ZetarisProvider:
                 f"Not via Zetaris: {', '.join(m.label.lower() for m in direct_metrics)} for {company.ticker} came directly "
                 f"from SEC companyfacts, because SEC's per-concept endpoint (which the Zetaris REST tables read) "
                 f"currently returns no rows for them.")
+        if unregistered:
+            # No Zetaris view yet (registration off or failed): use SEC directly and say so, rather than drop the figure.
+            direct = await SecDirectProvider(self.s).fetch(company, unregistered)
+            result.observations += direct.observations
+            result.receipts += direct.receipts
+            result.raw_counts.update(direct.raw_counts)
+            result.limitations.append(
+                f"Not via Zetaris: {', '.join(m.label.lower() for m in unregistered)} for {company.ticker} came directly "
+                f"from SEC, because no Zetaris view is registered for them yet (run scripts/zetaris_setup.py, or keep "
+                f"ZETARIS_AUTO_REGISTER on).")
         if pending or no_data_now or api_empty_now:
             result.events.append(f"Verified {len(verified)} new Zetaris view(s) against SEC row counts"
                                  + (f"; {len(rejected)} rejected." if rejected else "."))
             if self.persist:
                 self.manifest = await save_merged(
-                    self.s, probed=[(company.ticker, t) for m in METRICS for t in m.tags],
+                    self.s, probed=probed or [(company.ticker, t) for m in METRICS for t in m.tags],
                     verified=verified, rejected=rejected, no_data=no_data_now, api_empty=api_empty_now)
         result.events.append(
             f"Zetaris returned {len(result.observations)} observations across "

@@ -4,7 +4,7 @@ import { buildFeed } from "../lib/feed";
 import { duration, usd } from "../lib/format";
 import { cleanName, greeting, relTime, shortName } from "../lib/prefs";
 import { insightsFrom } from "../features/home/Home";
-import { healthCheckQuestion, suggestedQuestions } from "../features/investigation/AskComposer";
+import { healthCheckQuestion, possessive, suggestedQuestions } from "../features/investigation/AskComposer";
 import { toRaw, unitOf } from "../features/decisions/DecisionForm";
 import { connections } from "../layout/Sidebar";
 import type { Decision, IntegrationStatus, Investigation, TrendPoint, TripwireMetric, WatchItem } from "../types/api";
@@ -140,6 +140,12 @@ describe("Ask box", () => {
     expect(qs[0]).toBe("Is Tesla's profit backed by real cash?");
     expect(qs.every((q) => q.includes("Tesla") && !/\d/.test(q))).toBe(true);
     expect(healthCheckQuestion("Apple Inc. (SAMPLE, fictional)")).toContain("Apple Inc.'s finances");
+  });
+
+  it("writes possessives correctly for names ending in s", () => {
+    expect(possessive("Tesla")).toBe("Tesla's");
+    expect(possessive("Northwind Motors")).toBe("Northwind Motors'");
+    expect(suggestedQuestions("Northwind Motors (SAMPLE, fictional)")[0]).toBe("Is Northwind Motors' profit backed by real cash?");
   });
 });
 

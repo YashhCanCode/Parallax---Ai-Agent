@@ -51,6 +51,10 @@ SPECS: list[MetricSpec] = [
     MetricSpec("debt_to_ocf", "Debt / operating cash flow", "ratio",
                "Years of operating cash flow needed to repay long-term debt.", "less"),
     MetricSpec("current_ratio", "Current ratio", "ratio", "Short-term assets for each $1 owed within a year.", "more"),
+    MetricSpec("gross_margin", "Gross margin", "pct", "Gross profit as a share of revenue.", "more"),
+    MetricSpec("operating_margin", "Operating margin", "pct", "Operating income as a share of revenue.", "more"),
+    MetricSpec("free_cash_flow", "Free cash flow", "usd", "Operating cash flow minus capital spending.", "more"),
+    MetricSpec("cash", "Cash and equivalents", "usd", "Cash and cash equivalents at the latest year-end.", "more"),
     MetricSpec("recent_revisions", "Recent revised figures", "count",
                "Annual revenue, profit or cash-flow figures from the last 3 years that a later filing changed.", "neutral",
                tripwire=False),
@@ -133,6 +137,13 @@ def compute_metrics(obs: list[Observation]) -> dict[str, MetricValue]:
                 revised.append(r.current.id)
     out["recent_revisions"] = MetricValue("recent_revisions", float(len(revised)), "last 3 fiscal years", revised,
                                           "count of annual periods whose figure differs between filings")
+    # From the key-figures facts sheet, so tripwires, the board and answers all use the same numbers.
+    from app.analysis.key_figures import compute_key_figures
+    kfs = {k.key: k for k in compute_key_figures(obs)}
+    for key in ("gross_margin", "operating_margin", "free_cash_flow", "cash"):
+        k, p = kfs.get(key), (kfs[key].latest if key in kfs else None)
+        out[key] = MetricValue(key, p.value if p else None, f"FY ending {p.period_end.isoformat()}" if p else None,
+                               p.evidence if p else [], k.formula if k else "", {}, "" if p else "not reported")
     return out
 
 

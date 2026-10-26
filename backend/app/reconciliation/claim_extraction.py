@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from app.financial_data.companies import Company, company_mentions
-from app.reconciliation.claims import _AMOUNT_RE, _SCALE_WORDS, _YEAR_RE, METRIC_PATTERNS
+from app.reconciliation.claims import _AMOUNT_RE, _SCALE_WORDS, _YEAR_RE, DERIVED, METRIC_PATTERNS
 
 MAX_TEXT = 4000
 MAX_CLAIMS = 15
@@ -122,6 +122,11 @@ def extract_claims(text: str) -> Extraction:
             if company is None:
                 skipped.append({"sentence": sentence, "text": value_text,
                                 "reason": "No supported company is named, so this number can't be checked."})
+                continue
+            if metric == DERIVED:
+                skipped.append({"sentence": sentence, "text": value_text,
+                                "reason": "Ratios and computed figures (margins, free cash flow) aren't checked as claims "
+                                          "yet; FinSight shows them under Key figures."})
                 continue
             if claim.metric is None:
                 skipped.append({"sentence": sentence, "text": value_text,

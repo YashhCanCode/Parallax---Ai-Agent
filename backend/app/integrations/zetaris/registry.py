@@ -11,10 +11,10 @@ import json
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Optional, Iterable
 
 from app.config import REPO_ROOT, Settings
-from app.financial_data.companies import METRICS, Company
+from app.financial_data.companies import METRICS, Company, MetricDef
 from app.financial_data.sec_client import SecClient
 from app.integrations.zetaris.client import ZetarisClient, ZetarisError
 from app.integrations.zetaris.sql import ViewSpec, container_sql, database_sql, rest_table_sql, view_sql
@@ -76,6 +76,7 @@ class Registration:
     receipts: list[QueryReceipt] = field(default_factory=list)
     events: list[str] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
+    probed: list[tuple[str, str]] = field(default_factory=list)  # (ticker, tag) pairs checked in this registration
 
 
 async def _run(z: ZetarisClient, sql: str, reg: Registration, tolerate_exists: bool = True) -> bool:
@@ -94,8 +95,11 @@ async def _run(z: ZetarisClient, sql: str, reg: Registration, tolerate_exists: b
         return exists
 
 
-async def register_company(company: Company, settings: Settings, z: ZetarisClient) -> Registration:
-    """Create Zetaris REST tables + views for every concept the company reports (probed via SEC first)."""
+async def register_company(company: Company, settings: Settings, z: ZetarisClient,
+                           metrics: Optional[list[MetricDef]] = None) -> Registration:
+    """Create Zetaris REST tables + views for every concept the company reports (probed via SEC first).
+
+    `metrics` limits this to some figures, e.g. ones added to FinSight after the company was registered."""
     reg = Registration()
     ua = settings.sec_user_agent
     if not ua or "@" not in ua:
@@ -104,7 +108,8 @@ async def register_company(company: Company, settings: Settings, z: ZetarisClien
     lock = _locks.setdefault(company.ticker, asyncio.Lock())
     async with lock:
         sec = SecClient(ua, settings.cache_dir)
-        specs = [ViewSpec(company, m, t) for m in METRICS for t in m.tags]
+        specs = [ViewSpec(company, m, t) for m in (metrics or METRICS) for t in m.tags]
+        reg.probed = [(company.ticker, sp.tag) for sp in specs]
         counts: dict[str, int] = {}
         for sp in specs:
             r = await sec.concept_rows(company.cik, sp.tag)

@@ -135,3 +135,13 @@ def test_unreported_metric_gets_an_accurate_limitation():
     res = asyncio.run(ZetarisProvider(settings(zetaris_api_key="k"), manifest=manifest)
                       .fetch(find_company("F"), [METRIC_BY_KEY["current_assets"]]))
     assert "reports none of the tags" in res.limitations[0] and "run scripts" not in res.limitations[0]
+
+
+def test_every_metric_tag_has_a_zetaris_table_name():
+    # A tag without a name crashes on-demand registration (found when adding gross profit and friends).
+    from app.financial_data.companies import METRICS
+    from app.integrations.zetaris.sql import TAG_SLUGS
+
+    tags = [t for m in METRICS for t in m.tags]
+    assert [t for t in tags if t not in TAG_SLUGS] == []
+    assert len(set(TAG_SLUGS[t] for t in tags)) == len(tags)  # names are unique

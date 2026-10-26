@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 from typing import Optional
 
 from app.agents.charts import build_charts
+from app.analysis.key_figures import compute_key_figures
 from app.agents.narrator import Narrator
 from app.config import Settings
 from app.db import save_investigation
@@ -316,9 +317,14 @@ class Workflow:
             claim = self.parsed
             self.inv.charts.update(build_charts(self.inv.observations, self.inv.findings, focus, claim.fiscal_year,
                                                 claim.claimed_value, claim.claimed_text))
+            key_figures = compute_key_figures(self.inv.observations)
+            self.inv.charts["key_figures"] = [k.as_dict() for k in key_figures]
+            rec.events.append(f"Computed {sum(1 for k in key_figures if k.points)} key figures (margins, free cash flow, "
+                              f"changes) from the filings.")
             await self._write_memory(rec)
             apply_plain_language(self.inv.findings)
-            summary, call = await self.narrator.narrate(self.inv.question, self.inv.company or "", self.inv.findings)
+            summary, call = await self.narrator.narrate(self.inv.question, self.inv.company or "", self.inv.findings,
+                                                        key_figures)
             self.inv.summary = summary
             if call:
                 self.inv.model_calls.append(call)

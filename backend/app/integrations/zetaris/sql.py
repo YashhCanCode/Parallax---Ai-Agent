@@ -31,6 +31,17 @@ TAG_SLUGS = {
     "LongTermDebt": "ltd",
     "AssetsCurrent": "assets_current",
     "LiabilitiesCurrent": "liabilities_current",
+    "GrossProfit": "gross_profit",
+    "OperatingIncomeLoss": "operating_income",
+    "ResearchAndDevelopmentExpense": "rnd",
+    "ResearchAndDevelopmentExpenseExcludingAcquiredInProcessCost": "rnd_ex_iprd",
+    "PaymentsToAcquirePropertyPlantAndEquipment": "capex_ppe",
+    "PaymentsToAcquireProductiveAssets": "capex_productive",
+    "CashAndCashEquivalentsAtCarryingValue": "cash",
+    "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents": "cash_incl_restricted",
+    "PaymentsForRepurchaseOfCommonStock": "buybacks",
+    "PaymentsOfDividends": "dividends",
+    "PaymentsOfDividendsCommonStock": "dividends_common",
 }
 
 VIEW_COLUMNS = [

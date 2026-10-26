@@ -73,6 +73,18 @@ METRICS: list[MetricDef] = [
     MetricDef("long_term_debt", "Long-term debt", ("LongTermDebtNoncurrent", "LongTermDebt"), "instant"),
     MetricDef("current_assets", "Current assets", ("AssetsCurrent",), "instant"),
     MetricDef("current_liabilities", "Current liabilities", ("LiabilitiesCurrent",), "instant"),
+    # Added for wider questions (margins, free cash flow, cash, shareholder returns). All US-GAAP, USD.
+    MetricDef("gross_profit", "Gross profit", ("GrossProfit",), "duration"),
+    MetricDef("operating_income", "Operating income", ("OperatingIncomeLoss",), "duration"),
+    MetricDef("rnd", "R&D spending",
+              ("ResearchAndDevelopmentExpense", "ResearchAndDevelopmentExpenseExcludingAcquiredInProcessCost"), "duration"),
+    MetricDef("capex", "Capital spending",
+              ("PaymentsToAcquirePropertyPlantAndEquipment", "PaymentsToAcquireProductiveAssets"), "duration"),
+    MetricDef("cash", "Cash and equivalents",
+              ("CashAndCashEquivalentsAtCarryingValue", "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents"),
+              "instant"),
+    MetricDef("buybacks", "Share buybacks", ("PaymentsForRepurchaseOfCommonStock",), "duration"),
+    MetricDef("dividends", "Dividends paid", ("PaymentsOfDividends", "PaymentsOfDividendsCommonStock"), "duration"),
 ]
 
 METRIC_BY_KEY = {m.key: m for m in METRICS}

@@ -8,7 +8,9 @@
     "profit_up_cash_down": "NWM 2021-2024: net income rises every year while operating cash flow falls every year.",
     "missing_and_unresolved": "CSR: no long-term debt facts at all; market-data site C reports FY2025 revenue 27.9B against the 10-K's 27.1B with no unit, period or basis explanation.",
     "tag_change": "NWM: revenue is tagged us-gaap:Revenues through FY2021, then RevenueFromContractWithCustomerExcludingAssessedTax from FY2021 (overlap year differs by 0.2B).",
-    "amendment": "Applied only after 'Publish fictional amended filing' in the Watchlist: a NWM 10-K/A (filed 2025-06-16) revises FY2024 revenue 52.4B -> 51.9B and net income 4.4B -> 4.1B, and a Q1 2025 10-Q adds revenue 13.1B, net income 1.0B, operating cash flow 0.5B."
+    "amendment": "Applied only after 'Publish fictional amended filing' in the Watchlist: a NWM 10-K/A (filed 2025-06-16) revises FY2024 revenue 52.4B -> 51.9B and net income 4.4B -> 4.1B, and a Q1 2025 10-Q adds revenue 13.1B, net income 1.0B, operating cash flow 0.5B.",
+    "free_cash_flow_turns_negative": "NWM 2023-2024: operating cash flow falls (3.9B, 2.7B) while capital spending rises (4.1B, 4.6B), so free cash flow turns negative even though net income grows.",
+    "figure_not_reported": "CSR reports no R&D spending (a retailer); FinSight must say the filings don't report it, not invent one."
   },
   "companies": {
     "NWM": {
@@ -311,6 +313,331 @@
               }
             ]
           }
+        ],
+        "gross_profit": [
+          {
+            "tag": "GrossProfit",
+            "facts": [
+              {
+                "start": "2021-01-01",
+                "end": "2021-12-31",
+                "val": 7380000000,
+                "accn": "SAMPLE-NWM-2022-10K",
+                "fy": 2021,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2022-02-14"
+              },
+              {
+                "start": "2022-01-01",
+                "end": "2022-12-31",
+                "val": 7820000000,
+                "accn": "SAMPLE-NWM-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-02-13"
+              },
+              {
+                "start": "2023-01-01",
+                "end": "2023-12-31",
+                "val": 8210000000,
+                "accn": "SAMPLE-NWM-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-02-12"
+              },
+              {
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "val": 8590000000,
+                "accn": "SAMPLE-NWM-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-02-10"
+              }
+            ]
+          }
+        ],
+        "operating_income": [
+          {
+            "tag": "OperatingIncomeLoss",
+            "facts": [
+              {
+                "start": "2021-01-01",
+                "end": "2021-12-31",
+                "val": 3300000000,
+                "accn": "SAMPLE-NWM-2022-10K",
+                "fy": 2021,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2022-02-14"
+              },
+              {
+                "start": "2022-01-01",
+                "end": "2022-12-31",
+                "val": 4200000000,
+                "accn": "SAMPLE-NWM-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-02-13"
+              },
+              {
+                "start": "2023-01-01",
+                "end": "2023-12-31",
+                "val": 5000000000,
+                "accn": "SAMPLE-NWM-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-02-12"
+              },
+              {
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "val": 6000000000,
+                "accn": "SAMPLE-NWM-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-02-10"
+              }
+            ]
+          }
+        ],
+        "rnd": [
+          {
+            "tag": "ResearchAndDevelopmentExpense",
+            "facts": [
+              {
+                "start": "2021-01-01",
+                "end": "2021-12-31",
+                "val": 1900000000,
+                "accn": "SAMPLE-NWM-2022-10K",
+                "fy": 2021,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2022-02-14"
+              },
+              {
+                "start": "2022-01-01",
+                "end": "2022-12-31",
+                "val": 2100000000,
+                "accn": "SAMPLE-NWM-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-02-13"
+              },
+              {
+                "start": "2023-01-01",
+                "end": "2023-12-31",
+                "val": 2400000000,
+                "accn": "SAMPLE-NWM-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-02-12"
+              },
+              {
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "val": 2700000000,
+                "accn": "SAMPLE-NWM-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-02-10"
+              }
+            ]
+          }
+        ],
+        "capex": [
+          {
+            "tag": "PaymentsToAcquirePropertyPlantAndEquipment",
+            "facts": [
+              {
+                "start": "2021-01-01",
+                "end": "2021-12-31",
+                "val": 2800000000,
+                "accn": "SAMPLE-NWM-2022-10K",
+                "fy": 2021,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2022-02-14"
+              },
+              {
+                "start": "2022-01-01",
+                "end": "2022-12-31",
+                "val": 3400000000,
+                "accn": "SAMPLE-NWM-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-02-13"
+              },
+              {
+                "start": "2023-01-01",
+                "end": "2023-12-31",
+                "val": 4100000000,
+                "accn": "SAMPLE-NWM-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-02-12"
+              },
+              {
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "val": 4600000000,
+                "accn": "SAMPLE-NWM-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-02-10"
+              }
+            ]
+          }
+        ],
+        "cash": [
+          {
+            "tag": "CashAndCashEquivalentsAtCarryingValue",
+            "facts": [
+              {
+                "end": "2021-12-31",
+                "val": 6500000000,
+                "accn": "SAMPLE-NWM-2022-10K",
+                "fy": 2021,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2022-02-14"
+              },
+              {
+                "end": "2022-12-31",
+                "val": 5900000000,
+                "accn": "SAMPLE-NWM-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-02-13"
+              },
+              {
+                "end": "2023-12-31",
+                "val": 4800000000,
+                "accn": "SAMPLE-NWM-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-02-12"
+              },
+              {
+                "end": "2024-12-31",
+                "val": 3600000000,
+                "accn": "SAMPLE-NWM-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-02-10"
+              }
+            ]
+          }
+        ],
+        "buybacks": [
+          {
+            "tag": "PaymentsForRepurchaseOfCommonStock",
+            "facts": [
+              {
+                "start": "2021-01-01",
+                "end": "2021-12-31",
+                "val": 300000000,
+                "accn": "SAMPLE-NWM-2022-10K",
+                "fy": 2021,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2022-02-14"
+              },
+              {
+                "start": "2022-01-01",
+                "end": "2022-12-31",
+                "val": 300000000,
+                "accn": "SAMPLE-NWM-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-02-13"
+              },
+              {
+                "start": "2023-01-01",
+                "end": "2023-12-31",
+                "val": 200000000,
+                "accn": "SAMPLE-NWM-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-02-12"
+              },
+              {
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "val": 100000000,
+                "accn": "SAMPLE-NWM-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-02-10"
+              }
+            ]
+          }
+        ],
+        "dividends": [
+          {
+            "tag": "PaymentsOfDividends",
+            "facts": [
+              {
+                "start": "2021-01-01",
+                "end": "2021-12-31",
+                "val": 600000000,
+                "accn": "SAMPLE-NWM-2022-10K",
+                "fy": 2021,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2022-02-14"
+              },
+              {
+                "start": "2022-01-01",
+                "end": "2022-12-31",
+                "val": 650000000,
+                "accn": "SAMPLE-NWM-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-02-13"
+              },
+              {
+                "start": "2023-01-01",
+                "end": "2023-12-31",
+                "val": 700000000,
+                "accn": "SAMPLE-NWM-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-02-12"
+              },
+              {
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "val": 750000000,
+                "accn": "SAMPLE-NWM-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-02-10"
+              }
+            ]
+          }
         ]
       },
       "secondary_sources": [
@@ -505,6 +832,225 @@
               {
                 "end": "2025-01-31",
                 "val": 8000000000,
+                "accn": "SAMPLE-CSR-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-03-17"
+              }
+            ]
+          }
+        ],
+        "gross_profit": [
+          {
+            "tag": "GrossProfit",
+            "facts": [
+              {
+                "start": "2022-02-01",
+                "end": "2023-01-31",
+                "val": 7690000000,
+                "accn": "SAMPLE-CSR-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-03-20"
+              },
+              {
+                "start": "2023-02-01",
+                "end": "2024-01-31",
+                "val": 8080000000,
+                "accn": "SAMPLE-CSR-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-03-18"
+              },
+              {
+                "start": "2024-02-01",
+                "end": "2025-01-31",
+                "val": 8510000000,
+                "accn": "SAMPLE-CSR-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-03-17"
+              }
+            ]
+          }
+        ],
+        "operating_income": [
+          {
+            "tag": "OperatingIncomeLoss",
+            "facts": [
+              {
+                "start": "2022-02-01",
+                "end": "2023-01-31",
+                "val": 1450000000,
+                "accn": "SAMPLE-CSR-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-03-20"
+              },
+              {
+                "start": "2023-02-01",
+                "end": "2024-01-31",
+                "val": 1550000000,
+                "accn": "SAMPLE-CSR-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-03-18"
+              },
+              {
+                "start": "2024-02-01",
+                "end": "2025-01-31",
+                "val": 1650000000,
+                "accn": "SAMPLE-CSR-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-03-17"
+              }
+            ]
+          }
+        ],
+        "capex": [
+          {
+            "tag": "PaymentsToAcquirePropertyPlantAndEquipment",
+            "facts": [
+              {
+                "start": "2022-02-01",
+                "end": "2023-01-31",
+                "val": 700000000,
+                "accn": "SAMPLE-CSR-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-03-20"
+              },
+              {
+                "start": "2023-02-01",
+                "end": "2024-01-31",
+                "val": 740000000,
+                "accn": "SAMPLE-CSR-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-03-18"
+              },
+              {
+                "start": "2024-02-01",
+                "end": "2025-01-31",
+                "val": 780000000,
+                "accn": "SAMPLE-CSR-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-03-17"
+              }
+            ]
+          }
+        ],
+        "cash": [
+          {
+            "tag": "CashAndCashEquivalentsAtCarryingValue",
+            "facts": [
+              {
+                "end": "2023-01-31",
+                "val": 2100000000,
+                "accn": "SAMPLE-CSR-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-03-20"
+              },
+              {
+                "end": "2024-01-31",
+                "val": 2300000000,
+                "accn": "SAMPLE-CSR-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-03-18"
+              },
+              {
+                "end": "2025-01-31",
+                "val": 2500000000,
+                "accn": "SAMPLE-CSR-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-03-17"
+              }
+            ]
+          }
+        ],
+        "buybacks": [
+          {
+            "tag": "PaymentsForRepurchaseOfCommonStock",
+            "facts": [
+              {
+                "start": "2022-02-01",
+                "end": "2023-01-31",
+                "val": 400000000,
+                "accn": "SAMPLE-CSR-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-03-20"
+              },
+              {
+                "start": "2023-02-01",
+                "end": "2024-01-31",
+                "val": 450000000,
+                "accn": "SAMPLE-CSR-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-03-18"
+              },
+              {
+                "start": "2024-02-01",
+                "end": "2025-01-31",
+                "val": 500000000,
+                "accn": "SAMPLE-CSR-2025-10K",
+                "fy": 2024,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2025-03-17"
+              }
+            ]
+          }
+        ],
+        "dividends": [
+          {
+            "tag": "PaymentsOfDividends",
+            "facts": [
+              {
+                "start": "2022-02-01",
+                "end": "2023-01-31",
+                "val": 300000000,
+                "accn": "SAMPLE-CSR-2023-10K",
+                "fy": 2022,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2023-03-20"
+              },
+              {
+                "start": "2023-02-01",
+                "end": "2024-01-31",
+                "val": 320000000,
+                "accn": "SAMPLE-CSR-2024-10K",
+                "fy": 2023,
+                "fp": "FY",
+                "form": "10-K",
+                "filed": "2024-03-18"
+              },
+              {
+                "start": "2024-02-01",
+                "end": "2025-01-31",
+                "val": 340000000,
                 "accn": "SAMPLE-CSR-2025-10K",
                 "fy": 2024,
                 "fp": "FY",
