@@ -133,6 +133,88 @@ _ALIASES = {
 }
 
 
+# Everyday names for well-known SEC-listed companies that aren't built in ("JP Morgan" is "JPMORGAN CHASE & CO").
+WELL_KNOWN: dict[str, str] = {
+    "jp morgan": "JPM", "jpmorgan": "JPM", "j.p. morgan": "JPM", "jpmorgan chase": "JPM", "chase bank": "JPM",
+    "google": "GOOGL", "alphabet": "GOOGL", "facebook": "META", "meta platforms": "META", "amazon": "AMZN",
+    "berkshire hathaway": "BRK-B", "berkshire": "BRK-B", "coca-cola": "KO", "coca cola": "KO", "coke": "KO",
+    "netflix": "NFLX", "goldman sachs": "GS", "bank of america": "BAC", "wells fargo": "WFC", "morgan stanley": "MS",
+    "citigroup": "C", "citibank": "C", "american express": "AXP", "mastercard": "MA", "paypal": "PYPL",
+    "nike": "NKE", "disney": "DIS", "walt disney": "DIS", "intel": "INTC", "amd": "AMD", "advanced micro devices": "AMD",
+    "qualcomm": "QCOM", "broadcom": "AVGO", "cisco": "CSCO", "salesforce": "CRM", "adobe": "ADBE", "palantir": "PLTR",
+    "pepsi": "PEP", "pepsico": "PEP", "mcdonald's": "MCD", "mcdonalds": "MCD", "starbucks": "SBUX", "costco": "COST",
+    "home depot": "HD", "exxon": "XOM", "exxonmobil": "XOM", "exxon mobil": "XOM", "chevron": "CVX", "pfizer": "PFE",
+    "johnson & johnson": "JNJ", "johnson and johnson": "JNJ", "boeing": "BA", "uber": "UBER", "airbnb": "ABNB",
+    "procter & gamble": "PG", "procter and gamble": "PG", "unitedhealth": "UNH", "eli lilly": "LLY", "verizon": "VZ",
+    "at&t": "T", "comcast": "CMCSA", "general motors": "GM", "general electric": "GE", "caterpillar": "CAT",
+}
+
+_NAME_SUFFIXES = {"inc", "incorporated", "corp", "corporation", "co", "company", "ltd", "limited", "plc", "holdings",
+                  "holding", "group", "the", "class", "a", "b", "sa", "nv", "ag", "lp", "llc", "de", "new"}
+_name_index: dict[str, str] | None = None
+
+
+def _norm(words: list[str]) -> str:
+    return "".join(w for w in words if w)
+
+
+def _base_name(name: str) -> str:
+    """"JPMORGAN CHASE & CO" -> "jpmorganchase"; "Palantir Technologies Inc." -> "palantirtechnologies"."""
+    import re
+    words = re.sub(r"[^a-z0-9&\s]", " ", name.lower()).replace("&", " ").split()
+    while words and words[-1] in _NAME_SUFFIXES:
+        words.pop()
+    return _norm(words)
+
+
+def _directory_name_index() -> dict[str, str]:
+    """Base company name -> ticker for every SEC-listed company (major exchanges win ties)."""
+    global _name_index
+    if _name_index is None:
+        from app.financial_data.directory import DIRECTORY
+        try:
+            DIRECTORY.ensure_loaded()
+        except Exception:  # noqa: BLE001 - no directory (offline): only built-in names and tickers work
+            return {}
+        idx: dict[str, str] = {}
+        for e in sorted(DIRECTORY._by_ticker.values(), key=lambda e: (e.exchange not in ("Nasdaq", "NYSE"), len(e.ticker))):
+            b = _base_name(e.name)
+            if len(b) >= 4:
+                idx.setdefault(b, e.ticker)
+        _name_index = idx
+    return _name_index
+
+
+def _named_in_directory(text: str) -> list[tuple[int, int, Company]]:
+    """Well-known everyday names, and exact SEC company names (a single word only when capitalized)."""
+    import re
+    out: list[tuple[int, int, Company]] = []
+    lowered = text.lower()
+    for alias, ticker in WELL_KNOWN.items():
+        for m in re.finditer(rf"(?<![\w&]){re.escape(alias)}(?![\w&])", lowered):
+            c = find_company(ticker)
+            if c is not None:
+                out.append((m.start(), m.end(), c))
+    tokens = [(m.start(), m.end(), m.group(0)) for m in re.finditer(r"[A-Za-z0-9&.'-]+", text)]
+    idx = _directory_name_index()
+    for i in range(len(tokens)):
+        for n in (4, 3, 2, 1):
+            span = tokens[i:i + n]
+            if len(span) < n:
+                continue
+            words = [re.sub(r"[^a-z0-9]", "", w.lower()) for _, _, w in span]
+            key = _norm(words)
+            if len(key) < 4 or key not in idx:
+                continue
+            if n == 1 and not span[0][2][:1].isupper():
+                continue  # "growth", "apple pie"...: a lone lowercase word is not a company name
+            c = find_company(idx[key])
+            if c is not None:
+                out.append((span[0][0], span[-1][1], c))
+                break
+    return out
+
+
 def company_mentions(text: str, include_sample: bool = True) -> list[tuple[int, int, Company]]:
     """Every supported company named in the text, with its position (names, then tickers as whole words;
     a one-letter ticker such as F only when written as "$F" or "(F)")."""
@@ -157,6 +239,12 @@ def company_mentions(text: str, include_sample: bool = True) -> list[tuple[int, 
         c = find_company(t)
         if c is not None and (include_sample or not c.sample):
             found.append((m.start(), m.end(), c))
+    # Any other SEC-listed company named in words ("JP Morgan", "Palantir Technologies").
+    taken = {(a, b) for a, b, _ in found}
+    for a, b, c in _named_in_directory(text):
+        if not any(x <= a < y or a <= x < b for x, y in taken):
+            found.append((a, b, c))
+            taken.add((a, b))
     found.sort(key=lambda x: x[0])
     return found
 

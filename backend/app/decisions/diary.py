@@ -1,12 +1,12 @@
 """Decision Diary with tripwires.
 
 A user records their own decision about a company in their own words, plus tripwires: simple rules
-on filed metrics that would change their mind ("cash conversion < 0.8"). FinSight:
+on filed metrics that would change their mind ("cash conversion < 0.8"). Parallax:
 - snapshots what was known at decision time (metric values + latest filing),
 - writes the decision to Meterless H-MEM, whose append-only ledger proves what was known and when,
 - re-evaluates tripwires with deterministic code on every check (and on every watchlist check),
 - logs each newly hit tripwire to H-MEM too.
-FinSight never makes or suggests the decision.
+Parallax never makes or suggests the decision.
 """
 from __future__ import annotations
 

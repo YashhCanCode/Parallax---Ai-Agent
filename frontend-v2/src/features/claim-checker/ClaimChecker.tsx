@@ -33,7 +33,7 @@ export function ClaimChecker({ mode }: { mode: string }) {
 
   return (
     <div className="space-y-4">
-      <Card title="Check a post or article" subtitle="Paste text with financial numbers. FinSight finds each claim and checks it against official filings. Opinions aren't judged, only numbers. Any SEC-listed company works if its ticker is written like $PLTR or (NASDAQ: PLTR).">
+      <Card title="Check a post or article" subtitle="Paste text with financial numbers. Parallax finds each claim and checks it against official filings. Opinions aren't judged, only numbers. Any SEC-listed company works if its ticker is written like $PLTR or (NASDAQ: PLTR).">
         <label htmlFor="claimtext" className="sr-only">Text to check</label>
         <textarea id="claimtext" value={text} onChange={(e) => setText(e.target.value)} rows={5} maxLength={8000}
           className="w-full rounded-lg border border-line bg-surface p-3 text-sm leading-relaxed text-ink placeholder:text-muted"
@@ -70,7 +70,7 @@ export function ClaimChecker({ mode }: { mode: string }) {
             ))}
           </div>
           {res.not_checked.length > 0 && (
-            <Card title={`Not checked (${res.not_checked.length})`} subtitle="Numbers FinSight found but could not check, with the reason.">
+            <Card title={`Not checked (${res.not_checked.length})`} subtitle="Numbers Parallax found but could not check, with the reason.">
               <ul className="space-y-1 text-[13px] text-ink2">
                 {res.not_checked.map((n, i) => <li key={i}><span className="font-medium text-ink">{n.text}</span> — {n.reason} <span className="text-muted">(“{n.sentence.slice(0, 90)}{n.sentence.length > 90 ? "…" : ""}”)</span></li>)}
               </ul>

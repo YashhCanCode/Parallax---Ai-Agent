@@ -29,7 +29,7 @@ def test_status_states_and_headers():
     st = asyncio.run(MeterlessRuntime("127.0.0.1:8088", "tok").status())
     assert st.state == "online" and st.models == ["meterless/auto"]
     req = route.calls[0].request
-    assert req.headers["authorization"] == "Bearer tok" and req.headers["meterless-app"] == "finsight-ai"
+    assert req.headers["authorization"] == "Bearer tok" and req.headers["meterless-app"] == "parallax-ai"
     respx.get(url).mock(return_value=httpx.Response(401))
     assert asyncio.run(MeterlessRuntime("127.0.0.1:8088", "bad").status()).state == "unauthorized"
     respx.get(url).mock(return_value=httpx.Response(200, json={"data": [{"id": "gpt-x"}]}))
@@ -66,40 +66,6 @@ def test_validator_rejects_invented_numbers_unknown_ids_advice_and_bad_json():
     assert "valid JSON" in validate_narrative("not json", {"f1"}, EVIDENCE)[1]
 
 
-NV = "https://integrate.api.nvidia.com/v1"
-
-
-@respx.mock
-def test_nvidia_chat_sends_bearer_disables_thinking_and_strips_think_blocks():
-    from app.integrations.nvidia import DEFAULT_MODEL, NvidiaClient
-
-    route = respx.post(f"{NV}/chat/completions").mock(return_value=httpx.Response(200, json={
-        "model": DEFAULT_MODEL, "usage": {"prompt_tokens": 50, "completion_tokens": 9},
-        "choices": [{"message": {"content": "<think>scratch</think>{\"summary\": \"ok\", \"key_points\": []}"}}]}))
-    text, usage, model, _ = asyncio.run(NvidiaClient("nvapi-test").chat("s", "u"))
-    assert text == '{"summary": "ok", "key_points": []}' and usage["completion_tokens"] == 9
-    req = route.calls[0].request
-    body = json.loads(req.content)
-    assert req.headers["authorization"] == "Bearer nvapi-test"
-    assert body["model"] == DEFAULT_MODEL == "nvidia/nemotron-3.5-lightning-30b-a3b"
-    assert body["chat_template_kwargs"] == {"enable_thinking": False}
-
-
-@respx.mock
-def test_nvidia_retries_without_reasoning_switch_if_rejected_and_reports_bad_key():
-    from app.integrations.nvidia import NvidiaClient, NvidiaError
-
-    route = respx.post(f"{NV}/chat/completions").mock(side_effect=[
-        httpx.Response(400, json={"detail": "unknown field chat_template_kwargs"}),
-        httpx.Response(200, json={"choices": [{"message": {"content": "{}"}}]})])
-    assert asyncio.run(NvidiaClient("k").chat("s", "u"))[0] == "{}"
-    assert "chat_template_kwargs" not in json.loads(route.calls[1].request.content)
-    respx.post(f"{NV}/chat/completions").mock(return_value=httpx.Response(403, json={"detail": "Authorization failed"}))
-    import pytest
-    with pytest.raises(NvidiaError, match="rejected the key"):
-        asyncio.run(NvidiaClient("bad").chat("s", "u"))
-
-
 def test_validator_accepts_json_wrapped_in_a_sentence():
     raw = 'Here is the JSON: ' + _out("Profit rose 22.2% in 2024.") + ' Hope this helps.'
     out, reason = validate_narrative(raw, {"f1"}, EVIDENCE)
@@ -107,39 +73,42 @@ def test_validator_accepts_json_wrapped_in_a_sentence():
 
 
 @respx.mock
-def test_narrator_uses_nemotron_when_key_set_and_validates_output():
+def test_narrator_uses_meterless_nightshift_and_validates_output(tmp_path):
+    """Nightshift is the primary provider: auto-detected on its default port, token from the state dir."""
     import dataclasses
 
     from app.agents.narrator import Narrator
     from app.config import Settings
     from app.models.schemas import Classification, Finding, FindingStatus
 
+    token = tmp_path / "proxy-token"
+    token.write_text("rt-test-token")
     f = Finding(id="f1", category="risk", title="Profit rose +22.2% while operating cash flow fell -30.8% in 2024",
                 claim="x", classification=Classification.interpretation, status=FindingStatus.supported, severity="elevated")
-    respx.post(f"{NV}/chat/completions").mock(return_value=httpx.Response(200, json={
-        "model": "nvidia/nemotron-3.5-lightning-30b-a3b", "usage": {"total_tokens": 99},
+    respx.get("http://127.0.0.1:8088/v1/models").mock(return_value=httpx.Response(200, json={"data": [{"id": "meterless/auto"}]}))
+    chat = respx.post("http://127.0.0.1:8088/v1/chat/completions").mock(return_value=httpx.Response(200, json={
+        "model": "meterless/auto", "usage": {"total_tokens": 99},
         "choices": [{"message": {"content": _out("Profit rose 22.2% while cash flow fell 30.8% in 2024.")}}]}))
-    s = dataclasses.replace(Settings(), llm_provider="nvidia", nvidia_api_key="nvapi-test")
+    s = dataclasses.replace(Settings(), llm_provider="auto", meterless_token_file=str(token))
     n = Narrator(s)
-    assert asyncio.run(n.select_provider())[0] == "nvidia"
+    assert asyncio.run(n.select_provider())[0] == "meterless"
     summary, call = asyncio.run(n.narrate("q", "Co", [f]))
-    assert summary.generated_by == "nvidia:nvidia/nemotron-3.5-lightning-30b-a3b" and call.output_accepted
+    assert summary.generated_by == "meterless:meterless/auto" and call.output_accepted
     assert call.usage == {"total_tokens": 99}
+    assert chat.calls[0].request.headers["authorization"] == "Bearer rt-test-token"
 
 
-@respx.mock
-def test_nvidia_sends_json_schema_and_drops_it_if_rejected():
-    from app.agents.narrator import NARRATIVE_SCHEMA
-    from app.integrations.nvidia import NvidiaClient
+def test_without_nightshift_answers_are_written_in_code():
+    import dataclasses
 
-    route = respx.post(f"{NV}/chat/completions").mock(side_effect=[
-        httpx.Response(400, json={"detail": "response_format not supported"}),
-        httpx.Response(200, json={"choices": [{"message": {"content": "{}"}}]})])
-    asyncio.run(NvidiaClient("k").chat("s", "u", json_schema=NARRATIVE_SCHEMA))
-    first, second = (json.loads(c.request.content) for c in route.calls)
-    assert first["response_format"]["type"] == "json_schema"
-    assert first["response_format"]["json_schema"]["schema"]["required"] == ["answer", "summary", "key_points"]
-    assert "response_format" not in second
+    from app.agents.narrator import Narrator
+    from app.config import Settings
+
+    n = Narrator(dataclasses.replace(Settings(), llm_provider="none"))
+    assert asyncio.run(n.select_provider())[0] is None
+    summary, call = asyncio.run(n.narrate("Should I buy it?", "Co", []))
+    assert call is None and summary.generated_by == "deterministic"
+    assert summary.answer.startswith("Parallax doesn't make investment decisions")
 
 
 def test_validator_rejects_number_words_the_evidence_does_not_support():
@@ -156,3 +125,51 @@ def test_trailing_zero_numbers_count_as_the_same_number():
     from app.verification.model_output import grounded
 
     assert grounded("1.0", {"1"}) and grounded("2.50", {"2.5"}) and not grounded("1.5", {"1"})
+
+
+@respx.mock
+def test_sample_demo_reset_starts_a_fresh_memory_round_for_fictional_companies_only():
+    from app.db import set_state
+    from app.integrations.meterless.hmem import HmemClient, memory_subject
+
+    set_state("sample_demo_round", "0")
+    assert memory_subject("NWM") == "NWM" and memory_subject("AAPL") == "AAPL"
+    set_state("sample_demo_round", "2")
+    assert memory_subject("nwm") == "NWM-R2"
+    assert memory_subject("AAPL") == "AAPL"  # real companies never move
+    sent = []
+
+    def facts(request):
+        body = json.loads(request.content)
+        sent.append(body)
+        return httpx.Response(200, json={"results": [{"key": f["key"], "outcome": "new"} for f in body["facts"]]})
+
+    respx.post("http://hmem.test/facts").mock(side_effect=facts)
+    res = asyncio.run(HmemClient("http://hmem.test").write_facts("NWM", [{"key": "NWM:revenue:2024", "value": 1.0}]))
+    assert sent[0]["ticker"] == "NWM-R2" and sent[0]["facts"][0]["key"] == "NWM-R2:revenue:2024"
+    assert res["results"][0]["key"] == "NWM:revenue:2024"  # callers still see their own keys
+    set_state("sample_demo_round", "0")
+
+
+def test_nightshift_mac_app_token_is_found_without_configuration(tmp_path):
+    from app.integrations.meterless.runtime import discover_token_file
+
+    assert discover_token_file(tmp_path) is None
+    state = tmp_path / "Library" / "Application Support" / "ai.meterless.nightshift.m1m4"
+    state.mkdir(parents=True)
+    (state / "runtime-token").write_text("t")  # the Mac app's name; the contract's proxy-token also works
+    assert discover_token_file(tmp_path) == state / "runtime-token"
+
+
+@respx.mock
+def test_nemotron_through_nightshift_runs_without_reasoning_and_falls_back_if_rejected():
+    model = "nvidia/nemotron-3.5-lightning-30b-a3b"
+    ok = httpx.Response(200, json={"model": model, "usage": {"total_tokens": 30},
+                                   "choices": [{"message": {"content": "<think>x</think>{\"ok\": true}"}}]})
+    route = respx.post("http://127.0.0.1:8088/v1/chat/completions").mock(side_effect=[ok])
+    text, _, got, _ = asyncio.run(MeterlessRuntime("", "t", model).chat("s", "u"))
+    assert json.loads(route.calls[0].request.content)["chat_template_kwargs"] == {"enable_thinking": False}
+    assert text == '{"ok": true}' and got == model  # reasoning text is never shown; the reply names the model
+    route = respx.post("http://127.0.0.1:8088/v1/chat/completions").mock(side_effect=[httpx.Response(400), ok])
+    asyncio.run(MeterlessRuntime("", "t", model).chat("s", "u"))
+    assert "chat_template_kwargs" not in json.loads(route.calls[-1].request.content)  # the retry

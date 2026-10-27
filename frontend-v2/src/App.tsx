@@ -122,6 +122,9 @@ export default function App() {
   const running = !!inv && !TERMINAL.has(inv.state);
   const finished = !!inv && TERMINAL.has(inv.state);
   const hasData = !!inv && inv.observations.length > 0;
+  // Findings, risks and key figures are shown only once the investigation is finished and verified;
+  // while it runs, those tabs show the live progress instead of half-checked results.
+  const verified = finished && hasData;
 
   const sampleChoices: CompanyHit[] = mode === "sample"
     ? (companies?.sample ?? []).map((c) => ({ ticker: c.ticker, name: c.name, cik: "", exchange: "", builtin: true, zetaris_registered: false }))
@@ -178,9 +181,9 @@ export default function App() {
           {finished && !hasData && <Limitations inv={inv} />}
         </>
       )}
-      {ctab === "financials" && (hasData ? <><KeyFiguresPanel inv={inv} /><TruthPanel inv={inv} obsById={obsById} /></> : <ProgressPanel inv={inv} />)}
-      {ctab === "risks" && (hasData ? <RiskPanel inv={inv} obsById={obsById} /> : <ProgressPanel inv={inv} />)}
-      {ctab === "sources" && (<>{hasData && <SourcesPanel inv={inv} />}<div className="grid gap-4 lg:grid-cols-2"><TracePanel inv={inv} /><MemoryPanel inv={inv} /></div><Limitations inv={inv} /></>)}
+      {ctab === "financials" && (verified ? <><KeyFiguresPanel inv={inv} /><TruthPanel inv={inv} obsById={obsById} /></> : <ProgressPanel inv={inv} />)}
+      {ctab === "risks" && (verified ? <RiskPanel inv={inv} obsById={obsById} /> : <ProgressPanel inv={inv} />)}
+      {ctab === "sources" && (<>{verified && <SourcesPanel inv={inv} />}<div className="grid gap-4 lg:grid-cols-2"><TracePanel inv={inv} /><MemoryPanel inv={inv} /></div><Limitations inv={inv} /></>)}
       {ctab === "stress" && (<>{finished && inv.ticker && inv.findings.length > 0 ? <PremortemRoom key={inv.id + "-pm"} inv={inv} onDecide={() => setCtab("notes")} /> : <ProgressPanel inv={inv} />}<ScenarioSimulator /></>)}
       {ctab === "notes" && inv.ticker && (
         <>

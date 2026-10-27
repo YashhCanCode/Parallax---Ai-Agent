@@ -11,7 +11,6 @@ backend/test_finsight.db
 *.egg-info/
 # node
 node_modules/
-frontend/dist/
 frontend-v2/dist/
 *.tsbuildinfo
 services/hmem-sidecar/vendor/

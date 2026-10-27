@@ -1,4 +1,4 @@
-// "Today's insights": real events FinSight observed, newest first. Never invented.
+// "Today's insights": real events Parallax observed, newest first. Never invented.
 // Sources: watchlist reports (new filings, changed figures, tripwire hits) and the decision diary.
 import type { Decision, WatchItem } from "../types/api";
 import { shortName } from "./prefs";

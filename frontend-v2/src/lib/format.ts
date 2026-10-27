@@ -25,3 +25,12 @@ export const CLASS_LABEL: Record<string, string> = {
   interpretation: "Interpretation",
   hypothetical: "Hypothetical",
 };
+
+/** "meterless:nvidia/nemotron-3.5-lightning-30b-a3b" -> "nvidia/nemotron-3.5-lightning-30b-a3b via Meterless Nightshift".
+ *  The model id is the one Nightshift reported in its reply, so it names the model that actually handled the request. */
+export function modelLabel(generatedBy: string): string {
+  const i = generatedBy.indexOf(":");
+  const provider = i < 0 ? generatedBy : generatedBy.slice(0, i);
+  const model = i < 0 ? generatedBy : generatedBy.slice(i + 1);
+  return provider === "meterless" ? `${model} via Meterless Nightshift` : `${model} (${provider})`;
+}

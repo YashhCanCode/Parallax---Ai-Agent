@@ -18,7 +18,7 @@ const backendEnv: Record<string, string> = {
   FINSIGHT_CACHE_DIR: path.join(STATE, "cache"),
   LLM_PROVIDER: "none",
   // Explicit empty values win over the repo's .env (it is loaded with override=False).
-  NVIDIA_API_KEY: "", GEMINI_API_KEY: "", METERLESS_RUNTIME_TOKEN: "",
+  METERLESS_RUNTIME_TOKEN: "",
   ZETARIS_ORG_ID: "", ZETARIS_API_KEY: "", ZETARIS_USERNAME: "", ZETARIS_PASSWORD: "",
   SEC_USER_AGENT: "", ZETARIS_USER_AGENT: "",
   WATCHLIST_CHECK_MINUTES: "0",

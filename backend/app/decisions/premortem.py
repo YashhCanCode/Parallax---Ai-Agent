@@ -54,7 +54,7 @@ class PremortemOut(BaseModel):
 
 def system_prompt(year: int) -> str:
     return (
-        "You run a pre-mortem for a beginner investor using FinSight AI, an educational research tool. "
+        "You run a pre-mortem for a beginner investor using Parallax, an educational research tool. "
         f"Imagine it is {year} and a decision about this company went badly. Write two voices. "
         "SKEPTIC: the most likely failure story, built only from the warning signs in the findings. "
         "DEFENDER: the strongest counter-case, built only from counterevidence and reassuring findings. "

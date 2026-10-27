@@ -64,7 +64,7 @@ def profit_vs_cash(obs: list[Observation]) -> Optional[Finding]:
             title="Profit vs operating cash flow: not enough data",
             claim=f"Cannot compare profit with operating cash flow: missing {missing}.",
             classification=Classification.calculation,
-            uncertainty_or_limitations="The company may report these under concepts FinSight does not map.",
+            uncertainty_or_limitations="The company may report these under concepts Parallax does not map.",
             status=FindingStatus.insufficient_evidence,
         )
     conv = {y: (ocf[y].current.value / ni[y].current.value) if ni[y].current.value > 0 else None for y in years}
@@ -89,7 +89,16 @@ def profit_vs_cash(obs: list[Observation]) -> Optional[Finding]:
     for y in years:
         evidence += [EvidenceRef(observation_id=ni[y].current.id, note=f"net income {y}"),
                      EvidenceRef(observation_id=ocf[y].current.id, note=f"operating cash flow {y}")]
-    if diverging:
+    negative = ocf[y0].current.value <= 0 or ocf[y1].current.value <= 0
+    if negative:
+        # A percentage change to or from a negative cash flow means nothing ("-251.8%"), so state the values.
+        diverging = False
+        title = (f"Operating cash flow was {'negative' if ocf[y1].current.value <= 0 else 'positive'} in {y1} "
+                 f"({fmt_usd(ocf[y1].current.value)}, from {fmt_usd(ocf[y0].current.value)}) while net income was "
+                 f"{fmt_usd(ni[y1].current.value)}")
+        counter_notes.append("for banks, insurers and other financial companies, operating cash flow swings with "
+                             "lending, deposits and trading, so it says little about profit quality")
+    elif diverging:
         title = (f"Profit rose {_pct(ni_g)} while operating cash flow fell {_pct(ocf_g)} in {y1}"
                  + (f" ({run} years running)" if run > 1 else ""))
     else:
@@ -112,7 +121,7 @@ def profit_vs_cash(obs: list[Observation]) -> Optional[Finding]:
             "inputs": {str(y): {"net_income": ni[y].current.value, "operating_cash_flow": ocf[y].current.value} for y in years},
             "cash_conversion": {str(y): conv[y] for y in years},
             "net_income_growth": ni_g,
-            "ocf_growth": ocf_g,
+            "ocf_growth": None if negative else ocf_g,
         },
         uncertainty_or_limitations=(
             "A gap between profit and cash can come from growing receivables or inventory, timing of payments, "
@@ -124,8 +133,14 @@ def profit_vs_cash(obs: list[Observation]) -> Optional[Finding]:
             "statement and working-capital notes closely."
         ),
         status=FindingStatus.supported,
-        severity="elevated" if diverging and run > 1 else "watch" if diverging else "info",
+        severity="elevated" if diverging and run > 1 else "watch" if (diverging or negative) else "info",
     )
+
+
+def latest_filed_year(obs: list[Observation]) -> Optional[int]:
+    """The company's latest fiscal year, from its annual revenue or net income."""
+    years = [r.period_end.year for k in ("revenue", "net_income") for r in annual_series(obs, k)[-1:]]
+    return max(years) if years else None
 
 
 def debt_trend(obs: list[Observation]) -> Optional[Finding]:
@@ -139,13 +154,29 @@ def debt_trend(obs: list[Observation]) -> Optional[Finding]:
             classification=Classification.reported_fact,
             uncertainty_or_limitations=(
                 "Missing data is not evidence of zero debt. The company may report debt under other concepts "
-                "or in notes that FinSight does not read."
+                "or in notes that Parallax does not read."
             ),
             status=FindingStatus.insufficient_evidence,
         )
     s = consistent_window(debt, 4)
     ocf = _by_year(annual_series(obs, "operating_cash_flow"))
     last = s[-1]
+    current = latest_filed_year(obs)
+    if current is not None and last.period_end.year < current - 1:
+        # e.g. JPMorgan: the standard long-term-debt line stops in FY2013; a 2013 figure says nothing about today.
+        return Finding(
+            id=_fid("risk-debt-stale", last.period_end),
+            category="risk",
+            title=f"Long-term debt: no current figure (last reported for FY{last.period_end.year})",
+            claim=(f"The latest filings (FY{current}) don't report long-term debt under LongTermDebtNoncurrent or "
+                   f"LongTermDebt; the last value found is {fmt_usd(last.current.value)} for FY{last.period_end.year}, "
+                   f"too old to judge debt today."),
+            classification=Classification.reported_fact,
+            supporting_evidence=[EvidenceRef(observation_id=last.current.id, note=last.label)],
+            uncertainty_or_limitations=("Banks and other financial companies often report borrowings under other "
+                                        "concepts, which Parallax doesn't map. Missing data is not evidence of no debt."),
+            status=FindingStatus.insufficient_evidence,
+        )
     g = rel_diff(last.current.value, s[0].current.value) if len(s) > 1 else None
     coverage = None
     o = ocf.get(last.period_end.year)

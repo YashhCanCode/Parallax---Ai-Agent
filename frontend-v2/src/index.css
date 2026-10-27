@@ -3,7 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* FinSight v2 design tokens (dark). Palette from the reference:
+/* Parallax v2 design tokens (dark). Palette from the reference:
    #06141B darkest · #11212D primary dark · #253745 secondary · #4A5C6A muted slate
    #9BA8AB light slate · #CCD0CF pale neutral · #F7EFE7 warm cream
    plus the mockup's muted mauve / dusty rose for feature cards, charts and highlights.

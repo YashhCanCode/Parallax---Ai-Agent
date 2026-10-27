@@ -39,7 +39,7 @@ EXPLANATION_TEXT = {
     "alternate_concept": "This matches the figure under a different accounting definition, which is why it differs.",
     "other_document": "This matches a figure from a non-financial-statement document, not the official annual or quarterly report.",
     "fiscal_year_offset": "This matches a different year's figure; the year may have been mixed up.",
-    "unexplained": "FinSight couldn't find any reason this differs from the official filing. Be careful with this number until you can check where it came from.",
+    "unexplained": "Parallax couldn't find any reason this differs from the official filing. Be careful with this number until you can check where it came from.",
     "no_data": "There isn't enough official data to check this.",
 }
 
@@ -58,7 +58,7 @@ def _claim_or_source(f: Finding) -> str:
                     + ", and no common mix-up (wrong year, quarter instead of year, units, old figure) explains it.")
         if f.status == FindingStatus.contradicted:
             return "Your number isn't right as stated, but the mix-up is understandable: " + base[0].lower() + base[1:]
-        return base or "FinSight could not check this number."
+        return base or "Parallax could not check this number."
     return base
 
 
@@ -89,13 +89,13 @@ def explain(f: Finding) -> str:
                 "label would wrongly look as if the data stopped.")
     if k == "doc":
         return ("A different kind of document (such as a proxy statement, written for shareholder votes) shows a slightly "
-                "different number. FinSight treats the official annual or quarterly report as the reliable figure.")
+                "different number. Parallax treats the official annual or quarterly report as the reliable figure.")
     if k == "xcheck":
-        return ("FinSight compared the data it received through Zetaris with the SEC's own records"
+        return ("Parallax compared the data it received through Zetaris with the SEC's own records"
                 + (" and they matched exactly, so nothing was lost or changed." if f.status == FindingStatus.supported
                    else ". They differed, so treat these figures with care until the difference is understood."))
     if k == "mem":
-        return "This number changed since FinSight last looked at this company, usually because a newer filing updated it."
+        return "This number changed since Parallax last looked at this company, usually because a newer filing updated it."
     if k == "risk-rev":
         growth = d.get("growth") if isinstance(d.get("growth"), dict) else {}
         vals = [v for v in growth.values() if isinstance(v, (int, float))]
@@ -113,7 +113,7 @@ def explain(f: Finding) -> str:
         if ni_g is not None and ocf_g is not None:
             return ("Profit and the cash the business brings in moved in the same direction last year, so there's no "
                     "profit-versus-cash warning here.")
-        return "FinSight couldn't compare profit with cash."
+        return "Parallax couldn't compare profit with cash."
     if k == "risk-cash-missing":
         return "There isn't enough data to compare profit with the cash the business brings in."
     if k == "risk-debt":

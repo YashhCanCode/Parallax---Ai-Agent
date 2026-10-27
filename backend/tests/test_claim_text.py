@@ -71,5 +71,5 @@ def test_summary_answers_the_question_and_validates_the_answer():
     assert validate_narrative(bad, {"f1"}, "revenue $5 billion")[1].startswith("introduced numbers")
     advice = ok.replace("Yes. Revenue was $5 billion.", "You should buy it.")
     assert validate_narrative(advice, {"f1"}, "revenue $5 billion")[1] == "contained recommendation language"
-    assert deterministic_answer("Should I buy Tesla?", []).startswith("FinSight doesn't make investment decisions")
+    assert deterministic_answer("Should I buy Tesla?", []).startswith("Parallax doesn't make investment decisions")
     assert deterministic_answer("How is Tesla doing?", []) == ""

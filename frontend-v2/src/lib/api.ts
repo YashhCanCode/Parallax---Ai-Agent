@@ -42,6 +42,7 @@ export const api = {
     req<{ reports: WatchReport[] }>("/api/watchlist/check", { method: "POST", body: JSON.stringify({ ticker: ticker ?? null }) }),
   sampleAmendment: () => req<{ applied: boolean; description: string }>("/api/sample/amendment"),
   publishSampleAmendment: () => req<{ applied: boolean }>("/api/sample/amendment", { method: "POST" }),
+  resetSampleAmendment: () => req<{ applied: boolean; round: number }>("/api/sample/amendment", { method: "DELETE" }),
   premortem: (invId: string) => req<Premortem>(`/api/investigations/${invId}/premortem`, { method: "POST" }),
   tripwireMetrics: (ticker: string, data_mode: string) =>
     req<{ ticker: string; company: string; mode_used: string; metrics: TripwireMetric[] }>(`/api/tripwire-metrics?ticker=${encodeURIComponent(ticker)}&data_mode=${data_mode}`),

@@ -10,7 +10,7 @@ Sources checked on 2026-10-23:
 
 ## Zetaris
 
-**Role:** the federated SQL layer between FinSight and SEC EDGAR. Each company × concept is a Lightning REST table that Zetaris fetches live, flattened by a schemastore view. FinSight never parses Zetaris-only formats. It reads the view rows and normalizes them the same way it normalizes the direct SEC API, so the two channels can be compared row for row.
+**Role:** the federated SQL layer between Parallax and SEC EDGAR. Each company × concept is a Lightning REST table that Zetaris fetches live, flattened by a schemastore view. Parallax never parses Zetaris-only formats. It reads the view rows and normalizes them the same way it normalizes the direct SEC API, so the two channels can be compared row for row.
 
 | Piece | File | Source of truth |
 |---|---|---|
@@ -34,16 +34,17 @@ Sources checked on 2026-10-23:
 - **Sign-in:** both methods work against `localhost:3000`, the API key and `POST /api/auth/login` with a username and password.
 - **Query route:** `GET /api/proxy/lightning-database/databases` and `POST /api/proxy/sql-editor/sqls/run-query` work, including on the sample `NY_TAXI` data.
 - **Registration:** `scripts/zetaris_setup.py --apply` created the `FINSIGHT_SEC` Lightning database, the `finsight` container, and **78 REST tables plus views for all 9 companies**. **All 78 row counts match the direct SEC API**; `--verify` re-checked them all. The 12 company/concept pairs the SEC has no data for (mostly Ford) are listed under `no_data` in `zetaris/registered_views.json`, so the app can say "the company doesn't report this" instead of "not registered".
+- **On-demand registration:** Palantir and Coca-Cola were later registered on first lookup, and the 7 figures added later (gross profit, operating income, R&D, capital spending, cash, buybacks, dividends) got their own views for Apple, Microsoft, NVIDIA, Tesla and Walmart. The manifest now holds **143 verified views across 13 companies, 0 rejected** (2026-10-27).
 - **Live investigations** in `zetaris` mode, each cross-checked against the SEC with **0 value mismatches**:
   - Tesla: 1,133 facts through 9 queries
   - Apple: 1,272 facts through 10 queries
   - Ford: 617 facts through 5 queries
 - Two behaviours of the real instance that the docs don't mention, both now handled and covered by tests:
-  - Database descriptions may only contain letters, digits, spaces and `_ . - ,`. FinSight's first description had a colon and was rejected.
-  - Every value in query results comes back as text (`"1"`, not `1`). FinSight converts these.
+  - Database descriptions may only contain letters, digits, spaces and `_ . - ,`. Parallax's first description had a colon and was rejected.
+  - Every value in query results comes back as text (`"1"`, not `1`). Parallax converts these.
 - 10 unit tests in `backend/tests/test_zetaris.py`, plus 8 in `backend/tests/test_any_company.py` covering the directory, on-demand registration and the SEC-gap fallback.
 
-**On-demand registration for any SEC-listed company** (`backend/app/integrations/zetaris/registry.py`). The first time a company is looked up in `zetaris` mode, FinSight:
+**On-demand registration for any SEC-listed company** (`backend/app/integrations/zetaris/registry.py`). The first time a company is looked up in `zetaris` mode, Parallax:
 1. Probes the SEC for the concepts it reports.
 2. Creates the same `CREATE LIGHTNING REST TABLE` and `CREATE SCHEMASTORE VIEW` statements as the setup script.
 3. Queries the new views, and keeps each one **only if Zetaris returns the same number of rows as the SEC**. Mismatches are recorded under `rejected`, and their data isn't used.
@@ -52,7 +53,7 @@ Every CREATE is logged in the investigation's Integration trail. Verified live:
 - Palantir: 6 views created and verified in 13 s, 317 facts, 0 mismatches
 - Coca-Cola: 3 views
 
-**SEC-side gap found while testing:** for Coca-Cola, `companyconcept` (the endpoint the Zetaris recipe reads) returns `"USD": {}` for 5 concepts, while `companyfacts` has the full history. FinSight records those pairs under `concept_api_empty` instead of registering empty Zetaris tables. It reads those figures from `companyfacts` directly and shows "Not via Zetaris" for them.
+**SEC-side gap found while testing:** for Coca-Cola, `companyconcept` (the endpoint the Zetaris recipe reads) returns `"USD": {}` for 5 concepts, while `companyfacts` has the full history. Parallax records those pairs under `concept_api_empty` instead of registering empty Zetaris tables. It reads those figures from `companyfacts` directly and shows "Not via Zetaris" for them.
 
 Of the 8 companies spot-checked, only Coca-Cola had this. The others' concept counts matched `companyfacts` exactly.
 
@@ -66,11 +67,11 @@ backend/.venv/bin/python scripts/zetaris_setup.py --apply --tickers AAPL MSFT --
 
 ### H-MEM (memory engine) — exercised for real
 
-**Role:** FinSight's long-term memory across investigations, with provenance and an audit trail.
+**Role:** Parallax's long-term memory across investigations, with provenance and an audit trail.
 
 `services/hmem-sidecar/server.ts` loads the official H-MEM reference engine. `npm run setup` vendors it from `meterless/meterless/engines/hmem/reference` via degit, exactly as the official agentathon starter does. The sidecar exposes the engine over HTTP for the Python backend.
 
-| FinSight action | H-MEM service | When |
+| Parallax action | H-MEM service | When |
 |---|---|---|
 | Recall prior memories for a company (namespaced via `chatId` = ticker) | `MemoryRetrievalService.query` (hybrid ranking, trace) | PLANNING |
 | Store each reconciled annual figure, with `source` + `provenance.refs` (filing URL) | `MemoryStoreService.add` (rejects records with no source) | VERIFYING |
@@ -83,68 +84,45 @@ backend/.venv/bin/python scripts/zetaris_setup.py --apply --tickers AAPL MSFT --
 | **Blind-board pick**: which company the user chose on evidence, before seeing names | `MemoryStoreService.add` | Blind board reveal |
 | **Watchlist check**: write this run's figures (latest 3 years + latest 2 quarters per metric) and report each fact's outcome as new / confirmed / changed | same services as above | Watchlist tab, `POST /api/watchlist/check`, or every `WATCHLIST_CHECK_MINUTES` |
 
-**Why conflicts are keyed by fact:** the reference `ConflictDetectionService` flags any two very similar texts with different numbers. That would wrongly flag "revenue FY2023 = X" against "revenue FY2024 = Y". So FinSight keys each fact by company, metric and period, and records real conflicts through the same ledger actions and `supersededBy` semantics defined in the H-MEM spec (AGENTS.md §10).
+**Why conflicts are keyed by fact:** the reference `ConflictDetectionService` flags any two very similar texts with different numbers. That would wrongly flag "revenue FY2023 = X" against "revenue FY2024 = Y". So Parallax keys each fact by company, metric and period, and records real conflicts through the same ledger actions and `supersededBy` semantics defined in the H-MEM spec (AGENTS.md §10).
 
 **Verification status:**
 - 4 sidecar tests run against the real engine (`services/hmem-sidecar/test/sidecar.test.ts`).
 - `backend/tests/test_watchlist.py` starts the real sidecar and checks the full flow: baseline, then re-confirmation, then detecting the fictional amendment. That last step catches revenue 52.4B → 51.9B and net income 4.4B → 4.1B, with `conflict_detected` and `conflict_resolved` in the ledger.
 - Manual end-to-end runs on live Tesla and Apple data exercised recall and re-confirmation. A conflict also appeared when a corrected value replaced one stored by an earlier (buggy) run, which exercised the ledger path end to end.
 
-### Meterless Runtime (model provider) — contract implemented, not run live
+### Meterless Nightshift (Runtime) — the AI provider, routing to NVIDIA Nemotron; verified live (2026-10-26)
 
-**Role:** the first-choice route for FinSight's two model calls:
+**Role:** Parallax's only AI provider:
 - question interpretation, used only when no supported company is found deterministically
-- the plain-language summary
+- the direct answer and plain-language summary
+- the Pre-Mortem voices
+
+When it is offline, Parallax writes answers in code from verified findings and key figures.
 
 `backend/app/integrations/meterless/runtime.py` implements the published contract for Runtime 0.90.0:
 
 | Contract rule | Implementation |
 |---|---|
 | Default `http://127.0.0.1:8088/v1`; normalize any pasted URL to `<host>/v1`, never `/v1/v1` | `normalize_base_url` |
-| `Authorization: Bearer <token>`; token from `<stateDir>/proxy-token`; `rt-local` rejected | `resolve_token`, `METERLESS_TOKEN_FILE` |
-| `meterless-app` on every request, `meterless-scope: user` on chat | `_headers` (app id `finsight-ai`) |
-| Model ids are routing modes (`meterless/auto` …), read from `/v1/models` | `METERLESS_MODEL`, `status().models` |
+| `Authorization: Bearer <token>`; token from `<stateDir>/proxy-token`; `rt-local` rejected | `resolve_token`, `METERLESS_TOKEN_FILE`; with no setting, the Mac app's `runtime-token` is found automatically |
+| `meterless-app` on every request, `meterless-scope: user` on chat | `_headers` (app id `parallax-ai`) |
+| Model ids are routing modes (`meterless/auto` …) or provider models, read from `/v1/models` | `METERLESS_MODEL` (default `nvidia/nemotron-3.5-lightning-30b-a3b`), `status().models` |
 | `/v1/models` decides status: 401/403 unauthorized, 200 with meterless ids online, else offline | `status` |
 | Auto-detect ports 8088, 8090, 8787, 11434 on 127.0.0.1 / localhost / [::1] | `auto_detect` |
 | 180 s chat timeout | `CHAT_TIMEOUT_S` |
 
-What FinSight records per call (`ModelCall`):
+What Parallax records per call (`ModelCall`):
 - provider and model id, exactly as returned
 - duration
 - the `usage` object, exactly as returned
 - whether the output passed verification
 
-FinSight does not compute or claim costs.
+Parallax does not compute or claim costs.
 
-**Verification status:** 4 unit tests against mocks of the contract. **Not yet run against a live Nightshift runtime.** To verify:
-1. Install Nightshift (Mac M1+ edition is free: https://www.meterless.ai/mac.html).
-2. Set `METERLESS_TOKEN_FILE=<stateDir>/proxy-token`.
-3. Check `GET /api/integrations/status?deep=true`. It should show `meterless_runtime.state = online`.
-4. Run an investigation. The *Integration trail* panel lists the model call and its usage.
-
-## NVIDIA Nemotron — working, live-verified (2026-10-24)
-
-**Role:** FinSight's AI writer. Nemotron does the model calls only:
-- the plain-language investigation summary
-- mapping a vague question to a company, when the rules-based parser finds none
-
-It never does arithmetic or decides what is true.
-
-| Piece | Detail |
-|---|---|
-| Endpoint | `https://integrate.api.nvidia.com/v1/chat/completions`, OpenAI-compatible, `Authorization: Bearer $NVIDIA_API_KEY` (key from build.nvidia.com). Verified: no key gives 401, an invalid key 403. |
-| Model | `nvidia/nemotron-3.5-lightning-30b-a3b` by default (`NVIDIA_MODEL`). On this account, Nemotron 3 Ultra and 3.5 Bolt also work; 3 Super, Nano 3 and the Llama-based Nemotron models return "Not found for account". |
-| Reasoning | `chat_template_kwargs.enable_thinking=false` (documented for Nemotron 3). Short structured output; any `<think>` text is stripped. |
-| Structured output | `response_format: {type: json_schema, …}`, verified on the hosted service. Without it, Lightning sometimes produced malformed JSON (`{"text "…`), which FinSight's validator rejected. With it, **6 of 6 live investigations produced accepted summaries** (Tesla ×3, Apple, Coca-Cola, sample company), in about 4.5–6 s each. `nvext.guided_json` is **not** supported by the hosted service. |
-| Safety | Output is shown only after `app/verification/model_output.py` passes. Otherwise the deterministic summary is shown, with the reason. Failures (bad key, 429 rate limit, timeouts) fall back the same way and are recorded. |
-| Observability | Each call is a `ModelCall`: provider, model id, duration, and `usage` exactly as NVIDIA returns it (prompt, completion and total tokens). It appears in the Integration trail. |
-| Code | `backend/app/integrations/nvidia.py`, `backend/app/agents/narrator.py`. 5 tests in `backend/tests/test_meterless_and_llm.py`. |
-
-**Comparison on the same sample investigation:**
-
-| Model | Time | Summary accepted? |
-|---|---|---|
-| Lightning | 5.5 s | yes |
-| Ultra | 17 s | yes, slightly richer |
-
-Lightning is the default for speed.
+**Verification status: working live** against Nightshift on a Mac M1+ (2026-10-26), with NVIDIA added as a provider in the Nightshift app.
+- **Connection:** found on port 8088 and authenticated with the app's `runtime-token`, no configuration needed. `/v1/models` lists Nightshift's routing modes, its on-device models and the NVIDIA Nemotron models.
+- **Model:** Parallax requests `nvidia/nemotron-3.5-lightning-30b-a3b` through Nightshift, with `chat_template_kwargs.enable_thinking=false`, which Nightshift passes through: about 1 s for a short reply instead of about 17 s with reasoning on. If a model rejects the switch, the call is retried once without it.
+- **Live investigations** (Zetaris data, Nemotron via Nightshift): 5 of 7 answers were model-written and passed every check, at about 5 s per call. The other 2 used a number not in the evidence and were replaced by answers computed in code, as designed. Every answer names the model from Nightshift's reply.
+- **On-device models:** Nightshift's routing modes (`meterless/auto`, `fast`, `deep`, `local`) chose 1–4B on-device models with a 4,096-token context. They failed or took 1–2 minutes on Parallax's evidence, so the default is Nemotron.
+- **Tests:** contract, token discovery, the Nemotron switch and its retry, and the full answer path, all against mocks (`backend/tests/test_meterless_and_llm.py`).

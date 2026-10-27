@@ -71,7 +71,7 @@ Base.metadata.create_all(engine)
 
 
 def utc(dt: Optional[datetime]) -> Optional[datetime]:
-    """SQLite stores datetimes without a timezone; everything FinSight writes is UTC, so say so."""
+    """SQLite stores datetimes without a timezone; everything Parallax writes is UTC, so say so."""
     if dt is None:
         return None
     return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)

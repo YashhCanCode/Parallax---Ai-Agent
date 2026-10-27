@@ -1,10 +1,55 @@
 {
   "created_at": "2026-10-24T10:46:37.322653+00:00",
-  "updated_at": "2026-10-24T12:05:23.018706+00:00",
+  "updated_at": "2026-10-26T15:32:10.389446+00:00",
   "zetaris_base_url": "http://localhost:3000",
   "lightning_db": "FINSIGHT_SEC",
   "container": "finsight",
   "views": [
+    {
+      "ticker": "AAPL",
+      "metric": "buybacks",
+      "tag": "PaymentsForRepurchaseOfCommonStock",
+      "view": "aapl_buybacks",
+      "zetaris_rows": 126,
+      "sec_rows": 126,
+      "verified_at": "2026-10-26T13:16:58.545968+00:00"
+    },
+    {
+      "ticker": "AAPL",
+      "metric": "capex",
+      "tag": "PaymentsToAcquireProductiveAssets",
+      "view": "aapl_capex_productive",
+      "zetaris_rows": 59,
+      "sec_rows": 59,
+      "verified_at": "2026-10-26T13:16:58.545968+00:00"
+    },
+    {
+      "ticker": "AAPL",
+      "metric": "capex",
+      "tag": "PaymentsToAcquirePropertyPlantAndEquipment",
+      "view": "aapl_capex_ppe",
+      "zetaris_rows": 105,
+      "sec_rows": 105,
+      "verified_at": "2026-10-26T13:16:58.545968+00:00"
+    },
+    {
+      "ticker": "AAPL",
+      "metric": "cash",
+      "tag": "CashAndCashEquivalentsAtCarryingValue",
+      "view": "aapl_cash",
+      "zetaris_rows": 228,
+      "sec_rows": 228,
+      "verified_at": "2026-10-26T13:16:58.545968+00:00"
+    },
+    {
+      "ticker": "AAPL",
+      "metric": "cash",
+      "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+      "view": "aapl_cash_incl_restricted",
+      "zetaris_rows": 120,
+      "sec_rows": 120,
+      "verified_at": "2026-10-26T13:16:58.545968+00:00"
+    },
     {
       "ticker": "AAPL",
       "metric": "current_assets",
@@ -22,6 +67,33 @@
       "zetaris_rows": 144,
       "sec_rows": 144,
       "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "AAPL",
+      "metric": "dividends",
+      "tag": "PaymentsOfDividends",
+      "view": "aapl_dividends",
+      "zetaris_rows": 228,
+      "sec_rows": 228,
+      "verified_at": "2026-10-26T13:16:58.545968+00:00"
+    },
+    {
+      "ticker": "AAPL",
+      "metric": "dividends",
+      "tag": "PaymentsOfDividendsCommonStock",
+      "view": "aapl_dividends_common",
+      "zetaris_rows": 25,
+      "sec_rows": 25,
+      "verified_at": "2026-10-26T13:16:58.545968+00:00"
+    },
+    {
+      "ticker": "AAPL",
+      "metric": "gross_profit",
+      "tag": "GrossProfit",
+      "view": "aapl_gross_profit",
+      "zetaris_rows": 338,
+      "sec_rows": 338,
+      "verified_at": "2026-10-26T13:16:58.545968+00:00"
     },
     {
       "ticker": "AAPL",
@@ -70,6 +142,15 @@
     },
     {
       "ticker": "AAPL",
+      "metric": "operating_income",
+      "tag": "OperatingIncomeLoss",
+      "view": "aapl_operating_income",
+      "zetaris_rows": 234,
+      "sec_rows": 234,
+      "verified_at": "2026-10-26T13:16:58.545968+00:00"
+    },
+    {
+      "ticker": "AAPL",
       "metric": "revenue",
       "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
       "view": "aapl_rev_asc606",
@@ -94,6 +175,15 @@
       "zetaris_rows": 210,
       "sec_rows": 210,
       "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "AAPL",
+      "metric": "rnd",
+      "tag": "ResearchAndDevelopmentExpense",
+      "view": "aapl_rnd",
+      "zetaris_rows": 234,
+      "sec_rows": 234,
+      "verified_at": "2026-10-26T13:16:58.545968+00:00"
     },
     {
       "ticker": "F",
@@ -285,6 +375,78 @@
       "verified_at": "2026-10-24T10:57:00.352274+00:00"
     },
     {
+      "ticker": "JPM",
+      "metric": "buybacks",
+      "tag": "PaymentsForRepurchaseOfCommonStock",
+      "view": "jpm_buybacks",
+      "zetaris_rows": 93,
+      "sec_rows": 93,
+      "verified_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
+      "ticker": "JPM",
+      "metric": "cash",
+      "tag": "CashAndCashEquivalentsAtCarryingValue",
+      "view": "jpm_cash",
+      "zetaris_rows": 16,
+      "sec_rows": 16,
+      "verified_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
+      "ticker": "JPM",
+      "metric": "cash",
+      "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+      "view": "jpm_cash_incl_restricted",
+      "zetaris_rows": 120,
+      "sec_rows": 120,
+      "verified_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
+      "ticker": "JPM",
+      "metric": "dividends",
+      "tag": "PaymentsOfDividends",
+      "view": "jpm_dividends",
+      "zetaris_rows": 164,
+      "sec_rows": 164,
+      "verified_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
+      "ticker": "JPM",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebt",
+      "view": "jpm_ltd",
+      "zetaris_rows": 46,
+      "sec_rows": 46,
+      "verified_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
+      "ticker": "JPM",
+      "metric": "net_income",
+      "tag": "NetIncomeLoss",
+      "view": "jpm_net_income",
+      "zetaris_rows": 241,
+      "sec_rows": 241,
+      "verified_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
+      "ticker": "JPM",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivities",
+      "view": "jpm_ocf",
+      "zetaris_rows": 164,
+      "sec_rows": 164,
+      "verified_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
+      "ticker": "JPM",
+      "metric": "revenue",
+      "tag": "Revenues",
+      "view": "jpm_revenues",
+      "zetaris_rows": 120,
+      "sec_rows": 120,
+      "verified_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
       "ticker": "KO",
       "metric": "long_term_debt",
       "tag": "LongTermDebt",
@@ -313,6 +475,42 @@
     },
     {
       "ticker": "MSFT",
+      "metric": "buybacks",
+      "tag": "PaymentsForRepurchaseOfCommonStock",
+      "view": "msft_buybacks",
+      "zetaris_rows": 230,
+      "sec_rows": 230,
+      "verified_at": "2026-10-26T13:17:29.438820+00:00"
+    },
+    {
+      "ticker": "MSFT",
+      "metric": "capex",
+      "tag": "PaymentsToAcquirePropertyPlantAndEquipment",
+      "view": "msft_capex_ppe",
+      "zetaris_rows": 230,
+      "sec_rows": 230,
+      "verified_at": "2026-10-26T13:17:29.438820+00:00"
+    },
+    {
+      "ticker": "MSFT",
+      "metric": "cash",
+      "tag": "CashAndCashEquivalentsAtCarryingValue",
+      "view": "msft_cash",
+      "zetaris_rows": 266,
+      "sec_rows": 266,
+      "verified_at": "2026-10-26T13:17:29.438820+00:00"
+    },
+    {
+      "ticker": "MSFT",
+      "metric": "cash",
+      "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+      "view": "msft_cash_incl_restricted",
+      "zetaris_rows": 144,
+      "sec_rows": 144,
+      "verified_at": "2026-10-26T13:17:29.438820+00:00"
+    },
+    {
+      "ticker": "MSFT",
       "metric": "current_assets",
       "tag": "AssetsCurrent",
       "view": "msft_assets_current",
@@ -328,6 +526,24 @@
       "zetaris_rows": 142,
       "sec_rows": 142,
       "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "MSFT",
+      "metric": "dividends",
+      "tag": "PaymentsOfDividendsCommonStock",
+      "view": "msft_dividends_common",
+      "zetaris_rows": 238,
+      "sec_rows": 238,
+      "verified_at": "2026-10-26T13:17:29.438820+00:00"
+    },
+    {
+      "ticker": "MSFT",
+      "metric": "gross_profit",
+      "tag": "GrossProfit",
+      "view": "msft_gross_profit",
+      "zetaris_rows": 306,
+      "sec_rows": 306,
+      "verified_at": "2026-10-26T13:17:29.438820+00:00"
     },
     {
       "ticker": "MSFT",
@@ -376,6 +592,15 @@
     },
     {
       "ticker": "MSFT",
+      "metric": "operating_income",
+      "tag": "OperatingIncomeLoss",
+      "view": "msft_operating_income",
+      "zetaris_rows": 278,
+      "sec_rows": 278,
+      "verified_at": "2026-10-26T13:17:29.438820+00:00"
+    },
+    {
+      "ticker": "MSFT",
       "metric": "revenue",
       "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
       "view": "msft_rev_asc606",
@@ -402,6 +627,60 @@
       "verified_at": "2026-10-24T10:57:00.352274+00:00"
     },
     {
+      "ticker": "MSFT",
+      "metric": "rnd",
+      "tag": "ResearchAndDevelopmentExpense",
+      "view": "msft_rnd",
+      "zetaris_rows": 230,
+      "sec_rows": 230,
+      "verified_at": "2026-10-26T13:17:29.438820+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "buybacks",
+      "tag": "PaymentsForRepurchaseOfCommonStock",
+      "view": "nvda_buybacks",
+      "zetaris_rows": 123,
+      "sec_rows": 123,
+      "verified_at": "2026-10-26T13:18:45.019296+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "capex",
+      "tag": "PaymentsToAcquireProductiveAssets",
+      "view": "nvda_capex_productive",
+      "zetaris_rows": 35,
+      "sec_rows": 35,
+      "verified_at": "2026-10-26T13:18:45.019296+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "capex",
+      "tag": "PaymentsToAcquirePropertyPlantAndEquipment",
+      "view": "nvda_capex_ppe",
+      "zetaris_rows": 55,
+      "sec_rows": 55,
+      "verified_at": "2026-10-26T13:18:45.019296+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "cash",
+      "tag": "CashAndCashEquivalentsAtCarryingValue",
+      "view": "nvda_cash",
+      "zetaris_rows": 219,
+      "sec_rows": 219,
+      "verified_at": "2026-10-26T13:18:45.019296+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "cash",
+      "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+      "view": "nvda_cash_incl_restricted",
+      "zetaris_rows": 120,
+      "sec_rows": 120,
+      "verified_at": "2026-10-26T13:18:45.019296+00:00"
+    },
+    {
       "ticker": "NVDA",
       "metric": "current_assets",
       "tag": "AssetsCurrent",
@@ -418,6 +697,24 @@
       "zetaris_rows": 138,
       "sec_rows": 138,
       "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "dividends",
+      "tag": "PaymentsOfDividends",
+      "view": "nvda_dividends",
+      "zetaris_rows": 157,
+      "sec_rows": 157,
+      "verified_at": "2026-10-26T13:18:45.019296+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "gross_profit",
+      "tag": "GrossProfit",
+      "view": "nvda_gross_profit",
+      "zetaris_rows": 305,
+      "sec_rows": 305,
+      "verified_at": "2026-10-26T13:18:45.019296+00:00"
     },
     {
       "ticker": "NVDA",
@@ -457,6 +754,15 @@
     },
     {
       "ticker": "NVDA",
+      "metric": "operating_income",
+      "tag": "OperatingIncomeLoss",
+      "view": "nvda_operating_income",
+      "zetaris_rows": 225,
+      "sec_rows": 225,
+      "verified_at": "2026-10-26T13:18:45.019296+00:00"
+    },
+    {
+      "ticker": "NVDA",
       "metric": "revenue",
       "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
       "view": "nvda_rev_asc606",
@@ -472,6 +778,15 @@
       "zetaris_rows": 280,
       "sec_rows": 280,
       "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "rnd",
+      "tag": "ResearchAndDevelopmentExpense",
+      "view": "nvda_rnd",
+      "zetaris_rows": 225,
+      "sec_rows": 225,
+      "verified_at": "2026-10-26T13:18:45.019296+00:00"
     },
     {
       "ticker": "ORCL",
@@ -700,6 +1015,33 @@
     },
     {
       "ticker": "TSLA",
+      "metric": "capex",
+      "tag": "PaymentsToAcquirePropertyPlantAndEquipment",
+      "view": "tsla_capex_ppe",
+      "zetaris_rows": 142,
+      "sec_rows": 142,
+      "verified_at": "2026-10-26T13:16:05.805739+00:00"
+    },
+    {
+      "ticker": "TSLA",
+      "metric": "cash",
+      "tag": "CashAndCashEquivalentsAtCarryingValue",
+      "view": "tsla_cash",
+      "zetaris_rows": 246,
+      "sec_rows": 246,
+      "verified_at": "2026-10-26T13:16:05.805739+00:00"
+    },
+    {
+      "ticker": "TSLA",
+      "metric": "cash",
+      "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+      "view": "tsla_cash_incl_restricted",
+      "zetaris_rows": 12,
+      "sec_rows": 12,
+      "verified_at": "2026-10-26T13:16:05.805739+00:00"
+    },
+    {
+      "ticker": "TSLA",
       "metric": "current_assets",
       "tag": "AssetsCurrent",
       "view": "tsla_assets_current",
@@ -715,6 +1057,15 @@
       "zetaris_rows": 126,
       "sec_rows": 126,
       "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TSLA",
+      "metric": "gross_profit",
+      "tag": "GrossProfit",
+      "view": "tsla_gross_profit",
+      "zetaris_rows": 286,
+      "sec_rows": 286,
+      "verified_at": "2026-10-26T13:16:05.805739+00:00"
     },
     {
       "ticker": "TSLA",
@@ -763,6 +1114,15 @@
     },
     {
       "ticker": "TSLA",
+      "metric": "operating_income",
+      "tag": "OperatingIncomeLoss",
+      "view": "tsla_operating_income",
+      "zetaris_rows": 206,
+      "sec_rows": 206,
+      "verified_at": "2026-10-26T13:16:05.805739+00:00"
+    },
+    {
+      "ticker": "TSLA",
       "metric": "revenue",
       "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
       "view": "tsla_rev_asc606",
@@ -778,6 +1138,51 @@
       "zetaris_rows": 286,
       "sec_rows": 286,
       "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TSLA",
+      "metric": "rnd",
+      "tag": "ResearchAndDevelopmentExpense",
+      "view": "tsla_rnd",
+      "zetaris_rows": 206,
+      "sec_rows": 206,
+      "verified_at": "2026-10-26T13:16:05.805739+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "buybacks",
+      "tag": "PaymentsForRepurchaseOfCommonStock",
+      "view": "wmt_buybacks",
+      "zetaris_rows": 157,
+      "sec_rows": 157,
+      "verified_at": "2026-10-26T13:17:57.892526+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "capex",
+      "tag": "PaymentsToAcquirePropertyPlantAndEquipment",
+      "view": "wmt_capex_ppe",
+      "zetaris_rows": 157,
+      "sec_rows": 157,
+      "verified_at": "2026-10-26T13:17:57.892526+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "cash",
+      "tag": "CashAndCashEquivalentsAtCarryingValue",
+      "view": "wmt_cash",
+      "zetaris_rows": 229,
+      "sec_rows": 229,
+      "verified_at": "2026-10-26T13:17:57.892526+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "cash",
+      "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+      "view": "wmt_cash_incl_restricted",
+      "zetaris_rows": 124,
+      "sec_rows": 124,
+      "verified_at": "2026-10-26T13:17:57.892526+00:00"
     },
     {
       "ticker": "WMT",
@@ -796,6 +1201,24 @@
       "zetaris_rows": 193,
       "sec_rows": 193,
       "verified_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "dividends",
+      "tag": "PaymentsOfDividends",
+      "view": "wmt_dividends",
+      "zetaris_rows": 99,
+      "sec_rows": 99,
+      "verified_at": "2026-10-26T13:17:57.892526+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "dividends",
+      "tag": "PaymentsOfDividendsCommonStock",
+      "view": "wmt_dividends_common",
+      "zetaris_rows": 58,
+      "sec_rows": 58,
+      "verified_at": "2026-10-26T13:17:57.892526+00:00"
     },
     {
       "ticker": "WMT",
@@ -835,6 +1258,15 @@
     },
     {
       "ticker": "WMT",
+      "metric": "operating_income",
+      "tag": "OperatingIncomeLoss",
+      "view": "wmt_operating_income",
+      "zetaris_rows": 229,
+      "sec_rows": 229,
+      "verified_at": "2026-10-26T13:17:57.892526+00:00"
+    },
+    {
+      "ticker": "WMT",
       "metric": "revenue",
       "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
       "view": "wmt_rev_asc606",
@@ -863,6 +1295,12 @@
   ],
   "rejected": [],
   "no_data": [
+    {
+      "ticker": "AAPL",
+      "metric": "rnd",
+      "tag": "ResearchAndDevelopmentExpenseExcludingAcquiredInProcessCost",
+      "checked_at": "2026-10-26T13:16:58.545968+00:00"
+    },
     {
       "ticker": "F",
       "metric": "current_assets",
@@ -918,6 +1356,84 @@
       "checked_at": "2026-10-24T10:57:00.352274+00:00"
     },
     {
+      "ticker": "JPM",
+      "metric": "capex",
+      "tag": "PaymentsToAcquireProductiveAssets",
+      "checked_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
+      "ticker": "JPM",
+      "metric": "capex",
+      "tag": "PaymentsToAcquirePropertyPlantAndEquipment",
+      "checked_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
+      "ticker": "JPM",
+      "metric": "current_assets",
+      "tag": "AssetsCurrent",
+      "checked_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
+      "ticker": "JPM",
+      "metric": "current_liabilities",
+      "tag": "LiabilitiesCurrent",
+      "checked_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
+      "ticker": "JPM",
+      "metric": "dividends",
+      "tag": "PaymentsOfDividendsCommonStock",
+      "checked_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
+      "ticker": "JPM",
+      "metric": "gross_profit",
+      "tag": "GrossProfit",
+      "checked_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
+      "ticker": "JPM",
+      "metric": "long_term_debt",
+      "tag": "LongTermDebtNoncurrent",
+      "checked_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
+      "ticker": "JPM",
+      "metric": "operating_cash_flow",
+      "tag": "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations",
+      "checked_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
+      "ticker": "JPM",
+      "metric": "operating_income",
+      "tag": "OperatingIncomeLoss",
+      "checked_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
+      "ticker": "JPM",
+      "metric": "revenue",
+      "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "checked_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
+      "ticker": "JPM",
+      "metric": "revenue",
+      "tag": "SalesRevenueNet",
+      "checked_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
+      "ticker": "JPM",
+      "metric": "rnd",
+      "tag": "ResearchAndDevelopmentExpense",
+      "checked_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
+      "ticker": "JPM",
+      "metric": "rnd",
+      "tag": "ResearchAndDevelopmentExpenseExcludingAcquiredInProcessCost",
+      "checked_at": "2026-10-26T15:32:10.389446+00:00"
+    },
+    {
       "ticker": "KO",
       "metric": "revenue",
       "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
@@ -930,6 +1446,30 @@
       "checked_at": "2026-10-24T11:10:52.410086+00:00"
     },
     {
+      "ticker": "MSFT",
+      "metric": "capex",
+      "tag": "PaymentsToAcquireProductiveAssets",
+      "checked_at": "2026-10-26T13:17:29.438820+00:00"
+    },
+    {
+      "ticker": "MSFT",
+      "metric": "dividends",
+      "tag": "PaymentsOfDividends",
+      "checked_at": "2026-10-26T13:17:29.438820+00:00"
+    },
+    {
+      "ticker": "MSFT",
+      "metric": "rnd",
+      "tag": "ResearchAndDevelopmentExpenseExcludingAcquiredInProcessCost",
+      "checked_at": "2026-10-26T13:17:29.438820+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "dividends",
+      "tag": "PaymentsOfDividendsCommonStock",
+      "checked_at": "2026-10-26T13:18:45.019296+00:00"
+    },
+    {
       "ticker": "NVDA",
       "metric": "operating_cash_flow",
       "tag": "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations",
@@ -940,6 +1480,12 @@
       "metric": "revenue",
       "tag": "SalesRevenueNet",
       "checked_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "NVDA",
+      "metric": "rnd",
+      "tag": "ResearchAndDevelopmentExpenseExcludingAcquiredInProcessCost",
+      "checked_at": "2026-10-26T13:18:45.019296+00:00"
     },
     {
       "ticker": "ORCL",
@@ -973,15 +1519,69 @@
     },
     {
       "ticker": "TSLA",
+      "metric": "buybacks",
+      "tag": "PaymentsForRepurchaseOfCommonStock",
+      "checked_at": "2026-10-26T13:16:05.805739+00:00"
+    },
+    {
+      "ticker": "TSLA",
+      "metric": "capex",
+      "tag": "PaymentsToAcquireProductiveAssets",
+      "checked_at": "2026-10-26T13:16:05.805739+00:00"
+    },
+    {
+      "ticker": "TSLA",
+      "metric": "dividends",
+      "tag": "PaymentsOfDividends",
+      "checked_at": "2026-10-26T13:16:05.805739+00:00"
+    },
+    {
+      "ticker": "TSLA",
+      "metric": "dividends",
+      "tag": "PaymentsOfDividendsCommonStock",
+      "checked_at": "2026-10-26T13:16:05.805739+00:00"
+    },
+    {
+      "ticker": "TSLA",
       "metric": "revenue",
       "tag": "SalesRevenueNet",
       "checked_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "TSLA",
+      "metric": "rnd",
+      "tag": "ResearchAndDevelopmentExpenseExcludingAcquiredInProcessCost",
+      "checked_at": "2026-10-26T13:16:05.805739+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "capex",
+      "tag": "PaymentsToAcquireProductiveAssets",
+      "checked_at": "2026-10-26T13:17:57.892526+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "gross_profit",
+      "tag": "GrossProfit",
+      "checked_at": "2026-10-26T13:17:57.892526+00:00"
     },
     {
       "ticker": "WMT",
       "metric": "operating_cash_flow",
       "tag": "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations",
       "checked_at": "2026-10-24T10:57:00.352274+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "rnd",
+      "tag": "ResearchAndDevelopmentExpense",
+      "checked_at": "2026-10-26T13:17:57.892526+00:00"
+    },
+    {
+      "ticker": "WMT",
+      "metric": "rnd",
+      "tag": "ResearchAndDevelopmentExpenseExcludingAcquiredInProcessCost",
+      "checked_at": "2026-10-26T13:17:57.892526+00:00"
     }
   ],
   "concept_api_empty": [

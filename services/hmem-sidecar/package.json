@@ -1,7 +1,7 @@
 {
-  "name": "finsight-hmem-sidecar",
+  "name": "parallax-hmem-sidecar",
   "version": "0.1.0",
-  "description": "FinSight AI memory service: a small HTTP wrapper around the Meterless H-MEM reference engine.",
+  "description": "Parallax memory service: a small HTTP wrapper around the Meterless H-MEM reference engine.",
   "private": true,
   "license": "Apache-2.0",
   "type": "module",

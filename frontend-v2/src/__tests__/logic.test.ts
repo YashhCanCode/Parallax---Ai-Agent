@@ -1,7 +1,7 @@
 // Unit tests for the frontend's pure logic: no browser, no backend, no network.
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { buildFeed } from "../lib/feed";
-import { duration, usd } from "../lib/format";
+import { duration, modelLabel, usd } from "../lib/format";
 import { cleanName, greeting, relTime, shortName } from "../lib/prefs";
 import { insightsFrom } from "../features/home/Home";
 import { healthCheckQuestion, possessive, suggestedQuestions } from "../features/investigation/AskComposer";
@@ -56,6 +56,13 @@ describe("money", () => {
     expect(usd(950)).toBe("$950");
     expect(usd(null)).toBe("n/a");
     expect(usd(Number.NaN)).toBe("n/a");
+  });
+});
+
+describe("model label", () => {
+  it("names the model that handled the request, and Nightshift as the route", () => {
+    expect(modelLabel("meterless:nvidia/nemotron-3.5-lightning-30b-a3b")).toBe("nvidia/nemotron-3.5-lightning-30b-a3b via Meterless Nightshift");
+    expect(modelLabel("other:some-model")).toBe("some-model (other)");
   });
 });
 
@@ -166,10 +173,10 @@ describe("sidebar connection dots", () => {
   it("is green only for services that answered a live probe", () => {
     const st = {
       zetaris: { state: "configured (not probed)" }, meterless_hmem: { state: "online" },
-      nvidia: { state: "error: 401" }, sec: { user_agent_set: true },
+      meterless_runtime: { state: "offline" }, sec: { user_agent_set: true },
     } as unknown as IntegrationStatus;
     const c = Object.fromEntries(connections(st).map((x) => [x.label, x.on]));
-    expect(c).toEqual({ Zetaris: false, "Meterless H-MEM": true, "NVIDIA Nemotron": false, "SEC EDGAR": true });
+    expect(c).toEqual({ Zetaris: false, "Meterless H-MEM": true, "Meterless Nightshift": false, "SEC EDGAR": true });
     expect(connections(null).every((x) => !x.on)).toBe(true);
   });
 });

@@ -19,7 +19,7 @@ function ReportView({ r, onAudit }: { r: WatchReport; onAudit: (id: string) => v
       </div>
       {r.baseline ? (
         <p className="text-ink">
-          <span className="font-semibold">Started watching.</span> FinSight now remembers {r.figures_tracked} figures
+          <span className="font-semibold">Started watching.</span> Parallax now remembers {r.figures_tracked} figures
           {r.confirmed ? ` (${r.confirmed} already known from earlier investigations)` : ""}. Future checks will report what changes.
         </p>
       ) : changes.length === 0 && filings.length === 0 && newFigs.length === 0 ? (
@@ -100,7 +100,7 @@ export function Watchlist({ mode, companies }: { mode: string; companies: Compan
 
   return (
     <div className="space-y-4">
-      <Card title="Watchlist" subtitle="Follow companies. Each check fetches fresh data and compares it with what FinSight remembers in Meterless H-MEM, so you see exactly what changed.">
+      <Card title="Watchlist" subtitle="Follow companies. Each check fetches fresh data and compares it with what Parallax remembers in Meterless H-MEM, so you see exactly what changed.">
         <div className="flex flex-wrap items-center gap-2">
           {mode === "sample" ? (
             <select aria-label="Company to follow" value={ticker} onChange={(e) => setTicker(e.target.value)}
@@ -119,11 +119,19 @@ export function Watchlist({ mode, companies }: { mode: string; companies: Compan
             {busy === "all" ? "Checking…" : "Check all for updates"}
           </Button>
         </div>
-        {hasNwm && amend && (
+        {amend && (hasNwm || amend.applied) && (
           <div className="mt-3 rounded-lg border border-dashed border-line p-2.5 text-xs text-ink2">
             <Badge tone="warning">SAMPLE DATA</Badge>{" "}
             To see change detection without waiting for a real filing, publish a fictional amended filing for the fictional Northwind Motors.
-            It only affects sample data. {amend.applied ? <span className="font-medium text-ink">Already published.</span> : (
+            It only affects sample data. {amend.applied ? (
+              <>
+                <span className="font-medium text-ink">Already published.</span>{" "}
+                <button className="font-medium text-accent hover:underline" disabled={!!busy}
+                  onClick={() => act("reset", async () => { await api.resetSampleAmendment(); setAmend({ ...amend, applied: false }); })}>
+                  Reset the sample demo
+                </button>
+              </>
+            ) : (
               <button className="font-medium text-accent hover:underline" disabled={!!busy}
                 onClick={() => act("amend", async () => { await api.publishSampleAmendment(); setAmend({ ...amend, applied: true }); })}>
                 Publish fictional amended filing

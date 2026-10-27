@@ -165,16 +165,6 @@ async def integrations_status(deep: bool = False) -> dict[str, Any]:
     st = await (rt.auto_detect() if deep else rt.status())
     out["meterless_runtime"] = {"state": st.state, "base_url": st.base_url, "models": st.models[:10],
                                 "detail": st.detail, "token_set": bool(rt.token)}
-    nv: dict[str, Any] = {"configured": bool(s.nvidia_api_key), "model": s.nvidia_model, "state": "not_configured"}
-    if s.nvidia_api_key:
-        if deep:
-            from app.integrations.nvidia import NvidiaClient
-
-            nv["state"], nv["detail"] = await NvidiaClient(s.nvidia_api_key, s.nvidia_model, s.nvidia_base_url).check()
-        else:
-            nv["state"] = "configured (not probed)"
-    out["nvidia"] = nv
-    out["gemini"] = {"configured": bool(s.gemini_api_key), "model": s.gemini_model or "(auto from models.list)"}
     out["llm_provider"] = s.llm_provider
     out["sec"] = {"user_agent_set": bool(s.sec_user_agent and "@" in s.sec_user_agent)}
     return out
@@ -274,6 +264,19 @@ async def publish_sample_amendment() -> dict[str, Any]:
     return {"applied": True}
 
 
+@router.delete("/api/sample/amendment")
+async def reset_sample_amendment() -> dict[str, Any]:
+    """Reset the sample demo so the amendment can be shown again (fictional companies only).
+
+    Hides the fictional amended filing, unfollows NWM, and starts a new memory round for the sample companies
+    (see memory_subject). H-MEM is append-only: earlier rounds stay in its ledger; real companies are untouched."""
+    set_state("sample_amendment_applied", "false")
+    remove_watch("NWM")
+    n = int(get_state("sample_demo_round") or 0) + 1
+    set_state("sample_demo_round", str(n))
+    return {"applied": False, "round": n}
+
+
 # ---------------------------------------------------------------------------------------
 # Decision Diary (tripwires)
 # ---------------------------------------------------------------------------------------
@@ -321,18 +324,6 @@ async def decisions(ticker: str = "") -> list[dict[str, Any]]:
     from app.db import list_decisions
 
     return [_json.loads(p) for p in list_decisions(ticker.upper() or None)]
-
-
-@router.get("/api/decisions/{decision_id}")
-async def decision(decision_id: str) -> dict[str, Any]:
-    import json as _json
-
-    from app.db import load_doc
-
-    p = load_doc("decision", decision_id)
-    if p is None:
-        raise HTTPException(404, "decision not found")
-    return _json.loads(p)
 
 
 @router.post("/api/decisions/{decision_id}/check")
@@ -411,19 +402,6 @@ async def create_board(req: BoardRequest) -> dict[str, Any]:
     board = build(entries, mode, prior)
     save_doc("board", board["id"], _json.dumps(board))
     return public_view(board)
-
-
-@router.get("/api/board/{board_id}")
-async def get_board(board_id: str) -> dict[str, Any]:
-    import json as _json
-
-    from app.db import load_doc
-    from app.decisions.board import public_view
-
-    p = load_doc("board", board_id)
-    if p is None:
-        raise HTTPException(404, "board not found")
-    return public_view(_json.loads(p))
 
 
 @router.post("/api/board/{board_id}/reveal")

@@ -11,20 +11,19 @@ const tone = (s?: string) => (s === "online" || s === "configured" ? "good" : !s
 export function DataSourcesPage({ status, onProbe, probing }: { status: IntegrationStatus | null; onProbe: () => void; probing: boolean }) {
   if (!status) return <Empty>Loading integration status…</Empty>;
   const rows = [
-    { name: "Zetaris", role: "Federated SQL layer between FinSight and SEC EDGAR", state: status.zetaris.state,
+    { name: "Zetaris", role: "Federated SQL layer between Parallax and SEC EDGAR", state: status.zetaris.state,
       details: [status.zetaris.base_url, `${status.zetaris.registered_views} verified views`, ...(status.zetaris.lightning_databases != null ? [`${status.zetaris.lightning_databases} Lightning databases`] : []), ...status.zetaris.problems, status.zetaris.error ?? ""] },
     { name: "Meterless H-MEM", role: "Memory: facts, decisions, tripwires, append-only ledger", state: status.meterless_hmem.state,
       details: [status.meterless_hmem.url, status.meterless_hmem.engine_source ?? "", status.meterless_hmem.memories != null ? `${status.meterless_hmem.memories} memories` : "", status.meterless_hmem.error ?? ""] },
-    { name: "NVIDIA Nemotron", role: "AI writer for summaries and Pre-Mortem voices, checked before display", state: status.nvidia?.state ?? "not_configured", details: [status.nvidia?.model ?? "", status.nvidia?.detail ?? ""] },
-    { name: "Meterless Runtime", role: "Local model provider (Nightshift), tried first when online", state: status.meterless_runtime.state, details: [status.meterless_runtime.base_url, status.meterless_runtime.detail] },
+    { name: "Meterless Nightshift", role: "AI writer (primary): answers, summaries and Pre-Mortem voices, checked before display. When it isn't running, Parallax writes answers in code from the filings.",
+      state: status.meterless_runtime.state, details: [status.meterless_runtime.base_url, status.meterless_runtime.models.join(", "), status.meterless_runtime.detail] },
     { name: "SEC EDGAR", role: "Source of record: company filings (XBRL) and the company directory", state: status.sec.user_agent_set ? "configured" : "not_configured", details: [status.sec.user_agent_set ? "Contact (User-Agent) set" : "Set SEC_USER_AGENT in .env"] },
-    { name: "Gemini", role: "Optional fallback model provider", state: status.gemini.configured ? "configured" : "not_configured", details: [status.gemini.model] },
   ];
   return (
     <div className="space-y-4">
       <Card title="Data Sources" subtitle={`Default data mode: ${status.data_mode} · model order: ${status.llm_provider}`}
         actions={<Button variant="ghost" onClick={onProbe} disabled={probing}><RefreshCw size={15} className={probing ? "animate-spin" : ""} />{probing ? "Probing…" : "Probe live"}</Button>}>
-        <p className="text-[13px] text-ink2">“Probe live” calls Zetaris, the Meterless Runtime and NVIDIA for real; otherwise configured services show “configured (not probed)”.</p>
+        <p className="text-[13px] text-ink2">“Probe live” calls Zetaris and the Meterless Nightshift runtime for real; otherwise configured services show “configured (not probed)”.</p>
       </Card>
       <div className="grid gap-3 md:grid-cols-2">
         {rows.map((r) => (
@@ -53,7 +52,7 @@ export function SettingsPage({ prefs, onChange }: { prefs: Prefs; onChange: (p: 
             {MODES.map((m) => <option key={m.id} value={m.id}>{m.label}</option>)}
           </select>
         </label>
-        <p className="text-[12px] text-muted">FinSight is an educational research tool. It does not give personalized financial advice.</p>
+        <p className="text-[12px] text-muted">Parallax is an educational research tool. It does not give personalized financial advice.</p>
       </div>
     </Card>
   );

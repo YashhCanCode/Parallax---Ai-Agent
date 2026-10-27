@@ -1,9 +1,9 @@
 import * as echarts from "echarts";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const pageZoom = () => (typeof document === "undefined" ? 1 : parseFloat(getComputedStyle(document.body).zoom || "1") || 1);
 
-/** Thin ECharts wrapper. `build` receives a theme-token reader so charts re-render on light/dark change. */
+/** Thin ECharts wrapper. `build` receives a reader for the CSS colour tokens (the app is dark-only). */
 export function EChart({ build, height = 280, ariaLabel }: {
   build: (t: (name: string) => string) => echarts.EChartsOption;
   height?: number;
@@ -11,17 +11,6 @@ export function EChart({ build, height = 280, ariaLabel }: {
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const chart = useRef<echarts.ECharts | null>(null);
-  const [scheme, setScheme] = useState(0);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const on = () => setScheme((s) => s + 1);
-    mq.addEventListener("change", on);
-    const obs = new MutationObserver(on);
-    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-    return () => { mq.removeEventListener("change", on); obs.disconnect(); };
-  }, []);
-
   useEffect(() => {
     if (!ref.current) return;
     chart.current = echarts.init(ref.current, undefined, { renderer: "svg" });
@@ -34,7 +23,7 @@ export function EChart({ build, height = 280, ariaLabel }: {
     const css = getComputedStyle(document.documentElement);
     const t = (name: string) => css.getPropertyValue(name).trim();
     chart.current?.setOption(build(t), true);
-  }, [build, scheme]);
+  }, [build]);
 
   // The page renders with CSS zoom (--ui-zoom). ECharts maps the mouse with unzoomed pixels, which puts hover and
   // tooltips on the wrong bar, so the chart itself is drawn at zoom 1 and sized to the same on-screen box.

@@ -1,7 +1,7 @@
 """Watchlist: re-check followed companies and report what changed, using Meterless H-MEM memory.
 
 - New filings: accession numbers not seen at the previous check (none reported on the first check).
-- New / confirmed / changed figures: H-MEM's per-fact outcome when FinSight writes this run's figures
+- New / confirmed / changed figures: H-MEM's per-fact outcome when Parallax writes this run's figures
   (the same company + metric + period key with a different value is a change, kept in the ledger).
 Nothing is reported that the data and memory did not actually produce.
 """

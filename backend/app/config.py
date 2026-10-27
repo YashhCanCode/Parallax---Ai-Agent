@@ -29,7 +29,7 @@ def _bool(name: str, default: bool = False) -> bool:
 class Settings:
     # Data mode: "sample" (offline fixtures), "sec_direct" (live SEC EDGAR API),
     # "zetaris" (SEC EDGAR federated through your Zetaris instance).
-    data_mode: str = field(default_factory=lambda: _env("FINSIGHT_DATA_MODE", "sample"))
+    data_mode: str = field(default_factory=lambda: _env("FINSIGHT_DATA_MODE", "zetaris"))
     # When true and data_mode == "zetaris", also fetch the same facts directly from
     # SEC and reconcile the two (Zetaris's own docs recommend this row-count check).
     zetaris_cross_check: bool = field(default_factory=lambda: _bool("FINSIGHT_ZETARIS_CROSS_CHECK", True))
@@ -60,20 +60,14 @@ class Settings:
     hmem_url: str = field(default_factory=lambda: _env("HMEM_URL", "http://127.0.0.1:8765").rstrip("/"))
     hmem_enabled: bool = field(default_factory=lambda: _bool("HMEM_ENABLED", True))
 
-    # Model provider: "auto" | "meterless" | "nvidia" | "gemini" | "none".
+    # Model provider: "auto" / "meterless" (Meterless Nightshift) or "none" (answers written in code).
     llm_provider: str = field(default_factory=lambda: _env("LLM_PROVIDER", "auto"))
-    # Meterless Runtime (OpenAI-compatible), contract 0.90.0.
+    # Meterless Runtime (Nightshift; OpenAI-compatible), contract 0.90.0.
     meterless_base_url: str = field(default_factory=lambda: _env("METERLESS_BASE_URL", "http://127.0.0.1:8088/v1"))
     meterless_token: str = field(default_factory=lambda: _env("METERLESS_RUNTIME_TOKEN"))
     meterless_token_file: str = field(default_factory=lambda: _env("METERLESS_TOKEN_FILE"))
-    meterless_model: str = field(default_factory=lambda: _env("METERLESS_MODEL", "meterless/auto"))
-    # NVIDIA hosted API (build.nvidia.com), Nemotron models, OpenAI-compatible.
-    nvidia_api_key: str = field(default_factory=lambda: _env("NVIDIA_API_KEY"))
-    nvidia_model: str = field(default_factory=lambda: _env("NVIDIA_MODEL", "nvidia/nemotron-3.5-lightning-30b-a3b"))
-    nvidia_base_url: str = field(default_factory=lambda: _env("NVIDIA_BASE_URL", "https://integrate.api.nvidia.com/v1"))
-    # Google Gemini.
-    gemini_api_key: str = field(default_factory=lambda: _env("GEMINI_API_KEY"))
-    gemini_model: str = field(default_factory=lambda: _env("GEMINI_MODEL"))
+    # NVIDIA Nemotron, routed by Nightshift (connect NVIDIA in Nightshift). meterless/* routing modes also work.
+    meterless_model: str = field(default_factory=lambda: _env("METERLESS_MODEL", "nvidia/nemotron-3.5-lightning-30b-a3b"))
 
     # Re-check the watchlist automatically every N minutes (0 = only when asked).
     watchlist_check_minutes: int = field(default_factory=lambda: int(_env("WATCHLIST_CHECK_MINUTES", "0") or 0))

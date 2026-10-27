@@ -139,7 +139,7 @@ def test_registration_skips_concepts_whose_companyconcept_is_empty(tmp_path):
 
 
 def _pltr_known_manifest() -> dict:
-    # PLTR registered before gross profit existed in FinSight: a revenue view, and the rest probed as no-data.
+    # PLTR registered before gross profit existed in Parallax: a revenue view, and the rest probed as no-data.
     from app.financial_data.companies import METRIC_BY_KEY
     old = ("revenue", "net_income", "operating_cash_flow", "long_term_debt", "current_assets", "current_liabilities")
     return {"container": "finsight",

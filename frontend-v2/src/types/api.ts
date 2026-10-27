@@ -141,7 +141,7 @@ export interface KeyFigurePoint { fy: string; period_end: string; value: number;
 export interface KeyFigure {
   key: string; label: string; unit: "usd" | "pct" | "ratio";
   latest: KeyFigurePoint | null; prior: KeyFigurePoint | null;
-  change: number | null; change_display: string | null; direction: "up" | "down" | null;
+  change: number | null; change_display: string | null; direction: "up" | "down" | null; stale?: boolean;
   history: KeyFigurePoint[]; formula: string; sentence: string; note: string;
 }
 
@@ -193,8 +193,6 @@ export interface IntegrationStatus {
   zetaris: { configured: boolean; problems: string[]; base_url: string; registered_views: number; state: string; error?: string; lightning_databases?: number };
   meterless_hmem: { state: string; engine_source?: string; memories?: number; error?: string; url: string };
   meterless_runtime: { state: string; base_url: string; models: string[]; detail: string; token_set: boolean };
-  nvidia?: { configured: boolean; model: string; state: string; detail?: string };
-  gemini: { configured: boolean; model: string };
   llm_provider: string;
   sec: { user_agent_set: boolean };
 }

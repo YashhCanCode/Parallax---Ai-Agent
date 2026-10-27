@@ -1,4 +1,4 @@
-"""Build the financial facts FinSight stores in Meterless H-MEM.
+"""Build the financial facts Parallax stores in Meterless H-MEM.
 
 Each fact is keyed by company + metric + exact period, so H-MEM can tell "the same figure seen
 again" (confirmed) from "a different value for the same period" (conflict). Keys:

@@ -39,7 +39,7 @@ async def lifespan(_: FastAPI):
         task.cancel()
 
 
-app = FastAPI(title="FinSight AI", version="0.1.0", lifespan=lifespan,
+app = FastAPI(title="Parallax", version="0.1.0", lifespan=lifespan,
               description="Evidence-led financial investigations. Educational use only; not financial advice.")
 app.add_middleware(
     CORSMiddleware,

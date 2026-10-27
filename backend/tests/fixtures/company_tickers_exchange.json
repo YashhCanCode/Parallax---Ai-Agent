@@ -4,5 +4,11 @@
   [1067983, "BERKSHIRE HATHAWAY INC", "BRK-B", "NYSE"],
   [1652044, "Alphabet Inc.", "GOOGL", "Nasdaq"],
   [1652044, "Alphabet Inc.", "GOOG", "Nasdaq"],
-  [9999999, "Palantir Lookalike Holdings", "PLTX", "OTC"]
+  [9999999, "Palantir Lookalike Holdings", "PLTX", "OTC"],
+  [19617, "JPMORGAN CHASE & CO", "JPM", "NYSE"],
+  [886982, "GOLDMAN SACHS GROUP INC", "GS", "NYSE"],
+  [1065280, "NETFLIX INC", "NFLX", "Nasdaq"],
+  [21344, "COCA COLA CO", "KO", "NYSE"],
+  [1326801, "Meta Platforms, Inc.", "META", "Nasdaq"],
+  [1418091, "Twilio Inc.", "TWLO", "NYSE"]
 ]}

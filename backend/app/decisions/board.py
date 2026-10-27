@@ -3,7 +3,7 @@
 Labels (A, B, C) are shuffled server-side. Until the user reveals, the response carries no names,
 tickers, filing links or exact dates: revenue is shown as a size band and periods as fiscal years.
 Row comparisons are neutral sentences ("A turns $1.40 of every $1 of profit into cash; C turns $0.61"),
-never "better/worse". FinSight does not pick for the user.
+never "better/worse". Parallax does not pick for the user.
 """
 from __future__ import annotations
 

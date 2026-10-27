@@ -1,3 +1,4 @@
+import { modelLabel } from "../../lib/format";
 import { useState } from "react";
 import { RichText } from "../../components/Glossary";
 import { Badge, Button, Card } from "../../components/ui";
@@ -45,8 +46,8 @@ export function PremortemRoom({ inv, onDecide }: { inv: Investigation; onDecide:
 
   return (
     <Card id="premortem" title="Pre-Mortem Room"
-      subtitle="Before deciding, imagine it went badly. Two voices argue from the evidence; neither wins, and FinSight never tells you what to do."
-      actions={pm && <Badge tone={ai ? "accent" : "neutral"}>{ai ? `Voices by ${pm.generated_by}` : "Assembled without a model"}</Badge>}>
+      subtitle="Before deciding, imagine it went badly. Two voices argue from the evidence; neither wins, and Parallax never tells you what to do."
+      actions={pm && <Badge tone={ai ? "accent" : "neutral"}>{ai ? `Voices by ${modelLabel(pm.generated_by)}` : "Assembled without a model"}</Badge>}>
       {!pm ? (
         <div className="flex flex-wrap items-center gap-3">
           <Button onClick={run} disabled={busy}>{busy ? "Setting up the room…" : "Run the pre-mortem"}</Button>
@@ -56,7 +57,7 @@ export function PremortemRoom({ inv, onDecide }: { inv: Investigation; onDecide:
         <>
           <p className="mb-3 text-[13px] italic text-ink2">
             Imagine it is {pm.year} and a decision about {inv.company} went badly.
-            {ai && " These arguments are AI-written from FinSight's findings; check each against the verified finding shown under it."}
+            {ai && " These arguments are AI-written from Parallax's findings; check each against the verified finding shown under it."}
           </p>
           <div className="grid gap-3 md:grid-cols-2">
             <Voice title="The Skeptic: how it could go wrong" icon="🔴" tone="--status-critical" points={pm.skeptic} findings={findings} aiWritten={ai} />

@@ -137,6 +137,14 @@ def compute_metrics(obs: list[Observation]) -> dict[str, MetricValue]:
                 revised.append(r.current.id)
     out["recent_revisions"] = MetricValue("recent_revisions", float(len(revised)), "last 3 fiscal years", revised,
                                           "count of annual periods whose figure differs between filings")
+    # A figure the company stopped reporting years ago (JPMorgan's long-term debt ends in FY2013) is not current.
+    rev_years = [r.period_end.year for r in rev[-1:]] + [r.period_end.year for r in ni[-1:]]
+    current = max(rev_years) if rev_years else None
+    if current is not None and debt and debt[-1].period_end.year < current - 1:
+        stale = f"last reported for FY{debt[-1].period_end.year}; no current figure"
+        for k in ("long_term_debt", "debt_to_ocf"):
+            if k in out:
+                out[k] = MetricValue(k, None, None, note=stale)
     # From the key-figures facts sheet, so tripwires, the board and answers all use the same numbers.
     from app.analysis.key_figures import compute_key_figures
     kfs = {k.key: k for k in compute_key_figures(obs)}

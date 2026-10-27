@@ -5,7 +5,7 @@ import { CompanyPicker } from "../../components/CompanyPicker";
 import type { CompanyHit } from "../../types/api";
 import { cleanName, shortName } from "../../lib/prefs";
 
-/** Questions FinSight can answer from filings. Templates only; the company name is filled in, never a number. */
+/** Questions Parallax can answer from filings. Templates only; the company name is filled in, never a number. */
 /** "Tesla" -> "Tesla's", "Northwind Motors" -> "Northwind Motors'". */
 export const possessive = (n: string) => (n.endsWith("s") ? `${n}'` : `${n}'s`);
 
@@ -49,7 +49,7 @@ export function AskComposer({ company, mode, running, onAsk, onCompany, autoFocu
       <h2 className="flex items-center gap-2 text-[15px] font-medium text-[var(--cream)]">
         <Sparkles size={16} strokeWidth={1.8} className="text-[var(--accent)]" />{title ?? (company ? `Ask about ${name}` : "Ask about a company")}
       </h2>
-      {!compact && <p className="mt-1 text-[12.5px] text-ink2">FinSight answers from official filings only, cites every number, and never tells you what to buy or sell.</p>}
+      {!compact && <p className="mt-1 text-[12.5px] text-ink2">Parallax answers from official filings only, cites every number, and never tells you what to buy or sell.</p>}
 
       <div className="mt-3">
         {company ? (

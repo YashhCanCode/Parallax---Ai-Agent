@@ -2,7 +2,7 @@
 https://www.sec.gov/files/company_tickers_exchange.json  ({"fields": ["cik","name","ticker","exchange"], "data": [...]})
 
 Cached on disk for 24 hours. If the SEC can't be reached, the last cached copy is used; if there is
-none, only FinSight's built-in companies are available, and lookups say so. Set
+none, only Parallax's built-in companies are available, and lookups say so. Set
 FINSIGHT_COMPANY_DIRECTORY to a local file of the same shape to run fully offline (used by tests).
 """
 from __future__ import annotations

@@ -48,7 +48,7 @@ def test_no_percentage_change_when_a_year_is_negative(nwm):
 def test_unreported_figures_say_so_instead_of_inventing(csr):
     assert csr["rnd"].points == []
     lines = {x["id"]: x["text"] for x in facts_lines(list(csr.values()))}
-    assert lines["kf-rnd"] == "R&D spending: not reported in the filings FinSight read."
+    assert lines["kf-rnd"] == "R&D spending: not reported in the filings Parallax read."
     assert "kf-rnd_share" not in lines  # derived figures with no data are simply left out
 
 
@@ -65,6 +65,7 @@ def test_questions_name_the_right_figure():
     assert figures_named("Does it return cash to shareholders?") == ["shareholder_returns"]
     assert figures_named("What is the operating margin and gross profit?") == ["gross_profit", "operating_margin"]
     assert figures_named("Is profit backed by cash flow?") == ["operating_cash_flow", "net_income"]
+    assert figures_named("Is Northwind Motors' profit backed by real cash?") == ["operating_cash_flow", "net_income"]
 
 
 def test_coded_answers_for_common_questions(nwm, csr):
@@ -74,8 +75,8 @@ def test_coded_answers_for_common_questions(nwm, csr):
     assert deterministic_answer("Is the gross margin worsening?", [], kn).startswith("Yes: Gross margin was 16.4%")
     assert deterministic_answer("Is debt rising?", [], kn).startswith("Yes: Long-term debt was $19.50B")
     assert deterministic_answer("What is the gross margin?", [], kn).startswith("Gross margin was 16.4%")
-    assert deterministic_answer("How much does Contoso spend on R&D?", [], kc) == "R&D spending: not reported in the filings FinSight read."
-    assert deterministic_answer("Should I buy it?", [], kn).startswith("FinSight doesn't make investment decisions")
+    assert deterministic_answer("How much does Contoso spend on R&D?", [], kc) == "R&D spending: not reported in the filings Parallax read."
+    assert deterministic_answer("Should I buy it?", [], kn).startswith("Parallax doesn't make investment decisions")
 
 
 def test_derived_figures_are_never_checked_as_the_wrong_filed_figure():
@@ -132,3 +133,41 @@ def test_a_wrong_direction_on_a_new_figure_is_rejected(nwm):
     assert contradicted_direction("Gross margin improved to 16.4% in FY2024.", d)
     assert contradicted_direction("Gross margin fell to 16.4% in FY2024.", d) is None
     assert contradicted_direction("Free cash flow rose to -$1.90B.", d)  # it fell
+
+
+def _jpm_like():
+    """Revenue to FY2025; long-term debt last tagged in FY2013 (as JPMorgan); negative operating cash flow."""
+    from datetime import date, datetime, timezone
+
+    from app.models.schemas import Observation
+
+    def o(metric, end, v, start=True):
+        return Observation(id=f"{metric}-{end}", company="Bank", ticker="JPM", metric=metric, concept="us-gaap:X",
+                           value=v, currency_or_unit="USD", period_start=date(int(end[:4]), 1, 1) if start else None,
+                           period_end=date.fromisoformat(end), period_type="annual" if start else "instant",
+                           form="10-K", published_at=date(int(end[:4]) + 1, 2, 15), source_name="SEC",
+                           retrieved_at=datetime.now(timezone.utc), retrieval_channel="sec_direct", data_status="live")
+    return [o("revenue", "2024-12-31", 177.56e9), o("revenue", "2025-12-31", 182.45e9),
+            o("net_income", "2024-12-31", 58.47e9), o("net_income", "2025-12-31", 57.05e9),
+            o("operating_cash_flow", "2024-12-31", -42.01e9), o("operating_cash_flow", "2025-12-31", -147.78e9),
+            o("long_term_debt", "2012-12-31", 249.02e9, start=False), o("long_term_debt", "2013-12-31", 267.89e9, start=False)]
+
+
+def test_a_figure_last_reported_years_ago_is_not_shown_as_current():
+    kfs = {k.key: k for k in compute_key_figures(_jpm_like())}
+    debt = kfs["long_term_debt"]
+    assert debt.stale and debt.direction is None
+    assert debt.sentence().startswith("Long-term debt was last reported for FY2013 ($267.89B)")
+    assert not kfs["revenue"].stale
+
+
+def test_stale_debt_and_negative_cash_flow_risk_findings():
+    from app.risk_analysis.indicators import debt_trend, profit_vs_cash
+
+    d = debt_trend(_jpm_like())
+    assert d.title == "Long-term debt: no current figure (last reported for FY2013)"
+    assert d.status.value == "insufficient_evidence"
+    p = profit_vs_cash(_jpm_like())
+    assert p.title.startswith("Operating cash flow was negative in 2025 (-$147.78B, from -$42.01B)")
+    assert "moved together" not in p.title and "%" not in p.title
+    assert "financial companies" in p.uncertainty_or_limitations

@@ -1,4 +1,4 @@
-// FinSight AI memory sidecar: exposes the Meterless H-MEM reference engine over HTTP so the
+// Parallax memory sidecar: exposes the Meterless H-MEM reference engine over HTTP so the
 // Python backend can use it. Every route maps to a named H-MEM service:
 //
 //   POST /facts            MemoryStoreService.add + TrustLedgerService (conflict_detected /
@@ -13,7 +13,7 @@
 //
 // Conflict rule: the reference ConflictDetectionService flags any two very similar texts
 // with different numbers, which would wrongly flag "revenue FY2023 = X" against "revenue
-// FY2024 = Y". FinSight instead keys each financial fact by company + metric + period
+// FY2024 = Y". Parallax instead keys each financial fact by company + metric + period
 // (tag `fact:<key>`). A different value for the same key is a real conflict; it is logged to
 // the H-MEM trust ledger and the older-filed record is marked supersededBy (kept, penalized
 // in ranking, never deleted), exactly as AGENTS.md section 10 prescribes.

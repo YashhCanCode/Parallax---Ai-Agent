@@ -7,6 +7,5 @@ frontend-v2/dist
 .env
 *.db
 .git
-frontend/
 frontend-v2/test-results
 frontend-v2/playwright-report

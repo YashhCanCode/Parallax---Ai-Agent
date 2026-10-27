@@ -1,6 +1,7 @@
+import { useId } from "react";
 // Company marks, sparklines and the illustration used by the v2 dashboard.
 
-/** Initials mark on a light tile (FinSight has no logo files, so it never fakes a logo). */
+/** Initials mark on a light tile (Parallax has no company logo files, so it never fakes one). */
 export function CompanyMark({ ticker, size = 40, radius = 10 }: { ticker: string; size?: number; radius?: number }) {
   const t = (ticker || "?").slice(0, 4);
   return (
@@ -18,7 +19,7 @@ export function Sparkline({ values, color, width = 52, height = 20 }: { values: 
   return <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} aria-hidden><path d={d} fill="none" stroke={color} strokeWidth={1.6} strokeLinejoin="round" strokeLinecap="round" /></svg>;
 }
 
-/** Illustration for the cream action panel: a person reviewing a chart and a note card. Drawn for FinSight. */
+/** Illustration for the cream action panel: a person reviewing a chart and a note card. Drawn for Parallax. */
 export function QuestionIllustration({ className = "" }: { className?: string }) {
   const ink = "#2b2a33";
   return (
@@ -41,12 +42,16 @@ export function QuestionIllustration({ className = "" }: { className?: string })
   );
 }
 
-/** Abstract mark for the FinSight logo (segmented ring), drawn for FinSight. */
+/** Parallax logo: two offset rings, one object seen from two viewpoints, with the overlap (where the views
+ *  agree) filled. Drawn for Parallax; the same mark is the browser-tab icon in index.html. */
 export function LogoMark({ size = 28 }: { size?: number }) {
+  const id = useId();
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden>
-      <circle cx="16" cy="16" r="12" fill="none" stroke="#f7efe7" strokeWidth="5" strokeDasharray="22 6" transform="rotate(-30 16 16)" />
-      <circle cx="16" cy="16" r="12" fill="none" stroke="#a8838f" strokeWidth="5" strokeDasharray="14 61" transform="rotate(150 16 16)" />
+      <defs><clipPath id={`${id}-l`}><circle cx="12" cy="16" r="8.5" /></clipPath></defs>
+      <circle cx="20" cy="16" r="8.5" fill="#dcb7c1" clipPath={`url(#${id}-l)`} />
+      <circle cx="12" cy="16" r="8.5" fill="none" stroke="#f7efe7" strokeWidth="2.6" />
+      <circle cx="20" cy="16" r="8.5" fill="none" stroke="#a8838f" strokeWidth="2.6" />
     </svg>
   );
 }

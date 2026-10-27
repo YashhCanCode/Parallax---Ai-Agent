@@ -1,7 +1,7 @@
 import { RichText } from "../../components/Glossary";
 import { Badge, Card, Empty } from "../../components/ui";
 import { MemoryId, useMemoryAudit } from "../../components/MemoryAudit";
-import { duration } from "../../lib/format";
+import { duration, modelLabel } from "../../lib/format";
 import type { Investigation } from "../../types/api";
 
 const ORDER = ["RECEIVED", "PLANNING", "RETRIEVING", "NORMALIZING", "RECONCILING", "INVESTIGATING_RISKS", "SIMULATING", "VERIFYING"];
@@ -47,14 +47,14 @@ export function SummaryPanel({ inv }: { inv: Investigation }) {
   const s = inv.summary;
   const byId = new Map(inv.findings.map((f) => [f.id, f]));
   return (
-    <Card title={s?.answer ? "Your answer" : "Executive summary"} actions={s && <Badge tone={s.generated_by === "deterministic" ? "neutral" : "accent"}>{s.generated_by === "deterministic" ? "No model used" : `Written by ${s.generated_by}`}</Badge>}>
+    <Card title={s?.answer ? "Your answer" : "Executive summary"} actions={s && <Badge tone={s.generated_by === "deterministic" ? "neutral" : "accent"}>{s.generated_by === "deterministic" ? "No model used" : `Written by ${modelLabel(s.generated_by)}`}</Badge>}>
       <p className="-mt-1 mb-2 text-[12.5px] italic text-ink2">“{inv.question}”</p>
       {!s ? <Empty>The answer appears after the evidence is checked.</Empty> : (
         <>
           {s.answer && (
             <div className="mb-3 rounded-[12px] border border-[rgba(220,183,193,0.28)] bg-[rgba(220,183,193,0.07)] px-3.5 py-3">
               <p className="text-[14.5px] leading-relaxed text-[var(--cream)]"><RichText text={s.answer} /></p>
-              <p className="mt-1.5 text-[11px] text-muted">{s.answer_by === "computed" ? "Answer computed by FinSight from the verified filings (no AI wording)." : "AI-written from the cited findings; checked for real numbers, correct direction and no advice."}</p>
+              <p className="mt-1.5 text-[11px] text-muted">{s.answer_by === "computed" ? "Answer computed by Parallax from the verified filings (no AI wording)." : "AI-written from the cited findings; checked for real numbers, correct direction and no advice."}</p>
             </div>
           )}
           {s.answer && <h4 className="mb-1 text-[12px] font-medium uppercase tracking-wide text-muted">Summary of the evidence</h4>}
@@ -107,7 +107,7 @@ export function TracePanel({ inv }: { inv: Investigation }) {
         <ul className="mt-1 space-y-1 text-xs">
           {inv.model_calls.map((m, i) => (
             <li key={i} className="rounded-md bg-sunken px-2 py-1.5 text-ink2">
-              <span className="font-medium text-ink">{m.provider}:{m.model}</span> · {m.purpose} · {m.duration_ms} ms ·{" "}
+              <span className="font-medium text-ink">{modelLabel(`${m.provider}:${m.model}`)}</span> · {m.purpose} · {m.duration_ms} ms ·{" "}
               {m.ok ? (m.output_accepted ? "accepted" : `rejected (${m.rejection_reason})`) : `failed (${m.error})`}
               {m.usage && (
                 <span className="text-muted [overflow-wrap:anywhere]" title={JSON.stringify(m.usage)}>
@@ -143,9 +143,9 @@ export function Limitations({ inv }: { inv: Investigation | null }) {
     <Card title="Limitations and disclaimer">
       {inv && inv.limitations.length > 0 && <ul className="mb-2 list-disc pl-4 text-[13px] text-ink2">{inv.limitations.map((l, i) => <li key={i}>{l}</li>)}</ul>}
       <p className="text-[13px] text-ink2">
-        FinSight AI is an educational research tool. It shows what filings and sources say, how figures differ and why, and what hypothetical
+        Parallax is an educational research tool. It shows what filings and sources say, how figures differ and why, and what hypothetical
         assumptions imply. It does not predict markets, rate securities or give personalized financial advice. XBRL facts are as filed and are
-        not audited by FinSight; always read the underlying filing before relying on a number.
+        not audited by Parallax; always read the underlying filing before relying on a number.
       </p>
     </Card>
   );

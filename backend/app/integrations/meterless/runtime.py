@@ -19,7 +19,7 @@ from typing import Any, Optional
 
 import httpx
 
-APP_ID = "finsight-ai"
+APP_ID = "parallax-ai"
 CHAT_TIMEOUT_S = 180.0
 PROBE_TIMEOUT_S = 2.5
 DETECT_PORTS = (8088, 8090, 8787, 11434)
@@ -40,7 +40,24 @@ def normalize_base_url(raw: str) -> str:
     return url.rstrip("/") + "/v1"
 
 
+# Where the Nightshift desktop apps keep their runtime token (the Mac app names it "runtime-token"; the published
+# contract calls it <stateDir>/proxy-token). Used only when no token or token file is configured.
+NIGHTSHIFT_STATE_GLOB = "Library/Application Support/ai.meterless.nightshift*"
+TOKEN_NAMES = ("runtime-token", "proxy-token")
+
+
+def discover_token_file(home: Optional[Path] = None) -> Optional[Path]:
+    for state_dir in sorted((home or Path.home()).glob(NIGHTSHIFT_STATE_GLOB)):
+        for name in TOKEN_NAMES:
+            if (state_dir / name).is_file():
+                return state_dir / name
+    return None
+
+
 def resolve_token(token: str, token_file: str) -> str:
+    if not token and not token_file:
+        found = discover_token_file()
+        token_file = str(found) if found else ""
     if not token and token_file:
         p = Path(token_file).expanduser()
         if p.exists():
@@ -105,15 +122,24 @@ class MeterlessRuntime:
         return first
 
     async def chat(self, system: str, user: str) -> tuple[str, Optional[dict[str, Any]], str, int]:
-        """Return (text, usage-as-returned, model-id-as-returned, duration_ms)."""
-        body = {
+        """Return (text, usage-as-returned, model-id-as-returned, duration_ms).
+
+        Nemotron models (routed by Nightshift to NVIDIA) get chat_template_kwargs.enable_thinking=false: Parallax
+        wants short structured output, and Nemotron's reasoning otherwise makes each call ~20x slower. If a model
+        rejects the switch (HTTP 400), the call is retried once without it."""
+        body: dict[str, Any] = {
             "model": self.model,
             "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
             "temperature": 0.2,
         }
+        if self.model.lower().startswith("nvidia/nemotron"):
+            body["chat_template_kwargs"] = {"enable_thinking": False}
         t0 = time.perf_counter()
         async with httpx.AsyncClient(timeout=CHAT_TIMEOUT_S) as c:
             r = await c.post(self.base_url + "/chat/completions", json=body, headers=self._headers(chat=True))
+            if r.status_code == 400 and "chat_template_kwargs" in body:
+                body.pop("chat_template_kwargs")
+                r = await c.post(self.base_url + "/chat/completions", json=body, headers=self._headers(chat=True))
         duration = int((time.perf_counter() - t0) * 1000)
         if r.status_code in (401, 403):
             raise RuntimeError("Meterless Runtime rejected the token (unauthorized).")
@@ -122,4 +148,5 @@ class MeterlessRuntime:
         text = data["choices"][0]["message"]["content"]
         if not isinstance(text, str):
             raise RuntimeError("Meterless Runtime returned a non-string message content.")
+        text = re.sub(r"<think>.*?</think>", "", text, flags=re.S).strip()  # any reasoning text is never shown
         return text, data.get("usage"), data.get("model", self.model), duration

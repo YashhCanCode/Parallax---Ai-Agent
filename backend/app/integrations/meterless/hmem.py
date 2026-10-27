@@ -1,4 +1,4 @@
-"""Client for the FinSight H-MEM sidecar (services/hmem-sidecar), which runs the Meterless
+"""Client for the Parallax H-MEM sidecar (services/hmem-sidecar), which runs the Meterless
 H-MEM reference engine. Failures never break an investigation: they are reported as receipts.
 """
 from __future__ import annotations
@@ -14,6 +14,24 @@ from app.models.schemas import QueryReceipt
 
 class HmemUnavailable(RuntimeError):
     pass
+
+
+SAMPLE_TICKERS = {"NWM", "CSR"}
+
+
+def memory_subject(ticker: str) -> str:
+    """Who a memory belongs to in H-MEM. Real companies: the ticker. The two fictional sample companies: the ticker
+    plus the current demo round, so "Reset the sample demo" starts their memory fresh. H-MEM is append-only, so a
+    reset can't (and shouldn't) erase history; earlier rounds stay in the ledger under their own names."""
+    t = ticker.upper()
+    if t not in SAMPLE_TICKERS:
+        return t
+    try:
+        from app.db import get_state
+        n = int(get_state("sample_demo_round") or 0)
+    except Exception:  # noqa: BLE001 - no database yet: round 0
+        n = 0
+    return t if n <= 0 else f"{t}-R{n}"
 
 
 class HmemClient:
@@ -45,13 +63,23 @@ class HmemClient:
         return await self._call("GET", "/health")
 
     async def recall(self, ticker: str, query: str, top_n: int = 8) -> dict[str, Any]:
-        return await self._call("POST", "/recall", {"ticker": ticker, "query": query, "topN": top_n})
+        return await self._call("POST", "/recall", {"ticker": memory_subject(ticker), "query": query, "topN": top_n})
 
     async def write_facts(self, ticker: str, facts: list[dict[str, Any]]) -> dict[str, Any]:
-        return await self._call("POST", "/facts", {"ticker": ticker, "facts": facts})
+        subject = memory_subject(ticker)
+        if subject == ticker.upper():
+            return await self._call("POST", "/facts", {"ticker": subject, "facts": facts})
+        # Fact keys start with the ticker ("NWM:revenue:..."); a demo round keys them under its own name.
+        old, new = f"{ticker.upper()}:", f"{subject}:"
+        moved = [{**f, "key": new + f["key"][len(old):]} if str(f.get("key", "")).startswith(old) else f for f in facts]
+        res = await self._call("POST", "/facts", {"ticker": subject, "facts": moved})
+        for r in res.get("results", []) if isinstance(res, dict) else []:
+            if str(r.get("key", "")).startswith(new):
+                r["key"] = old + r["key"][len(new):]  # callers match results by their own keys
+        return res
 
     async def write_note(self, ticker: str, content: str, source: str, refs: list[str], tags: list[str]) -> dict[str, Any]:
-        return await self._call("POST", "/notes", {"ticker": ticker, "content": content, "source": source,
+        return await self._call("POST", "/notes", {"ticker": memory_subject(ticker), "content": content, "source": source,
                                                     "refs": refs, "tags": tags})
 
     async def audit(self, memory_id: str) -> dict[str, Any]:

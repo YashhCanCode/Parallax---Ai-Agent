@@ -126,7 +126,7 @@ def extract_claims(text: str) -> Extraction:
             if metric == DERIVED:
                 skipped.append({"sentence": sentence, "text": value_text,
                                 "reason": "Ratios and computed figures (margins, free cash flow) aren't checked as claims "
-                                          "yet; FinSight shows them under Key figures."})
+                                          "yet; Parallax shows them under Key figures."})
                 continue
             if claim.metric is None:
                 skipped.append({"sentence": sentence, "text": value_text,

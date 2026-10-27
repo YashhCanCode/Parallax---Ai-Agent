@@ -154,7 +154,7 @@ export function BlindBoard({ mode, companies, onInvestigate }: {
           ) : board.reflection && (
             <div className="mt-3 rounded-lg bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] p-3 text-[13px] text-ink">
               <p>{board.reflection.text}</p>
-              <p className="mt-1 text-xs text-ink2">Choosing what to research isn't a decision to invest. FinSight doesn't pick for you.</p>
+              <p className="mt-1 text-xs text-ink2">Choosing what to research isn't a decision to invest. Parallax doesn't pick for you.</p>
               <div className="mt-2 flex flex-wrap gap-2">
                 {board.companies && Object.values(board.companies).map((c) => (
                   <Button key={c.ticker} variant="ghost" className="px-2.5 py-1 text-xs" onClick={() => onInvestigate(c.ticker)}>Investigate {c.ticker} →</Button>

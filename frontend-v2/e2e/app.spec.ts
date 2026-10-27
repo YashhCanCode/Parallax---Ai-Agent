@@ -1,5 +1,5 @@
 // User flows through the real UI, against a private backend in sample mode (see playwright.config.ts).
-// No AI model runs here, so answers come from FinSight's own code and are the same on every run.
+// No AI model runs here, so answers come from Parallax's own code and are the same on every run.
 import { expect, test, type Page } from "@playwright/test";
 
 const nav = (page: Page, name: string) =>
@@ -18,13 +18,15 @@ async function askNorthwind(page: Page, question: string) {
   await expect(page.getByText("Completed: Investigation finished.")).toBeVisible({ timeout: 45_000 });
 }
 
-test.describe.serial("FinSight AI", () => {
+test.describe.serial("Parallax", () => {
   test("home loads with the right rail and live service status", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toContainText(/Good (morning|afternoon|evening)/);
     await expect(rail(page)).toBeVisible();
     await expect(page.getByText("No company yet")).toBeVisible(); // fresh database: nothing invented
     await expect(page.getByText("No events yet.")).toBeVisible();
+    await expect(page).toHaveTitle("Parallax");
+    expect(await page.locator("body").innerText()).not.toMatch(/\/>|<svg|<\/|stroke=/); // no stray markup shown as text
   });
 
   test("ask your own question about a sample company and get a direct answer", async ({ page }) => {
@@ -34,7 +36,7 @@ test.describe.serial("FinSight AI", () => {
     await expect(page.getByText("Your answer")).toBeVisible();
     // No model in this run: the answer is computed from the verified filings, and says so.
     await expect(page.getByText(/^Yes: Revenue was \$52\.40B in FY2024, up 8\.5% from \$48\.30B in FY2023/)).toBeVisible();
-    await expect(page.getByText(/Answer computed by FinSight from the verified filings/)).toBeVisible();
+    await expect(page.getByText(/Answer computed by Parallax from the verified filings/)).toBeVisible();
     await expect(rail(page)).toHaveCount(0); // the rail is for Home only
   });
 
@@ -135,6 +137,17 @@ test.describe.serial("FinSight AI", () => {
     await page.getByRole("button", { name: "Check now" }).first().click();
     await expect(page.getByText("Changed").first()).toBeVisible();
     await expect(page.getByText(/\$52\.40B → \$51\.90B/)).toBeVisible();
+
+    // The demo can be repeated: reset, follow again, publish again, and the change is detected again.
+    await page.getByRole("button", { name: "Reset the sample demo" }).click();
+    await expect(page.getByText("Northwind Motors (SAMPLE, fictional)").first()).toBeHidden();
+    await page.getByRole("combobox").filter({ hasText: "Choose a sample company" }).selectOption("NWM");
+    await page.getByRole("button", { name: "Follow", exact: true }).click();
+    await expect(page.getByText("Started watching.")).toBeVisible();
+    await page.getByRole("button", { name: "Publish fictional amended filing" }).click();
+    await page.getByRole("button", { name: "Check now" }).first().click();
+    await expect(page.getByText(/\$52\.40B → \$51\.90B/)).toBeVisible();
+    await page.getByRole("button", { name: "Reset the sample demo" }).click(); // leave sample data as it started
   });
 
   test("record a decision with tripwires in the diary", async ({ page }) => {
@@ -163,6 +176,39 @@ test.describe.serial("FinSight AI", () => {
     await nav(page, "Data Sources");
     await expect(page.getByText("Meterless H-MEM").first()).toBeVisible();
     await expect(page.locator("main")).toContainText("online");
+  });
+
+  test("main walkthrough: ask, catch a wrong number, see the agent's steps, guardrail", async ({ page }) => {
+    await page.goto("/");
+    // Step 1: ask a question.
+    await nav(page, "Investigate");
+    const ask = page.getByRole("region", { name: "Ask about a company" });
+    await ask.getByRole("button", { name: "Northwind Motors (SAMPLE, fictional)" }).click();
+    await ask.getByRole("button", { name: "Is Northwind Motors' free cash flow positive?" }).click();
+    await expect(page.getByText("Completed: Investigation finished.")).toBeVisible({ timeout: 45_000 });
+    await expect(page.getByText(/^No: Free cash flow was -\$1\.90B in FY2024/)).toBeVisible();
+    await page.getByRole("tab", { name: "Financials" }).click();
+    await expect(page.getByRole("heading", { name: "Key figures" })).toBeVisible();
+    // Step 2: catch a wrong number.
+    await page.getByRole("button", { name: "+ Ask about a different company" }).click();
+    await page.getByRole("button", { name: "Was Northwind Motors' 2024 revenue really $13.6 billion?" }).click();
+    await expect(page.getByText("Completed: Investigation finished.")).toBeVisible({ timeout: 45_000 });
+    await expect(page.getByText(/^Your claim is contradicted/)).toBeVisible();
+    // Step 3: how the agent got there.
+    await expect(page.getByRole("heading", { name: "Investigation progress" })).toBeVisible();
+    for (const step of ["Planning", "Retrieving", "Normalizing", "Reconciling", "Investigating risks", "Verifying"]) {
+      await expect(page.getByText(step, { exact: true }).first()).toBeVisible();
+    }
+    await page.getByRole("tab", { name: "Sources" }).click();
+    await expect(page.getByRole("heading", { name: "Integration trail" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Memory (Meterless H-MEM)" })).toBeVisible();
+    // Step 6: the guardrail.
+    await page.getByRole("tab", { name: "Overview" }).click();
+    const again = page.getByRole("region", { name: "Ask about a company" });
+    await again.getByLabel("Your question").fill("Should I buy it now?");
+    await again.getByRole("button", { name: "Ask", exact: true }).click();
+    await expect(page.getByText("“Should I buy it now?”")).toBeVisible({ timeout: 45_000 });
+    await expect(page.getByText(/^Parallax doesn't make investment decisions for you\./)).toBeVisible({ timeout: 45_000 });
   });
 
   test("phone layout has no sideways scrolling", async ({ page }) => {

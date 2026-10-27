@@ -71,7 +71,7 @@ export function DecisionForm({ ticker, company, mode, investigationId, findings,
         </ul>
         <p className="mt-2 text-xs text-ink2">
           Every watchlist check re-tests these tripwires with code, not AI. Memory record: <MemoryId id={saved.memory_id} onOpen={open} />
-          {!saved.memory_id && " (memory sidecar unavailable; saved in FinSight only)"} · Find it under the <b>My decisions</b> tab.
+          {!saved.memory_id && " (memory sidecar unavailable; saved in Parallax only)"} · Find it under the <b>My decisions</b> tab.
         </p>
         {view}
       </Card>
@@ -80,7 +80,7 @@ export function DecisionForm({ ticker, company, mode, investigationId, findings,
 
   return (
     <Card id="decide" title={`Record your decision about ${company}`}
-      subtitle="Your words, your call. Add tripwires: evidence that would change your mind. FinSight watches them for you and holds you to them.">
+      subtitle="Your words, your call. Add tripwires: evidence that would change your mind. Parallax watches them for you and holds you to them.">
       <fieldset className="flex flex-wrap gap-2" aria-label="Your decision">
         {TYPES.map(([k, label]) => (
           <label key={k} className={`cursor-pointer rounded-lg border px-3 py-1.5 text-sm ${type === k ? "border-accent bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] text-ink" : "border-line text-ink2"}`}>
@@ -130,7 +130,7 @@ export function DecisionForm({ ticker, company, mode, investigationId, findings,
       <p className="mt-1 text-[11.5px] text-muted">Suggestions come from this investigation's warning signs. Change or remove any of them; they're yours.</p>
       <div className="mt-3 flex items-center gap-3">
         <Button onClick={save} disabled={busy || metrics.length === 0}>{busy ? "Saving…" : "Save to my decision diary"}</Button>
-        <span className="text-xs text-muted">FinSight records your decision; it never makes one.</span>
+        <span className="text-xs text-muted">Parallax records your decision; it never makes one.</span>
       </div>
       {err && <p className="mt-2 text-sm text-critical">{err}</p>}
     </Card>

@@ -5,7 +5,7 @@ TESLA = {"revenue": "down", "net_income": "down", "operating_cash_flow": "up"}
 APPLE = {"revenue": "up", "net_income": "up", "operating_cash_flow": "down"}
 
 
-def test_catches_the_wrong_direction_nemotron_wrote_for_tesla():
+def test_catches_the_wrong_direction_the_ai_wrote_for_tesla():
     # Found testing frontend-v2: revenue fell -2.9%, but the answer said it grew.
     why = contradicted_direction("Yes, Tesla's revenue grew to $94.83B in FY 2025.", TESLA)
     assert why and why.startswith("described revenue as rising")
@@ -25,9 +25,9 @@ def test_operating_cash_flow_is_not_read_as_a_second_metric():
 
 
 def test_advice_filter_catches_buying_and_recommendations():
-    assert _ADVICE_RE.search("FinSight does not recommend buying Tesla stock.")
+    assert _ADVICE_RE.search("Parallax does not recommend buying Tesla stock.")
     assert _ADVICE_RE.search("Consider selling.")
-    assert not _ADVICE_RE.search("FinSight doesn't make investment decisions for you.")
+    assert not _ADVICE_RE.search("Parallax doesn't make investment decisions for you.")
 
 
 def test_yes_no_must_match_the_filings_and_negations_are_not_misread():

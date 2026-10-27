@@ -225,7 +225,7 @@ def concept_findings(observations: list[Observation], metric_key: str) -> list[F
                 },
                 uncertainty_or_limitations=(
                     "Different US-GAAP concepts have different definitions (for example, revenue under ASC 606 "
-                    "excludes some items that the broader 'Revenues' concept may include). FinSight uses the "
+                    "excludes some items that the broader 'Revenues' concept may include). Parallax uses the "
                     f"concept order {', '.join(metric.tags)} and shows the alternatives instead of mixing them."
                 ),
                 why_it_matters="Data sites that pull a different concept can show a different number for the same year.",
@@ -257,7 +257,7 @@ def concept_findings(observations: list[Observation], metric_key: str) -> list[F
                     supporting_evidence=[EvidenceRef(observation_id=ev.id, note=f"last {older[2]}"),
                                          EvidenceRef(observation_id=ev2.id, note=f"first {newer[2]}")],
                     uncertainty_or_limitations=(
-                        "A tool that reads only the older concept will look as if the data stopped. FinSight "
+                        "A tool that reads only the older concept will look as if the data stopped. Parallax "
                         "joins the series using the concept priority above; check the overlap year for definition differences."
                     ),
                     why_it_matters="This is a common reason a data source shows 'no revenue' for recent years.",
@@ -289,7 +289,7 @@ def other_document_findings(observations: list[Observation], metric_key: str, re
                 calculation_details={"formula": "pct = (other - statement) / |statement|",
                                      "inputs": {"statement": r.current.value, "other": o.value}, "pct": pct},
                 uncertainty_or_limitations=(
-                    f"A {o.form} is not a financial-statement filing, so FinSight does not treat it as a revision. "
+                    f"A {o.form} is not a financial-statement filing, so Parallax does not treat it as a revision. "
                     "Proxy statements (DEF 14A) often present measures defined for executive-pay tables, which can "
                     "differ in scope (for example, including non-controlling interests). The filings do not state the "
                     "reason here, so it is not asserted."
@@ -321,7 +321,7 @@ def consistency_finding(observations: list[Observation], metric_key: str) -> Opt
         ),
         classification=Classification.reported_fact,
         supporting_evidence=[EvidenceRef(observation_id=o.id, note=o.form or "") for o in same_concept],
-        uncertainty_or_limitations="Values are as filed in XBRL; they are not audited by FinSight.",
+        uncertainty_or_limitations="Values are as filed in XBRL; they are not audited by Parallax.",
         status=FindingStatus.supported if len(distinct) == 1 else FindingStatus.unresolved,
         severity="info",
     )
@@ -385,7 +385,7 @@ def explain_value(
         return Explanation(
             "basis", FindingStatus.supported,
             f"The source reports a {basis} figure; the filings' {fmt_usd(cur)} is consolidated (includes subsidiaries). "
-            f"The two measure different scopes, so the gap is expected. FinSight cannot verify the {basis} figure itself.",
+            f"The two measure different scopes, so the gap is expected. Parallax cannot verify the {basis} figure itself.",
             ref.current, ref, details,
         )
 
@@ -444,7 +444,7 @@ def explain_value(
                            f"The filed figure for {ref.label} is {fmt_usd(cur)} ({pct_txt} difference). No period, "
                            f"unit, revision or definition difference explains the claimed value.", ref.current, ref, details)
     return Explanation("unexplained", FindingStatus.unresolved,
-                       f"Differs from the filed {fmt_usd(cur)} by {pct_txt}. FinSight found no period, unit, basis, "
+                       f"Differs from the filed {fmt_usd(cur)} by {pct_txt}. Parallax found no period, unit, basis, "
                        f"revision or definition difference that explains it, so this stays unresolved.",
                        ref.current, ref, details)
 
@@ -482,7 +482,7 @@ def secondary_source_findings(observations: list[Observation], metric_key: str) 
                                      "explanation_kind": exp.kind, **exp.details},
                 uncertainty_or_limitations=(
                     "Secondary sources are not primary filings. "
-                    + ("No supported explanation was found; FinSight does not guess one." if exp.kind == "unexplained" else
+                    + ("No supported explanation was found; Parallax does not guess one." if exp.kind == "unexplained" else
                        "The explanation is the first documented cause that reproduces the source's number exactly.")
                 ),
                 why_it_matters="Knowing why figures differ tells you which number answers your question.",

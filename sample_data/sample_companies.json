@@ -1,5 +1,5 @@
 {
-  "_notice": "SYNTHETIC SAMPLE DATA. Northwind Motors and Contoso Retail are fictional companies. Every figure in this file was invented to exercise FinSight AI's reconciliation and risk checks reproducibly offline. Nothing here describes a real company or a real filing.",
+  "_notice": "SYNTHETIC SAMPLE DATA. Northwind Motors and Contoso Retail are fictional companies. Every figure in this file was invented to exercise Parallax's reconciliation and risk checks reproducibly offline. Nothing here describes a real company or a real filing.",
   "_cases": {
     "quarterly_vs_annual": "NWM 2024: the 10-Q reports Q3 (13.6B) and nine-month YTD (38.9B) revenue; the 10-K reports annual (52.4B). A secondary 'news' source quotes 13.6B as if it were annual.",
     "standalone_vs_consolidated": "NWM 2024: a parent-only (standalone) statement reports 31.8B revenue versus consolidated 52.4B.",
@@ -10,7 +10,7 @@
     "tag_change": "NWM: revenue is tagged us-gaap:Revenues through FY2021, then RevenueFromContractWithCustomerExcludingAssessedTax from FY2021 (overlap year differs by 0.2B).",
     "amendment": "Applied only after 'Publish fictional amended filing' in the Watchlist: a NWM 10-K/A (filed 2025-06-16) revises FY2024 revenue 52.4B -> 51.9B and net income 4.4B -> 4.1B, and a Q1 2025 10-Q adds revenue 13.1B, net income 1.0B, operating cash flow 0.5B.",
     "free_cash_flow_turns_negative": "NWM 2023-2024: operating cash flow falls (3.9B, 2.7B) while capital spending rises (4.1B, 4.6B), so free cash flow turns negative even though net income grows.",
-    "figure_not_reported": "CSR reports no R&D spending (a retailer); FinSight must say the filings don't report it, not invent one."
+    "figure_not_reported": "CSR reports no R&D spending (a retailer); Parallax must say the filings don't report it, not invent one."
   },
   "companies": {
     "NWM": {

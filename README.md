@@ -1,221 +1,149 @@
-# FinSight AI
+# Parallax
 
 **Understand the facts. Investigate the risks. Explore the possibilities.**
 
-FinSight AI is an agentic financial research workspace for beginner investors. Ask about a listed company, or paste a claim such as *"Was Tesla's 2024 revenue $97.7 billion?"*. FinSight then runs a full investigation:
+Parallax is an AI research agent that answers questions about any US-listed company **from its official SEC filings**, and shows where every number came from. Ask *"Is Tesla's revenue still growing?"* or paste a post claiming *"Apple made $500 billion last year"*, and Parallax checks the filings, explains what it found in plain words, and shows every step it took.
 
-- pulls SEC EDGAR XBRL facts, either through **Zetaris** or directly
-- reconciles figures across filings, accounting concepts and sources
-- explains each difference only when a documented cause reproduces it exactly
-- checks a small set of risk indicators, listing evidence and counterevidence
-- runs a transparent scenario calculator
-- remembers what it learned in **Meterless H-MEM**, with an audit ledger
+Financial information is everywhere, but much of it is wrong: a quarterly figure quoted as the full year, a number that was later revised, or an AI answer with no source. Parallax treats every number as something to verify, not something to trust.
 
-It is an educational tool. It does not rate securities, predict markets or give financial advice.
-
-### What you can do in the app
-
-| Tab | What it does |
-|---|---|
-| **Investigate a company** | Full evidence-backed investigation of one company or one claim, with charts, risk indicators, sources, memory and an integration trail. |
-| **Check a post** | Paste a tweet, article or message. FinSight finds every financial claim (company + figure + amount + year), checks each one against filings, and explains any mix-up in plain words. Numbers it can't check are listed with the reason. |
-| **Watchlist** | Follow companies. Each check fetches fresh data and asks Meterless H-MEM what is new, re-confirmed or **changed** since last time, plus any new filings. Click a memory id to see its ledger. In sample mode, "Publish fictional amended filing" demonstrates a detected change honestly. Set `WATCHLIST_CHECK_MINUTES` to check on a schedule. |
-| **Blind board** | Compare 2–3 companies on their filings **with the names hidden**. Labels are shuffled on the server, and names, tickers and filing links aren't sent until you reveal. Revenue is shown as a size band. You choose which to look into, then reveal; if you recorded a first impression, FinSight shows whether the brand was shaping it. |
-| **My decisions** | Your decision diary. From any investigation: run the **Pre-Mortem Room**, then **record your decision** in your own words with **tripwires** (e.g. "cash conversion falls below 0.8"). Each decision is written to Meterless H-MEM, and every watchlist check re-tests the tripwires with code. You get **"what you knew then vs now"**. |
-| **Savings & fees** | Compare a savings account, a low-fee fund and a high-fee fund (all assumptions editable), or bad/middle/good years. Shows money lost to fees, including the growth those fees forgo, and inflation-adjusted values. |
-
-**Pre-Mortem Room** (on every finished investigation): *"Imagine it's two years from now and a decision about this company went badly."* Nemotron writes a **Skeptic** and a **Defender**, both only from FinSight's findings, followed by questions only you can answer. Voices are rejected if they:
-- cite unknown findings
-- add numbers
-- give a verdict or a prediction
-- use size words like "doubled" that the evidence doesn't
-- assert a cause the evidence says is unknown
-
-The verified finding is shown under every point.
-
-Every finding has an **"In plain words"** line, and financial terms are underlined: hover or tap one for a definition. Both come from deterministic templates and a hand-written glossary, not from a model, so they can't introduce a wrong number.
+It is an educational tool. It does not rate securities, predict prices or give investment advice.
 
 Open Agent Hackathon 2026. Primary track: **Track 1, Solving Fragmented Intelligence**. Also relevant to Track 2, *The Agent That Can Explain Why*.
 
 ---
 
-## Quick start (sample mode, no credentials)
+## Try it in two minutes (sample mode, nothing connected)
 
-Requirements: Python 3.11+, Node 20+ (uv optional).
+Requirements: Python 3.11+ and Node 20+.
 
 ```bash
 ./scripts/dev.sh
 ```
 
-Open http://127.0.0.1:5174. Search a company (one letter is enough), pick it, then ask your own question about it, or tap a suggested one. To try it offline, keep the data selector on **Sample (offline)** and pick a **sample case**. Sample mode uses two **fictional** companies, Northwind Motors and Contoso Retail. They are labeled `SAMPLE DATA` everywhere they appear, and each one exercises a reconciliation case reproducibly offline.
+Open **http://127.0.0.1:5174**, set the data selector at the top to **Sample (offline)**, then:
 
-FinSight answers your question directly from the filings. AI-written answers must use only real numbers, agree with the direction of each change (rose or fell) and give no advice; otherwise FinSight shows an answer computed by code, or says plainly that it can't answer. The Home dashboard shows the latest finished investigation, your Watchlist (latest annual revenue and YoY change; FinSight has no market-price feed) and "Today's insights", which are real watchlist and decision events, never placeholders.
+1. **Investigate** → click **Northwind Motors (SAMPLE, fictional)** → click *"Is Northwind Motors' free cash flow positive?"*
+2. Try the sample case *"Was Northwind Motors' 2024 revenue really $13.6 billion?"*. Parallax shows the $13.6B is one quarter; the full year was $52.4B.
+3. Open **Overview → Investigation progress** and **Sources** to see every step, query and memory behind the answer.
 
-What `dev.sh` does:
-1. Creates `.env` from `.env.example`.
-2. Sets up `backend/.venv`.
-3. Runs `npm run setup` in `services/hmem-sidecar`, which vendors the Meterless H-MEM engine.
-4. Starts the backend (:8000), the H-MEM sidecar (:8765) and the frontend (`frontend-v2/`, :5174). The frontend proxies `/api` to the backend; set `VITE_BACKEND_URL` to point it elsewhere.
+Sample mode needs no internet, keys, Zetaris or AI. It uses two **fictional** companies, Northwind Motors and Contoso Retail, labeled `SAMPLE DATA` everywhere. Without an AI model, every answer is computed by Parallax from the filings and labeled so.
 
-Or with Docker (tested: images build, and an investigation and a watchlist check run end to end with Postgres and H-MEM):
+`dev.sh` creates `.env` from `.env.example`, sets up `backend/.venv`, vendors the Meterless H-MEM engine, and starts the backend (:8000), the H-MEM memory service (:8765) and the app (:5174).
 
-```bash
-cp .env.example .env
-docker compose up --build      # http://localhost:8080
-```
+Or with Docker: `cp .env.example .env && docker compose up --build`, then open http://localhost:8080.
 
-## Live data
+## What you can do
 
-| Mode | Set in `.env` | What it needs |
-|---|---|---|
-| `sample` | `FINSIGHT_DATA_MODE=sample` | nothing |
-| `sec_direct` | `FINSIGHT_DATA_MODE=sec_direct` | `SEC_USER_AGENT="your-app you@example.com"` (SEC requires a contact) |
-| `zetaris` | `FINSIGHT_DATA_MODE=zetaris` | a Zetaris instance, `ZETARIS_*` settings, and the setup step below |
+| Section | What it does |
+|---|---|
+| **Home** | The latest investigation's key figures and chart, recent investigations, your watchlist, a calendar and real events (new filings, revised figures, tripwire hits). |
+| **Investigate** | Search a company (one letter is enough), pick it, and ask your own question, or tap a suggested one. The answer cites the filings; tabs show Financials (with a **Key figures** table), Risks, Sources, Stress-test and Notes & tripwires. |
+| **Check a post** | Paste a post or article. Parallax finds each financial claim, checks it against the filings and explains any mix-up (wrong year, quarter vs year, units, an old figure). |
+| **Savings & fees** | Compare a savings account, a low-fee fund and a high-fee fund, with money lost to fees and inflation shown. All assumptions are editable and labeled hypothetical. |
+| **Compare** | Compare 2–3 companies on their filings **with the names hidden**, so a famous brand can't sway you. Choose which to look into, then reveal. |
+| **Pre-Mortem** | *"Imagine this went badly. What most likely went wrong?"* A Skeptic and a Defender argue only from the verified findings, followed by questions only you can answer. |
+| **Decision Diary** | Record your decision in your own words with **tripwires** (e.g. "free cash flow falls below $0"). Every watchlist check re-tests them with code. |
+| **Watchlist** | Follow companies. Each check compares fresh filings with what Parallax remembers and shows exactly what changed. In sample mode, *Publish fictional amended filing* demonstrates a detected revision; *Reset the sample demo* lets you show it again. |
+| **Data Sources** | Live status of Zetaris, Meterless H-MEM, Meterless Nightshift and SEC EDGAR. |
 
-You can also switch modes per investigation in the UI. **Any SEC-listed company works** (about 10,400, from the SEC's official [company_tickers_exchange.json](https://www.sec.gov/files/company_tickers_exchange.json), cached for a day):
-- In the UI, use the company search box (by ticker or name).
-- In a question or a pasted post, write the ticker, for example `$PLTR` or `(NASDAQ: PLTR)`.
+Financial terms are underlined throughout: hover or tap one for a plain-English definition.
 
-Nine companies (AAPL, MSFT, NVDA, TSLA, F, WMT, TGT, IBM, ORCL) are also recognised by name. In Zetaris mode, a company's SEC sources are **registered in Zetaris the first time it is looked up**, which takes about 10–40 seconds once. Its views are kept only if Zetaris's row counts match the SEC's. Set `ZETARIS_AUTO_REGISTER=false` to turn this off.
+## How answers stay trustworthy
 
-### Zetaris setup
+1. **Filings first.** Figures come from SEC EDGAR XBRL filings, through Zetaris or directly. The figure of record is the latest financial-statement filing; earlier filed values are kept, so revisions are visible.
+2. **Code does the maths.** A facts sheet is computed for every investigation: 11 filed figures (revenue, gross profit, operating income, net income, operating cash flow, capital spending, R&D, cash, long-term debt, buybacks, dividends) and 8 derived ones (gross, operating, net and free-cash-flow margins, free cash flow, R&D share of revenue, cash minus debt, buybacks plus dividends). A figure the company stopped reporting years ago is labeled "no current figure" rather than shown as current.
+3. **The AI is checked, not trusted.** Before an AI answer is shown, Parallax checks that it cites real findings, uses only numbers from the evidence, agrees with the direction of every change (rose or fell), matches any yes/no the filings settle, and contains no advice. A rejected answer gets one retry told exactly what to fix; if that fails, Parallax writes the answer in code from the facts, or says plainly that it has no checked answer.
+4. **No advice.** "Should I buy…?" always gets a fixed reply, followed by what the filings show.
+5. **Nothing is hidden.** Results appear only after verification. Every step, SQL query, SEC request, AI call (with the model that handled it and its token usage) and memory read or write is shown in the app.
+
+Investigation steps: `RECEIVED → PLANNING → RETRIEVING → NORMALIZING → RECONCILING → INVESTIGATING_RISKS → VERIFYING → COMPLETED`.
+
+## Sponsor technology
+
+Details of each integration, and what has been verified live: [`docs/INTEGRATIONS.md`](docs/INTEGRATIONS.md).
+
+**Zetaris: the data layer** ([`backend/app/integrations/zetaris/`](backend/app/integrations/zetaris))
+- SEC EDGAR XBRL concepts are registered in Zetaris as `CREATE LIGHTNING REST TABLE` sources with `CREATE SCHEMASTORE VIEW`s, and Parallax reads them with SQL through Zetaris's `run-query` API.
+- Every view is kept only if Zetaris's row count matches the SEC's; 143 views across 13 companies are verified so far, and the count grows as new companies are looked up. A new company is registered on first lookup, and figures added later get their own views.
+- Every query is recorded with its SQL, request ID, rows and timing, and shown in the Integration trail.
+
+**Meterless: H-MEM memory engine** ([`services/hmem-sidecar/`](services/hmem-sidecar), [`backend/app/integrations/meterless/`](backend/app/integrations/meterless))
+- The official H-MEM reference engine stores every figure Parallax finds, with provenance, and re-confirms it on later checks.
+- A changed figure is recorded as a conflict in H-MEM's append-only trust ledger, which powers the Watchlist's revision detection, the Decision Diary and the audit trail (click any memory ID).
+
+**Meterless Nightshift: the AI provider, routing to NVIDIA Nemotron** ([`backend/app/integrations/meterless/runtime.py`](backend/app/integrations/meterless/runtime.py))
+- Every AI call goes to Nightshift, found automatically on this Mac (port 8088, with the app's own token). Nightshift routes it to **NVIDIA Nemotron 3.5 Lightning 30B** (`nvidia/nemotron-3.5-lightning-30b-a3b`), with Nemotron's reasoning switched off for fast, structured answers.
+- The model that handled each request, as named in Nightshift's reply, is shown on every answer ("Written by nvidia/nemotron-… via Meterless Nightshift"), in the Pre-Mortem and in the Integration trail.
+- Setup: install Nightshift (free Mac M1+ edition: https://www.meterless.ai/mac.html) and add NVIDIA as a provider in the app. If Nightshift isn't running, answers are written in code.
+
+## Configuration
+
+`.env.example` lists every setting. The main ones:
+
+| Setting | Purpose |
+|---|---|
+| `FINSIGHT_DATA_MODE` | `zetaris` (default), `sec_direct` or `sample`. The data selector in the app overrides it per investigation. If Zetaris isn't reachable, Parallax uses SEC directly and labels it. |
+| `SEC_USER_AGENT` | Required for live data: `"app-name you@example.com"` (the SEC asks for a contact). |
+| `ZETARIS_*` | Your Zetaris instance and login. `ZETARIS_AUTO_REGISTER=false` turns off registration on first lookup. |
+| `METERLESS_MODEL` | The model Nightshift should use; default `nvidia/nemotron-3.5-lightning-30b-a3b`. |
+| `LLM_PROVIDER` | `auto` (use Nightshift when it is running) or `none` (answers always written in code). |
+
+Some setting names keep the project's original `FINSIGHT_` prefix so existing setups keep working.
+
+To register companies in Zetaris ahead of time:
 
 ```bash
 backend/.venv/bin/python scripts/zetaris_setup.py --dry-run          # show the SQL; sends nothing
 backend/.venv/bin/python scripts/zetaris_setup.py --apply            # create the sources, then verify them
-backend/.venv/bin/python scripts/zetaris_setup.py --apply --tickers TSLA AAPL --skip-existing
 ```
-
-To use the Zetaris SQL Editor instead, the same statements are in [`zetaris/sql/finsight_edgar_create.sql`](zetaris/sql/finsight_edgar_create.sql).
-
-### Model provider (optional)
-
-`LLM_PROVIDER=auto` tries the providers in this order:
-1. **Meterless Runtime**, if online (`METERLESS_RUNTIME_TOKEN` or `METERLESS_TOKEN_FILE`)
-2. **NVIDIA Nemotron**, if `NVIDIA_API_KEY` is set. Get a free key at build.nvidia.com. The default model is `nvidia/nemotron-3.5-lightning-30b-a3b`.
-3. **Gemini**, if `GEMINI_API_KEY` is set
-4. Otherwise no model: the summary is built deterministically from findings and labeled "No model used".
-
-The model never does arithmetic and never supplies numbers. Its output is shown only after passing [`app/verification/model_output.py`](backend/app/verification/model_output.py), which checks four things:
-- the output is valid JSON
-- it cites only real finding ids
-- every number in it already appears in the evidence
-- it contains no buy/sell language
-
-## Where the sponsors are used
-
-Full details, including what is verified and what is not: [`docs/INTEGRATIONS.md`](docs/INTEGRATIONS.md).
-
-**Zetaris: federated data access** ([`backend/app/integrations/zetaris/`](backend/app/integrations/zetaris))
-- Uses the HTTP routes from Zetaris's official `getting-started` helpers: `POST /api/auth/login` and `POST /api/proxy/sql-editor/sqls/run-query`, with the `Authorization`, `X-Org-ID` and `X-Request-ID` headers.
-- SEC EDGAR concepts are registered as `CREATE LIGHTNING REST TABLE` sources plus `CREATE SCHEMASTORE VIEW`s, following Zetaris's verified EDGAR recipe. FinSight queries those views with SQL.
-- When cross-check is on, every Zetaris investigation also fetches the same facts from SEC directly and reports whether row counts and values agree. This is the check Zetaris's docs recommend.
-- Every query is kept as a receipt: SQL, request id, rows and timing.
-
-**Meterless: memory and model routing** ([`services/hmem-sidecar/`](services/hmem-sidecar), [`backend/app/integrations/meterless/`](backend/app/integrations/meterless))
-- **H-MEM engine** (official reference, vendored by `npm run setup`). Each investigation:
-  1. recalls earlier memories for the company (`MemoryRetrievalService`)
-  2. writes the figures it found, with provenance (`MemoryStoreService`)
-  3. re-confirms facts it already knew (feedback)
-  4. records any changed figure as a `conflict_detected` / `conflict_resolved` entry in the append-only `TrustLedgerService`
-- In the UI, click any memory id to see its ledger history.
-- **Meterless Runtime provider**, implementing the published 0.90.0 contract:
-  - URL normalization and bearer token, with `rt-local` rejected
-  - `meterless-app` and `meterless-scope` headers
-  - status decided by `/v1/models`: online, unauthorized or offline
-  - port auto-detect and a 180 s timeout
-- Model usage is shown exactly as the provider returns it. Costs are never estimated.
 
 ## Tests
 
 ```bash
-cd backend && .venv/bin/pytest -q              # 100 tests: reconciliation, risk, scenarios, claims, answers, watchlist, Zetaris, Meterless, API
-cd services/hmem-sidecar && npm test           # 4 tests against the real vendored H-MEM engine
-cd frontend-v2 && npm test                     # 12 unit tests: names, times, money, feed, Key Insights, tripwire units
-cd frontend-v2 && npm run test:e2e             # 14 browser tests of real user flows (first time: npx playwright install chromium)
-cd frontend-v2 && npm run build                # typecheck + production build
+cd backend && .venv/bin/pytest -q              # 127 tests: reconciliation, risks, key figures, answers and checks, claims, company recognition, watchlist, Zetaris, Meterless, API
+cd services/hmem-sidecar && npm test           # 4 tests against the real H-MEM engine
+cd frontend-v2 && npm test                     # 14 unit tests
+cd frontend-v2 && npm run test:e2e             # 16 browser tests of real user flows (first time: npx playwright install chromium)
+cd frontend-v2 && npm run build                # type check + production build
 ```
 
-The browser tests start their own private backend, H-MEM sidecar and frontend on ports 8767, 8011 and 5177, in sample mode with no AI model and a temporary database. They never read your `.env` keys, database or memory, and they need no internet. They cover asking a question, every investigation tab, claim checks, glossary pop-ups, the Home dashboard, Compare, Check a post, the savings simulator, watchlist change detection, the decision diary, the Pre-Mortem, Data Sources and the phone layout. A failed run leaves a screenshot and trace in `frontend-v2/test-results/`.
-
-GitHub Actions (`.github/workflows/ci.yml`) runs all of the above, plus a Docker image build, on every push and pull request. No secrets are needed.
-
-The brief's evaluation cases are covered in `backend/tests/test_reconciliation.py` and `test_risk_and_scenarios.py`:
-1. quarterly vs annual
-2. standalone vs consolidated
-3. different units
-4. stale vs newer source
-5. profit up while cash flow falls
-6. missing data and unresolved disagreement
-7. scenario math, checked against closed-form formulas
-8. an unsupported claim
-
-## How an investigation works
-
-`RECEIVED → PLANNING → RETRIEVING → NORMALIZING → RECONCILING → INVESTIGATING_RISKS → (SIMULATING) → VERIFYING → COMPLETED | NEEDS_MORE_EVIDENCE | FAILED`
-
-Each step is recorded with real timestamps and events as it runs ([`backend/app/agents/workflow.py`](backend/app/agents/workflow.py)), and the UI polls that record. Inside the steps:
-
-- **Reconciliation** ([`backend/app/reconciliation/engine.py`](backend/app/reconciliation/engine.py)):
-  - The figure of record is the latest *financial-statement* filing (10-K/10-Q/20-F or an amendment) under a fixed concept priority.
-  - Earlier filed values are kept.
-  - Proxy statements (DEF 14A) and other documents are compared, but never treated as revisions.
-- **Explaining an outside value:** FinSight tests these causes in order: exact match, reporting basis, revision or stale source, other concept, other document, partial period, unit scale, fiscal-year offset. If none reproduces the number, the finding is reported as **unresolved** (for a user claim, **contradicted**), and no cause is guessed.
-- **Risk indicators** ([`backend/app/risk_analysis/indicators.py`](backend/app/risk_analysis/indicators.py)):
-  - revenue trend
-  - profit vs operating cash flow
-  - debt trend and debt / operating cash flow
-  - current ratio
-
-  Each is computed over a window that uses one concept only, and each finding gives its formula, its inputs, its counterevidence and what it cannot tell you.
-- **Key figures** ([`backend/app/analysis/key_figures.py`](backend/app/analysis/key_figures.py)): a facts sheet computed in code for every investigation. It covers 11 filed figures (revenue, gross profit, operating income, net income, operating cash flow, capital spending, R&D, cash, long-term debt, buybacks, dividends) and 8 derived ones (gross, operating, net and free-cash-flow margins, free cash flow, R&D share of revenue, cash minus debt, buybacks plus dividends). Each row has the latest fiscal year, the year before, the change and the filing behind it. A percentage change is only given when both years are positive. The same rows feed the Key figures table, the AI's evidence ("facts", so it never calculates), the rise/fall checks, tripwires, the Compare board and the answers FinSight writes without a model.
-- **Answers:** the AI answers the question from findings and facts, and must cite them, use only their numbers, agree with each figure's direction and give no advice. If it fails, it gets one retry told exactly what to fix; if that fails too, FinSight answers in code from the facts (for example "No: Free cash flow was -$1.90B in FY2024…") or says plainly that it has no checked answer. Investment-decision questions always get a fixed reply.
-- **Scenarios** ([`backend/app/scenarios/calculator.py`](backend/app/scenarios/calculator.py)): monthly compounding with fees and inflation. Results are labeled hypothetical.
+The browser tests start their own private backend, memory service and app in sample mode, with no AI and a temporary database, so they never touch your `.env`, data or memory and need no internet. GitHub Actions ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs all of the above, plus a Docker build, on every push.
 
 ## API
 
 | Method | Path | Purpose |
 |---|---|---|
 | GET | `/health` | service health |
-| GET | `/api/integrations/status?deep=true` | live status of Zetaris, H-MEM, Meterless Runtime and Gemini |
-| GET | `/api/companies` | built-in live and sample companies, plus sample cases |
-| GET | `/api/companies/search?q=` | search any SEC-listed company by ticker or name |
-| POST | `/api/investigations` | start an investigation `{question, ticker?, data_mode?}` |
-| GET | `/api/investigations/{id}` | state, steps, observations, findings, charts, receipts, memory |
-| POST | `/api/scenarios/calculate` | deterministic scenarios (1–5) |
-| GET | `/api/memory/{id}/audit` | H-MEM trust-ledger history for one memory |
-| POST | `/api/claims/check` | check every claim in pasted text `{text, data_mode?}` |
-| GET | `/api/glossary` | beginner glossary |
-| GET / POST / DELETE | `/api/watchlist`, `/api/watchlist/{ticker}` | follow / list / unfollow companies |
-| POST | `/api/watchlist/check` | re-check one or all followed companies and report changes |
-| POST | `/api/investigations/{id}/premortem` | Pre-Mortem Room voices + questions |
-| GET | `/api/tripwire-metrics?ticker=` | current values of tripwire metrics |
-| GET / POST | `/api/decisions`, `/api/decisions/{id}`, `/api/decisions/{id}/check` | decision diary and tripwire checks |
-| POST | `/api/board`, `/api/board/{id}/reveal` | Brand-Blind Board (blind view, then reveal) |
-| GET / POST | `/api/sample/amendment` | publish the fictional Northwind amended filing (sample data only) |
+| GET | `/api/integrations/status?deep=true` | live status of Zetaris, H-MEM and Meterless Nightshift |
+| GET | `/api/companies`, `/api/companies/search?q=` | built-in and sample companies; search any SEC-listed company |
+| POST, GET | `/api/investigations`, `/api/investigations/{id}` | start an investigation `{question, ticker?, data_mode?}`; read its steps, findings, figures and trail |
+| POST | `/api/investigations/{id}/premortem` | Pre-Mortem voices and questions |
+| POST | `/api/claims/check` | check every claim in pasted text |
+| POST | `/api/scenarios/calculate` | savings and fees scenarios |
+| GET | `/api/glossary`, `/api/memory/{id}/audit` | plain-English glossary; H-MEM ledger history of one memory |
+| GET, POST, DELETE | `/api/watchlist`, `/api/watchlist/{ticker}`, `/api/watchlist/check` | follow, list, unfollow and re-check companies |
+| GET, POST | `/api/decisions`, `/api/decisions/{id}/check`, `/api/tripwire-metrics` | decision diary and tripwires |
+| POST | `/api/board`, `/api/board/{id}/reveal` | brand-blind comparison |
+| GET, POST, DELETE | `/api/sample/amendment` | publish or reset the fictional Northwind amended filing |
 
 ## Repository layout
 
 ```
-backend/app/        FastAPI app: agents/ (workflow, narrator, charts), financial_data/ (SEC client, providers,
-                    normalization), integrations/ (zetaris, meterless, gemini), reconciliation/, risk_analysis/,
-                    scenarios/, verification/, models/
-services/hmem-sidecar/  Node HTTP wrapper around the Meterless H-MEM reference engine
-frontend-v2/        the app: React + TypeScript + Vite + Tailwind + Apache ECharts (port 5174)
-zetaris/            generated Lightning SQL and the verified-view manifest
-sample_data/        fictional fixtures (labeled SAMPLE)
-scripts/            dev.sh, zetaris_setup.py
-docker/, docker-compose.yml
+backend/app/            FastAPI app
+  agents/               investigation workflow, AI narrator, watchlist, charts
+  analysis/             key figures (the facts sheet)
+  financial_data/       SEC client, company directory, providers (Zetaris, SEC, sample)
+  integrations/         Zetaris and Meterless (H-MEM client, Nightshift runtime)
+  reconciliation/       figure of record, revisions, claim checks
+  risk_analysis/        risk indicators
+  verification/         checks on AI output (numbers, direction, yes/no, advice)
+  decisions/            decision diary, tripwires, brand-blind board, pre-mortem
+  explain/, scenarios/, models/, api/
+backend/tests/          pytest suite
+services/hmem-sidecar/  HTTP wrapper around the Meterless H-MEM reference engine
+frontend-v2/            the app: React, TypeScript, Vite, Tailwind, Apache ECharts (+ e2e/ browser tests)
+zetaris/                generated Lightning SQL and the verified-view manifest
+sample_data/            fictional sample companies (labeled SAMPLE)
+scripts/                dev.sh, zetaris_setup.py
+docker/, docker-compose.yml, .github/workflows/
 ```
-
-## Limitations
-
-- **Zetaris is verified on a local instance** (Docker Compose bundle, 2026-10-24). The 9 built-in companies are registered (78 views), plus Palantir and Coca-Cola registered on demand. Every row count matches the SEC.
-- **Coverage depends on the company's filings.** FinSight reads 13 figures under about 21 US-GAAP labels, and derives 8 more. Companies that use other labels, report under IFRS (most foreign filers), or are banks or insurers will show "insufficient evidence" for some figures rather than wrong numbers. Names in free text are only matched for the 9 built-in companies; others need the search box or a written ticker.
-- **SEC-side gap:** for a few filers (seen for Coca-Cola), the SEC's per-concept endpoint returns an empty list while its companyfacts endpoint has the data. FinSight then reads that figure from companyfacts and doesn't register it in Zetaris, because a Zetaris table on the empty endpoint would be empty. The app labels those figures "Not via Zetaris".
-- **The Meterless Runtime provider has not been run against a live runtime** (no Nightshift install on the build machine). It is tested against the published contract with mocks. **H-MEM is exercised for real**, against the vendored engine.
-- **Gemini has not been called:** no key was available. NVIDIA Nemotron is the verified model provider.
-- **Coverage is limited.** All dollar figures; share counts (dilution) and revenue by business segment are not read (segment data isn't in the SEC's API). Figures added after a company was registered in Zetaris get their own views on first use; with `ZETARIS_AUTO_REGISTER` off they come from SEC directly, labeled "Not via Zetaris". XBRL facts are as filed. Some companies don't use the standard concepts; for example, Ford has no current assets/liabilities split. In that case FinSight reports *insufficient evidence* rather than zero.
-- **Claim extraction** is rule-based. It handles company names, tickers, the filed figures above (revenue, profit, cash flow, debt, gross profit, R&D, capital spending, cash, buybacks, dividends…), amounts with units and years. It doesn't read percentages, growth rates or forecasts, and it lists anything it skipped. A relative phrase like "last year" is checked against the latest fiscal year and flagged.
-- **H-MEM conflict detection:** the reference engine's generic detector flags similar texts with different numbers, which would wrongly pair different fiscal years. So FinSight keys conflicts by company, metric and period, and records them through H-MEM's own ledger and `supersededBy` mechanism.
-- **Licensing:** SEC data is filer-authored. FinSight queries it live and does not redistribute it.

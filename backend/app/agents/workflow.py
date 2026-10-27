@@ -1,4 +1,4 @@
-"""The FinSight investigation workflow: an explicit, inspectable sequence of states.
+"""The Parallax investigation workflow: an explicit, inspectable sequence of states.
 
 Every StepRecord is written as the step actually runs (real timestamps, real outcomes), and the
 investigation is persisted after each step so the UI shows true progress.
@@ -15,7 +15,7 @@ from app.analysis.key_figures import compute_key_figures
 from app.agents.narrator import Narrator
 from app.config import Settings
 from app.db import save_investigation
-from app.financial_data.companies import LIVE_COMPANIES, METRICS, SAMPLE_COMPANIES, Company, find_company, match_company_in_text
+from app.financial_data.companies import METRICS, Company, find_company, match_company_in_text
 from app.financial_data.providers import FetchResult, SampleProvider, SecDirectProvider, ZetarisProvider
 from app.integrations.meterless.hmem import HmemClient, HmemUnavailable
 from app.integrations.zetaris.client import ZetarisError
@@ -107,7 +107,7 @@ class Workflow:
             if self.company is None:
                 self.inv.state = StepState.NEEDS_MORE_EVIDENCE
                 self.inv.limitations.append(
-                    "FinSight could not identify the company. Pick it in the company search box, or write its "
+                    "Parallax could not identify the company. Pick it in the company search box, or write its "
                     "ticker in the question, for example $PLTR or (NASDAQ: PLTR). Any SEC-listed company works.")
                 self._save()
                 return self.inv
@@ -153,12 +153,15 @@ class Workflow:
             provider, detail = await self.narrator.select_provider()
             rec.events.append(f"Model provider: {provider or 'none'} ({detail}).")
             if company is None and provider:
-                pool = SAMPLE_COMPANIES if include_sample else LIVE_COMPANIES
-                ticker, call = await self.narrator.interpret_company(self.inv.question, {c.ticker: c.name for c in pool})
+                ticker, call = await self.narrator.interpret_company(self.inv.question)
                 if call:
                     self.inv.model_calls.append(call)
                 company = find_company(ticker) if ticker else None
-                rec.events.append(f"Model interpretation suggested {ticker or 'no company'} (validated against supported list).")
+                rec.events.append(f"Model interpretation suggested {ticker or 'no company'} (checked against the SEC "
+                                  f"directory and the question's own words).")
+                if company and not company.sample and self.inv.data_mode == "sample":
+                    self.inv.data_mode = "sec_direct"
+                    rec.events.append(f"{company.ticker} is a live company; switching data mode to sec_direct.")
             self.company = company
             if company is None:
                 rec.status = "warning"
@@ -265,7 +268,7 @@ class Workflow:
                 if age > 200:
                     self.inv.limitations.append(f"The newest filing in the data is {age} days old; newer results may exist.")
             self.inv.limitations.append(
-                "SEC 'fy'/'fp' fields describe the filing, not the period; FinSight labels periods by their end date.")
+                "SEC 'fy'/'fp' fields describe the filing, not the period; Parallax labels periods by their end date.")
 
     async def _reconcile(self) -> None:
         async with self.step(StepState.RECONCILING, "Comparing figures across filings, concepts and sources.") as rec:
@@ -352,7 +355,7 @@ class Workflow:
                     id=_fid("mem", c["memoryA"], c["memoryB"]),
                     category="memory",
                     title=f"Changed since an earlier investigation: {c['key']}",
-                    claim=f"FinSight's memory ({c['memoryA']}) recorded {fmt_usd(float(prev_val))} for {c['key']}; "
+                    claim=f"Parallax's memory ({c['memoryA']}) recorded {fmt_usd(float(prev_val))} for {c['key']}; "
                           f"this run found a different value ({c['memoryB']}). Resolution: {c['resolution']}.",
                     classification=Classification.reported_fact,
                     uncertainty_or_limitations="Usually a later filing revised the figure; the earlier memory is kept in the H-MEM ledger.",

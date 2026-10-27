@@ -1,4 +1,4 @@
-"""Render the Zetaris Lightning SQL that federates SEC EDGAR into FinSight.
+"""Render the Zetaris Lightning SQL that federates SEC EDGAR into Parallax.
 
 The statement shapes copy Zetaris's verified recipe
 (getting-started/open_data/rest_apis/sql/rate_limited/01_edgar_company_facts_create.sql):
@@ -83,7 +83,7 @@ def _quote(value: str) -> str:
 
 def database_sql(db: str) -> str:
     # Zetaris accepts only letters, digits, spaces and _ . - , in a description (no colon).
-    return f'CREATE LIGHTNING DATABASE {db} DESCRIBE BY "FinSight AI SEC EDGAR XBRL companyconcept REST source"'
+    return f'CREATE LIGHTNING DATABASE {db} DESCRIBE BY "Parallax SEC EDGAR XBRL companyconcept REST source"'
 
 
 def container_sql(container: str) -> str:

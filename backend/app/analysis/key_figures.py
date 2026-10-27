@@ -1,9 +1,9 @@
 """Key figures: the facts sheet for one company, computed in code from filed observations.
 
-For every figure FinSight tracks (and a few derived from them: margins, free cash flow, cash minus debt) this
+For every figure Parallax tracks (and a few derived from them: margins, free cash flow, cash minus debt) this
 gives the latest fiscal-year value, the year before, the change, and the value a few years back. Each value
 names the filing it came from. The same rows feed the Key figures table, the AI's evidence (so it never has to
-calculate anything itself) and the answers FinSight writes without a model.
+calculate anything itself) and the answers Parallax writes without a model.
 """
 from __future__ import annotations
 
@@ -36,6 +36,7 @@ class KeyFigure:
     points: list[Point]  # oldest first, one per fiscal year
     formula: str = "as filed"
     note: str = ""
+    stale: bool = False  # latest value is more than a year older than the company's latest filings
 
     @property
     def latest(self) -> Optional[Point]:
@@ -61,7 +62,7 @@ class KeyFigure:
     @property
     def direction(self) -> Optional[str]:
         a, b = self.prior, self.latest
-        if not a or not b or a.value == b.value:
+        if self.stale or not a or not b or a.value == b.value:
             return None
         return "up" if b.value > a.value else "down"
 
@@ -92,7 +93,10 @@ class KeyFigure:
         b, a = self.latest, self.prior
         verb = "were" if self.key in PLURAL else "was"
         if not b:
-            return f"{self.label}: not reported in the filings FinSight read."
+            return f"{self.label}: not reported in the filings Parallax read."
+        if self.stale:
+            return (f"{self.label} was last reported for {b.fy} ({self.fmt(b.value)}); the company's newer filings "
+                    f"don't report it under this definition, so there is no current figure.")
         s = f"{self.label} {verb} {self.fmt(b.value)} in {b.fy}"
         if a:
             if not self.direction:
@@ -115,7 +119,8 @@ class KeyFigure:
                                            "display": self.fmt(x.value), "form": x.form, "filed": x.filed,
                                            "evidence": x.evidence}
         return {"key": self.key, "label": self.label, "unit": self.unit, "latest": p(self.latest), "prior": p(self.prior),
-                "change": self.change, "change_display": self.fmt_change(), "direction": self.direction,
+                "change": None if self.stale else self.change, "change_display": None if self.stale else self.fmt_change(),
+                "direction": self.direction, "stale": self.stale,
                 "history": [p(x) for x in self.points], "formula": self.formula, "sentence": self.sentence(),
                 "note": self.note}
 
@@ -125,7 +130,8 @@ class KeyFigure:
 QUESTION_PATTERNS: list[tuple[str, str]] = [
     ("fcf_margin", r"free cash ?flow margin|\bfcf margin"),
     ("free_cash_flow", r"free cash ?flow|\bfcf\b"),
-    ("operating_cash_flow", r"(operating )?cash ?flows?( from operations)?|\bocf\b"),
+    ("operating_cash_flow", r"(operating )?cash ?flows?( from operations)?|\bocf\b|backed by (real |actual )?cash|"
+                            r"(turn|convert)\w* (its )?(profits?|earnings) into cash"),
     ("gross_margin", r"gross margins?"),
     ("gross_profit", r"gross profits?"),
     ("operating_margin", r"operating margins?"),
@@ -193,6 +199,11 @@ def compute_key_figures(obs: list[Observation]) -> list[KeyFigure]:
     fcf = next(k for k in out if k.key == "free_cash_flow")
     fcf_margin = _combine({p.period_end: p for p in fcf.points}, rev, ratio)
     out.append(KeyFigure("fcf_margin", "Free cash flow margin", "pct", fcf_margin, "free cash flow / revenue"))
+    # A figure that stopped being reported years ago (JPMorgan's long-term debt ends in FY2013) is not current.
+    current = max((p.period_end.year for k in out if k.key in ("revenue", "net_income") for p in k.points[-1:]), default=None)
+    for k in out:
+        if current is not None and k.latest and k.latest.period_end.year < current - 1:
+            k.stale = True
     return out
 
 

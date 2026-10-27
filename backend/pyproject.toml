@@ -1,7 +1,7 @@
 [project]
-name = "finsight-backend"
+name = "parallax-backend"
 version = "0.1.0"
-description = "FinSight AI backend: evidence-led financial investigations (FastAPI)."
+description = "Parallax backend: evidence-led financial investigations (FastAPI)."
 requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.115",

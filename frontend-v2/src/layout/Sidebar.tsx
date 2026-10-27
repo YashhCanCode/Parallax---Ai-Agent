@@ -17,7 +17,7 @@ export function connections(st: IntegrationStatus | null) {
   return [
     { label: "Zetaris", on: on(st?.zetaris.state), state: st?.zetaris.state ?? "unknown" },
     { label: "Meterless H-MEM", on: st?.meterless_hmem.state === "online", state: st?.meterless_hmem.state ?? "unknown" },
-    { label: "NVIDIA Nemotron", on: on(st?.nvidia?.state), state: st?.nvidia?.state ?? "not_configured" },
+    { label: "Meterless Nightshift", on: on(st?.meterless_runtime?.state), state: st?.meterless_runtime?.state ?? "unknown" },
     { label: "SEC EDGAR", on: !!st?.sec.user_agent_set, state: st?.sec.user_agent_set ? "configured" : "not_configured" },
   ];
 }
@@ -40,7 +40,7 @@ export function Sidebar({ page, onNavigate, status }: { page: Page; onNavigate: 
     <>
       <aside className="sticky top-[31px] hidden h-[calc(100vh/var(--ui-zoom)-62px)] max-h-[1067px] w-[218px] shrink-0 flex-col rounded-[22px] border border-[rgba(255,255,255,0.06)] bg-[var(--sidebar)] px-[14px] pb-[20px] pt-[24px] shadow-[0_10px_30px_rgba(0,0,0,0.25)] lg:flex">
         <div className="flex items-center gap-[10px] px-[8px]">
-          <LogoMark size={30} /><span className="text-[23px] font-semibold tracking-[-0.01em] text-[var(--cream)]">FinSight AI</span>
+          <LogoMark size={30} /><span className="text-[23px] font-semibold tracking-[-0.01em] text-[var(--cream)]">Parallax</span>
         </div>
         <nav className="mt-[34px] space-y-[5px]" aria-label="Main">
           {MAIN.map(([id, label, Icon]) => <Item key={id} id={id} label={label} Icon={Icon} page={page} onNavigate={onNavigate} />)}

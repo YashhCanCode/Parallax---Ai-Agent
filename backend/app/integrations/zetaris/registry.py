@@ -53,7 +53,7 @@ def merge_manifest(previous: dict[str, Any], *, db: str, container: str, base_ur
         "rejected": keep("rejected") + rejected,
         "no_data": sorted(keep("no_data") + [{**v, "checked_at": now} for v in no_data], key=order),
         # SEC's companyconcept endpoint returns no rows although companyfacts has data: not registered in
-        # Zetaris (its REST table would be empty); FinSight reads these from SEC companyfacts directly.
+        # Zetaris (its REST table would be empty); Parallax reads these from SEC companyfacts directly.
         "concept_api_empty": sorted(keep("concept_api_empty") + [{**v, "checked_at": now} for v in (api_empty or [])],
                                     key=order),
     }
@@ -99,7 +99,7 @@ async def register_company(company: Company, settings: Settings, z: ZetarisClien
                            metrics: Optional[list[MetricDef]] = None) -> Registration:
     """Create Zetaris REST tables + views for every concept the company reports (probed via SEC first).
 
-    `metrics` limits this to some figures, e.g. ones added to FinSight after the company was registered."""
+    `metrics` limits this to some figures, e.g. ones added to Parallax after the company was registered."""
     reg = Registration()
     ua = settings.sec_user_agent
     if not ua or "@" not in ua:
@@ -126,7 +126,7 @@ async def register_company(company: Company, settings: Settings, z: ZetarisClien
             reg.events.append(f"SEC's companyconcept endpoint returns no rows for {len(reg.api_empty)} concept(s) that "
                               f"companyfacts has; those are read from SEC directly, not registered in Zetaris.")
         if not present:
-            reg.events.append(f"{company.name} reports none of FinSight's concepts; nothing to register in Zetaris.")
+            reg.events.append(f"{company.name} reports none of Parallax's concepts; nothing to register in Zetaris.")
             return reg
         db, container = settings.zetaris_lightning_db, settings.zetaris_container
         await _run(z, database_sql(db), reg)
