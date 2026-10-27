@@ -54,6 +54,23 @@ async def start_investigation(req: InvestigationRequest) -> Investigation:
     return inv
 
 
+@router.post("/run")
+async def run_now(req: InvestigationRequest) -> dict[str, Any]:
+    """Run one investigation and return its structured result, trace included, in one call (no UI needed).
+
+    Body: {"question": "...", "ticker": "NWM"?, "data_mode": "sample" | "sec_direct" | "zetaris"?}
+    """
+    from app.agents.report import report
+    from app.models.schemas import StepState
+
+    inv = new_investigation(req, get_settings())
+    save_investigation(inv)
+    await _run(inv)
+    if inv.state == StepState.FAILED and inv.error and "exceeded" in inv.error:
+        raise HTTPException(504, {"trace_id": inv.id, "error": inv.error})
+    return report(inv)
+
+
 @router.get("/api/investigations")
 async def recent_investigations() -> list[dict[str, Any]]:
     return list_investigations()

@@ -105,3 +105,21 @@ def test_with_no_filings_the_model_is_not_asked_and_the_answer_says_why(tmp_path
     assert inv.state.value == "NEEDS_MORE_EVIDENCE"
     assert inv.summary.answer.startswith("Parallax couldn't retrieve any filings") and "test outage" in inv.summary.answer
     assert any(e["action"] == "require_evidence" and e["status"] == "blocked" for e in inv.trace)
+
+
+def test_post_run_returns_the_structured_result_and_trace_in_one_call():
+    from fastapi.testclient import TestClient
+
+    from app.main import app
+
+    with TestClient(app) as c:
+        r = c.post("/run", json={"question": "Was Northwind Motors' 2024 revenue really $13.6 billion?",
+                                 "ticker": "NWM", "data_mode": "sample"})
+        assert r.status_code == 200
+        out = r.json()
+        assert out["state"] == "COMPLETED" and out["answer"].startswith("Your claim is contradicted")
+        assert out["trace"][-1]["action"] == "finish" and out["data_requests"]["sample"]["requests"] >= 1
+        other = c.post("/run", json={"question": "Is Contoso Retail's revenue growing?", "ticker": "CSR",
+                                     "data_mode": "sample"}).json()
+        assert other["company"] != out["company"] and other["answer"] != out["answer"]  # real work per input
+        assert c.post("/run", json={"question": "x"}).status_code == 422  # malformed input: a clear error

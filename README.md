@@ -11,7 +11,8 @@ It is an educational tool. It does not rate securities, predict prices or give i
 Open Agent Hackathon 2026. Primary track: **Track 1, Solving Fragmented Intelligence**. Also relevant to Track 2, *The Agent That Can Explain Why*.
 
 > **Sponsor technology:** Zetaris (data layer) · Meterless H-MEM (memory engine) · Meterless Nightshift (AI provider) · NVIDIA Nemotron 3.5 Lightning 30B (through Nightshift)
-> **Run:** `./scripts/dev.sh`, then open http://127.0.0.1:5174 · **Example:** `python3 scripts/run_example.py input_examples/example_1.json`
+> **Run:** `./scripts/dev.sh`, then open http://127.0.0.1:5174 · **API:** `curl -X POST http://127.0.0.1:8000/run -H "Content-Type: application/json" -d @input_examples/example_1.json`
+> **Sponsor technology explanation:** [`docs/SPONSOR_TECHNOLOGY.md`](docs/SPONSOR_TECHNOLOGY.md)
 
 ---
 
@@ -114,8 +115,11 @@ Every investigation writes one JSON line per decision to `logs/runs/<trace_id>.j
 Six real runs, recorded on 2026-10-27 with Zetaris, H-MEM and Nightshift (Nemotron) running. Inputs are in [`input_examples/`](input_examples), the saved outputs in [`output_examples/`](output_examples) and their traces in [`logs/examples/`](logs/examples). Run any of them yourself against a running app:
 
 ```bash
-python3 scripts/run_example.py input_examples/example_1.json
+curl -X POST http://127.0.0.1:8000/run -H "Content-Type: application/json" -d @input_examples/example_1.json
+python3 scripts/run_example.py input_examples/example_1.json     # same call, prints the trace step by step
 ```
+
+`POST /run` runs the whole investigation and returns structured JSON: the answer and who wrote it, findings, key figures, model calls (with the model that handled each), data requests per source, memory activity, limitations and the full agent trace. A malformed request gets HTTP 422 with the reason.
 
 | # | Question | Data | Answer (abridged) | What it shows |
 |---|---|---|---|---|
@@ -181,7 +185,7 @@ Investigation steps: `RECEIVED → PLANNING → RETRIEVING → NORMALIZING → R
 
 ## Sponsor technology
 
-Details of each integration, and what has been verified live: [`docs/INTEGRATIONS.md`](docs/INTEGRATIONS.md).
+The submission's sponsor technology explanation: [`docs/SPONSOR_TECHNOLOGY.md`](docs/SPONSOR_TECHNOLOGY.md). Details of each integration, and what has been verified live: [`docs/INTEGRATIONS.md`](docs/INTEGRATIONS.md).
 
 **Zetaris: the data layer** ([`backend/app/integrations/zetaris/`](backend/app/integrations/zetaris))
 - SEC EDGAR XBRL concepts are registered in Zetaris as `CREATE LIGHTNING REST TABLE` sources with `CREATE SCHEMASTORE VIEW`s, and Parallax reads them with SQL through Zetaris's `run-query` API.
@@ -244,7 +248,7 @@ backend/.venv/bin/python scripts/zetaris_setup.py --apply            # create th
 ## Tests
 
 ```bash
-cd backend && .venv/bin/pytest -q              # 135 tests: reconciliation, risks, key figures, answers and checks, claims, company recognition, agent trace, watchlist, Zetaris, Meterless, API
+cd backend && .venv/bin/pytest -q              # 136 tests: reconciliation, risks, key figures, answers and checks, claims, company recognition, agent trace, watchlist, Zetaris, Meterless, API
 cd services/hmem-sidecar && npm test           # 4 tests against the real H-MEM engine
 cd frontend-v2 && npm test                     # 14 unit tests
 cd frontend-v2 && npm run test:e2e             # 16 browser tests of real user flows (first time: npx playwright install chromium)
@@ -257,6 +261,7 @@ The browser tests start their own private backend, memory service and app in sam
 
 | Method | Path | Purpose |
 |---|---|---|
+| POST | `/run` | run one investigation and return its structured result and trace in one call |
 | GET | `/health` | service health |
 | GET | `/api/integrations/status?deep=true` | live status of Zetaris, H-MEM and Meterless Nightshift |
 | GET | `/api/companies`, `/api/companies/search?q=` | built-in and sample companies; search any SEC-listed company |
