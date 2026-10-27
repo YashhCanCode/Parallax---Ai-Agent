@@ -48,6 +48,10 @@ Nightshift routes Parallax's calls to **NVIDIA Nemotron 3.5 Lightning 30B** (`nv
 
 Nemotron's reasoning is switched off (`chat_template_kwargs.enable_thinking=false`, passed through by Nightshift): about 1 second for a short reply instead of about 17. Every request records which model handled it.
 
+## Cursor (optional)
+
+Parallax was developed in the Cursor IDE.
+
 ## What was unique about our use
 
 - **A verified data layer, not a pass-through.** Zetaris views are kept only when their row counts match the SEC's, and every run cross-checks them, so the data layer is checked before any figure is used.

@@ -10,7 +10,7 @@ It is an educational tool. It does not rate securities, predict prices or give i
 
 Open Agent Hackathon 2026. Primary track: **Track 1, Solving Fragmented Intelligence**. Also relevant to Track 2, *The Agent That Can Explain Why*.
 
-> **Sponsor technology:** Zetaris (data layer) · Meterless H-MEM (memory engine) · Meterless Nightshift (AI provider) · NVIDIA Nemotron 3.5 Lightning 30B (through Nightshift)
+> **Sponsor technology:** Zetaris (data layer) · Meterless H-MEM (memory engine) · Meterless Nightshift (AI provider) · NVIDIA Nemotron 3.5 Lightning 30B (through Nightshift) · developed in the Cursor IDE
 > **Run:** `./scripts/dev.sh`, then open http://127.0.0.1:5174 · **API:** `curl -X POST http://127.0.0.1:8000/run -H "Content-Type: application/json" -d @input_examples/example_1.json`
 > **Sponsor technology explanation:** [`docs/SPONSOR_TECHNOLOGY.md`](docs/SPONSOR_TECHNOLOGY.md)
 
@@ -212,6 +212,8 @@ The submission's sponsor technology explanation: [`docs/SPONSOR_TECHNOLOGY.md`](
 - Every AI call goes to Nightshift, found automatically on this Mac (port 8088, with the app's own token). Nightshift routes it to **NVIDIA Nemotron 3.5 Lightning 30B** (`nvidia/nemotron-3.5-lightning-30b-a3b`), with Nemotron's reasoning switched off for fast, structured answers.
 - The model that handled each request, as named in Nightshift's reply, is shown on every answer ("Written by nvidia/nemotron-… via Meterless Nightshift"), in the Pre-Mortem and in the Integration trail.
 - Setup: install Nightshift (free Mac M1+ edition: https://www.meterless.ai/mac.html) and add NVIDIA as a provider in the app. If Nightshift isn't running, answers are written in code.
+
+**Cursor (optional):** Parallax was developed in the Cursor IDE.
 
 **NVIDIA's contribution:** Nemotron writes the plain-English explanation of every investigation, the Pre-Mortem's Skeptic and Defender, and recognises which company a question is about ("JP Morgan" → JPM). Parallax's checks then decide whether its output is shown.
 
