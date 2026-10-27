@@ -21,3 +21,8 @@ services/hmem-sidecar/.hmem-state/
 # test output
 frontend-v2/test-results/
 frontend-v2/playwright-report/
+
+# local tool settings and data backups
+.claude/
+*.db.backup
+services/hmem-sidecar/.hmem-state*/
