@@ -173,3 +173,24 @@ def test_nemotron_through_nightshift_runs_without_reasoning_and_falls_back_if_re
     route = respx.post("http://127.0.0.1:8088/v1/chat/completions").mock(side_effect=[httpx.Response(400), ok])
     asyncio.run(MeterlessRuntime("", "t", model).chat("s", "u"))
     assert "chat_template_kwargs" not in json.loads(route.calls[-1].request.content)  # the retry
+
+
+def test_a_ratio_the_model_worked_out_cannot_pass_by_matching_an_unrelated_percentage():
+    from app.verification.model_output import mismatched_kinds
+
+    evidence = "Net margin 5.4% in FY2021. Long-term debt $19.50B; cash $3.60B. Current ratio 0.91. Profit rose +22.2%."
+    assert mismatched_kinds("Debt is 5.4 times its cash.", evidence) == ["5.4 as a multiple"]
+    assert mismatched_kinds("Debt is 5.4x its cash.", evidence) == ["5.4 as a multiple"]
+    assert mismatched_kinds("Net margin was 5.4% and the current ratio 0.91x; profit rose 22.2 percent.", evidence) == []
+    out, reason = validate_narrative(_out("Long-term debt of $19.50B is 5.4 times the $3.60B cash."), {"f1"}, evidence)
+    assert out is None and "5.4 as a multiple" in reason
+
+
+def test_only_yes_no_questions_get_a_yes_or_no_from_code(nwm):
+    from app.agents.narrator import deterministic_answer
+    from app.analysis.key_figures import compute_key_figures
+
+    kfs = compute_key_figures(nwm.observations)
+    assert deterministic_answer("Is Northwind Motors' free cash flow positive?", [], kfs).startswith("No: ")
+    how_much = deterministic_answer("How much did Northwind Motors' free cash flow change, and is it positive?", [], kfs)
+    assert not how_much.startswith(("Yes", "No")) and "Free cash flow" in how_much

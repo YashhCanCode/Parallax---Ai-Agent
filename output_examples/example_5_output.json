@@ -1,0 +1,487 @@
+{
+  "trace_id": "inv-924b8d731c49",
+  "question": "How many times bigger is Northwind Motors' debt than its cash?",
+  "company": "Northwind Motors (SAMPLE, fictional)",
+  "ticker": "NWM",
+  "data_mode": "sample",
+  "state": "COMPLETED",
+  "answer": "Cash and equivalents was $3.60B in FY2024, down 25.0% from $4.80B in FY2023; it was $6.50B in FY2021. Long-term debt was $19.50B in FY2024, up 16.1% from $16.80B in FY2023; it was $12.00B in FY2021.",
+  "answer_by": "computed",
+  "written_by": "deterministic",
+  "summary": "Parallax checked 15 findings for Northwind Motors (SAMPLE, fictional). Worth a closer look: Profit rose +22.2% while operating cash flow fell -30.8% in 2024 (3 years running); Long-term debt $19.50B, +62.5% since 2021; 7.2 years of operating cash flow; Current ratio 0.91 (was 1.13); Revenue for FY ending 2023-12-31 was revised in a later filing.",
+  "key_points": [
+    {
+      "text": "Profit rose +22.2% while operating cash flow fell -30.8% in 2024 (3 years running)",
+      "finding_ids": [
+        "risk-cash-4c53e173"
+      ]
+    },
+    {
+      "text": "Long-term debt $19.50B, +62.5% since 2021; 7.2 years of operating cash flow",
+      "finding_ids": [
+        "risk-debt-4d530f05"
+      ]
+    },
+    {
+      "text": "Current ratio 0.91 (was 1.13)",
+      "finding_ids": [
+        "risk-liq-7e79a3af"
+      ]
+    },
+    {
+      "text": "Revenue for FY ending 2023-12-31 was revised in a later filing",
+      "finding_ids": [
+        "rev-13b9cb7c"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "latest-27e8f293",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Latest annual long-term debt: $19.50B (as of 2024-12-31)"
+    },
+    {
+      "id": "latest-56fb81e1",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Latest annual revenue: $52.40B (FY ending 2024-12-31)"
+    },
+    {
+      "id": "rev-13b9cb7c",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "watch",
+      "title": "Revenue for FY ending 2023-12-31 was revised in a later filing"
+    },
+    {
+      "id": "concept-d32b93de",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "watch",
+      "title": "Revenue for FY ending 2021-12-31 appears under 2 different definitions"
+    },
+    {
+      "id": "switch-b72537e7",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Revenue switched reporting concept"
+    },
+    {
+      "id": "src-89444f25",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Sample market-data site A (fictional): $52.40B revenue vs filings (unit normalized match)"
+    },
+    {
+      "id": "src-bf41dfa4",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Sample parent-only statement (fictional): $31.80B revenue vs filings (basis)"
+    },
+    {
+      "id": "src-d917ae10",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "watch",
+      "title": "Sample news article (fictional): $13.60B revenue vs filings (period mismatch)"
+    },
+    {
+      "id": "src-c1444df4",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "watch",
+      "title": "Sample market-data site B (fictional): $48.90B revenue vs filings (stale source)"
+    },
+    {
+      "id": "latest-ffc422d7",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Latest annual net income: $4.40B (FY ending 2024-12-31)"
+    },
+    {
+      "id": "latest-72923d86",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Latest annual operating cash flow: $2.70B (FY ending 2024-12-31)"
+    },
+    {
+      "id": "risk-rev-4d530f05",
+      "category": "risk",
+      "status": "supported",
+      "severity": "info",
+      "title": "Revenue trend: +8.5% in the latest fiscal year"
+    },
+    {
+      "id": "risk-cash-4c53e173",
+      "category": "risk",
+      "status": "supported",
+      "severity": "elevated",
+      "title": "Profit rose +22.2% while operating cash flow fell -30.8% in 2024 (3 years running)"
+    },
+    {
+      "id": "risk-debt-4d530f05",
+      "category": "risk",
+      "status": "supported",
+      "severity": "watch",
+      "title": "Long-term debt $19.50B, +62.5% since 2021; 7.2 years of operating cash flow"
+    },
+    {
+      "id": "risk-liq-7e79a3af",
+      "category": "risk",
+      "status": "supported",
+      "severity": "watch",
+      "title": "Current ratio 0.91 (was 1.13)"
+    }
+  ],
+  "key_figures": [
+    {
+      "label": "Revenue",
+      "latest": "$52.40B",
+      "fiscal_year": "FY2024",
+      "change": "+8.5%",
+      "stale": false
+    },
+    {
+      "label": "Gross profit",
+      "latest": "$8.59B",
+      "fiscal_year": "FY2024",
+      "change": "+4.6%",
+      "stale": false
+    },
+    {
+      "label": "Operating income",
+      "latest": "$6.00B",
+      "fiscal_year": "FY2024",
+      "change": "+20.0%",
+      "stale": false
+    },
+    {
+      "label": "Net income",
+      "latest": "$4.40B",
+      "fiscal_year": "FY2024",
+      "change": "+22.2%",
+      "stale": false
+    },
+    {
+      "label": "Operating cash flow",
+      "latest": "$2.70B",
+      "fiscal_year": "FY2024",
+      "change": "-30.8%",
+      "stale": false
+    },
+    {
+      "label": "Capital spending",
+      "latest": "$4.60B",
+      "fiscal_year": "FY2024",
+      "change": "+12.2%",
+      "stale": false
+    },
+    {
+      "label": "R&D spending",
+      "latest": "$2.70B",
+      "fiscal_year": "FY2024",
+      "change": "+12.5%",
+      "stale": false
+    },
+    {
+      "label": "Cash and equivalents",
+      "latest": "$3.60B",
+      "fiscal_year": "FY2024",
+      "change": "-25.0%",
+      "stale": false
+    },
+    {
+      "label": "Long-term debt",
+      "latest": "$19.50B",
+      "fiscal_year": "FY2024",
+      "change": "+16.1%",
+      "stale": false
+    },
+    {
+      "label": "Share buybacks",
+      "latest": "$100.0M",
+      "fiscal_year": "FY2024",
+      "change": "-50.0%",
+      "stale": false
+    },
+    {
+      "label": "Dividends paid",
+      "latest": "$750.0M",
+      "fiscal_year": "FY2024",
+      "change": "+7.1%",
+      "stale": false
+    },
+    {
+      "label": "Gross margin",
+      "latest": "16.4%",
+      "fiscal_year": "FY2024",
+      "change": "-0.6 points",
+      "stale": false
+    },
+    {
+      "label": "Operating margin",
+      "latest": "11.5%",
+      "fiscal_year": "FY2024",
+      "change": "+1.1 points",
+      "stale": false
+    },
+    {
+      "label": "Net margin",
+      "latest": "8.4%",
+      "fiscal_year": "FY2024",
+      "change": "+0.9 points",
+      "stale": false
+    },
+    {
+      "label": "Free cash flow",
+      "latest": "-$1.90B",
+      "fiscal_year": "FY2024",
+      "change": null,
+      "stale": false
+    },
+    {
+      "label": "R&D as a share of revenue",
+      "latest": "5.2%",
+      "fiscal_year": "FY2024",
+      "change": "+0.2 points",
+      "stale": false
+    },
+    {
+      "label": "Cash minus long-term debt",
+      "latest": "-$15.90B",
+      "fiscal_year": "FY2024",
+      "change": null,
+      "stale": false
+    },
+    {
+      "label": "Buybacks plus dividends",
+      "latest": "$850.0M",
+      "fiscal_year": "FY2024",
+      "change": "-5.6%",
+      "stale": false
+    },
+    {
+      "label": "Free cash flow margin",
+      "latest": "-3.6%",
+      "fiscal_year": "FY2024",
+      "change": "-3.2 points",
+      "stale": false
+    }
+  ],
+  "model_calls": [
+    {
+      "provider": "meterless",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "purpose": "summary (after one retry)",
+      "duration_ms": 12713,
+      "output_accepted": false,
+      "rejection_reason": "numbers not in the evidence in that form (worked out by the model?): ['5.4 as a multiple']",
+      "usage": {
+        "prompt_tokens": 4155,
+        "completion_tokens": 309,
+        "total_tokens": 4464
+      }
+    }
+  ],
+  "data_requests": {
+    "sample": {
+      "requests": 1,
+      "failed": 0,
+      "rows": 0
+    },
+    "hmem": {
+      "requests": 5,
+      "failed": 0,
+      "rows": 0
+    }
+  },
+  "memory": {
+    "recalled": 8,
+    "written": 13,
+    "conflicts": 0
+  },
+  "limitations": [
+    "The newest filing in the data is 624 days old; newer results may exist.",
+    "SEC 'fy'/'fp' fields describe the filing, not the period; Parallax labels periods by their end date."
+  ],
+  "trace": [
+    {
+      "timestamp": "2026-10-27T12:58:11Z",
+      "trace_id": "inv-924b8d731c49",
+      "agent_name": "Planner",
+      "action": "read_question",
+      "input_summary": "How many times bigger is Northwind Motors' debt than its cash?",
+      "output_summary": "Company from the chosen ticker: NWM; claim: none; focus: long_term_debt",
+      "target_agent": "Planner",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:58:12Z",
+      "trace_id": "inv-924b8d731c49",
+      "agent_name": "Planner",
+      "action": "plan",
+      "input_summary": "NWM, sample",
+      "output_summary": "Steps: retrieve, normalize, reconcile, investigate risks, verify; focus long_term_debt",
+      "target_agent": "MemoryKeeper",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:58:12Z",
+      "trace_id": "inv-924b8d731c49",
+      "agent_name": "MemoryKeeper",
+      "action": "recall",
+      "input_summary": "NWM",
+      "output_summary": "8 prior memories recalled from Meterless H-MEM",
+      "target_agent": "Retriever",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:58:12Z",
+      "trace_id": "inv-924b8d731c49",
+      "agent_name": "Retriever",
+      "action": "load_sample",
+      "input_summary": "NWM",
+      "output_summary": "58 observations from the fictional sample filings",
+      "target_agent": "Normalizer",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:58:12Z",
+      "trace_id": "inv-924b8d731c49",
+      "agent_name": "Normalizer",
+      "action": "classify_periods",
+      "input_summary": "58 observations",
+      "output_summary": "annual=44, instant=12, quarterly=1, ytd=1; units USD",
+      "target_agent": "Reconciler",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:58:12Z",
+      "trace_id": "inv-924b8d731c49",
+      "agent_name": "Reconciler",
+      "action": "reconcile",
+      "input_summary": "58 observations, metrics long_term_debt, revenue, net_income, operating_cash_flow",
+      "output_summary": "1 revised figures found",
+      "target_agent": "RiskInvestigator",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:58:12Z",
+      "trace_id": "inv-924b8d731c49",
+      "agent_name": "RiskInvestigator",
+      "action": "run_indicators",
+      "input_summary": "4 indicators",
+      "output_summary": "3 flagged: Profit rose +22.2% while operating cash flow fell -30.8% in 2024 (3 years running); Long-term debt $19.50B, +62.5% since 2021; 7.2 years of operating cash flow; Current ratio 0.91 (was 1.13)",
+      "target_agent": "Verifier",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:58:12Z",
+      "trace_id": "inv-924b8d731c49",
+      "agent_name": "Verifier",
+      "action": "check_evidence_links",
+      "input_summary": "15 findings",
+      "output_summary": "0 downgraded (missing or no evidence); the rest cite real observations",
+      "target_agent": "MemoryKeeper",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:58:12Z",
+      "trace_id": "inv-924b8d731c49",
+      "agent_name": "MemoryKeeper",
+      "action": "write_facts",
+      "input_summary": "13 facts with sources",
+      "output_summary": "confirmed=13",
+      "target_agent": "Narrator",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:58:20Z",
+      "trace_id": "inv-924b8d731c49",
+      "agent_name": "Narrator",
+      "action": "draft_answer",
+      "input_summary": "How many times bigger is Northwind Motors' debt than its cash?",
+      "output_summary": "Draft citing 14 findings and 19 facts",
+      "target_agent": "Verifier",
+      "retry_count": 0,
+      "status": "success",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "duration_ms": 8330
+    },
+    {
+      "timestamp": "2026-10-27T12:58:20Z",
+      "trace_id": "inv-924b8d731c49",
+      "agent_name": "Verifier",
+      "action": "validate_answer",
+      "input_summary": "Narrator draft",
+      "output_summary": "Rejected: numbers not in the evidence in that form (worked out by the model?): ['5.4 as a multiple']",
+      "target_agent": "Narrator",
+      "retry_count": 0,
+      "status": "needs_revision"
+    },
+    {
+      "timestamp": "2026-10-27T12:58:24Z",
+      "trace_id": "inv-924b8d731c49",
+      "agent_name": "Narrator",
+      "action": "draft_answer",
+      "input_summary": "How many times bigger is Northwind Motors' debt than its cash? (retry: numbers not in the evidence in that form (worked out by the model?): ['5.4 as a multiple'])",
+      "output_summary": "Draft citing 14 findings and 19 facts",
+      "target_agent": "Verifier",
+      "retry_count": 1,
+      "status": "success",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "duration_ms": 4383
+    },
+    {
+      "timestamp": "2026-10-27T12:58:24Z",
+      "trace_id": "inv-924b8d731c49",
+      "agent_name": "Verifier",
+      "action": "validate_answer",
+      "input_summary": "Narrator draft",
+      "output_summary": "Rejected: numbers not in the evidence in that form (worked out by the model?): ['5.4 as a multiple']",
+      "target_agent": "Orchestrator",
+      "retry_count": 1,
+      "status": "rejected"
+    },
+    {
+      "timestamp": "2026-10-27T12:58:24Z",
+      "trace_id": "inv-924b8d731c49",
+      "agent_name": "Verifier",
+      "action": "fallback_to_code",
+      "input_summary": "Two rejected drafts",
+      "output_summary": "Showing the answer written in code from the verified findings",
+      "target_agent": "Orchestrator",
+      "retry_count": 1,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-10-27T12:58:24Z",
+      "trace_id": "inv-924b8d731c49",
+      "agent_name": "Orchestrator",
+      "action": "finish",
+      "input_summary": "15 findings",
+      "output_summary": "Answer (computed in code): Cash and equivalents was $3.60B in FY2024, down 25.0% from $4.80B in FY2023; it was $6.50B in FY2021. Long-term debt was $19.50B in FY2024, up 16.1% from $16.80B in FY2023; it was $12.00B in FY2021.",
+      "target_agent": "",
+      "retry_count": 0,
+      "status": "completed"
+    }
+  ]
+}

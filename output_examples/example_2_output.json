@@ -1,0 +1,467 @@
+{
+  "trace_id": "inv-4087707209d5",
+  "question": "Should I buy Northwind Motors stock?",
+  "company": "Northwind Motors (SAMPLE, fictional)",
+  "ticker": "NWM",
+  "data_mode": "sample",
+  "state": "COMPLETED",
+  "answer": "Parallax doesn't make investment decisions for you. The findings below show what the filings say, so you can judge for yourself.",
+  "answer_by": "computed",
+  "written_by": "meterless:nvidia/nemotron-3.5-lightning-30b-a3b",
+  "summary": "Northwind Motors reported FY2024 revenue of $52.40B, up 8.5% year-over-year. Net income rose 22.2% to $4.40B, while operating cash flow dropped 30.8% to $2.70B. Long-term debt reached $19.50B (+16.1%). Gross margin declined to 16.4%, and free cash flow was -$1.90B.",
+  "key_points": [
+    {
+      "text": "Revenue increased 8.5% to $52.40B in FY2024, up from $48.30B in FY2023.",
+      "finding_ids": [
+        "risk-rev-4d530f05",
+        "kf-revenue"
+      ]
+    },
+    {
+      "text": "Net income rose 22.2% to $4.40B in FY2024, while operating cash flow fell 30.8% to $2.70B.",
+      "finding_ids": [
+        "risk-cash-4c53e173",
+        "latest-72923d86",
+        "kf-net_income",
+        "kf-operating_cash_flow"
+      ]
+    },
+    {
+      "text": "Long-term debt increased to $19.50B in FY2024, up 16.1% from $16.80B in FY2023.",
+      "finding_ids": [
+        "risk-debt-4d530f05",
+        "kf-long_term_debt"
+      ]
+    },
+    {
+      "text": "Gross margin declined to 16.4% in FY2024, down 0.6 points from 17.0% in FY2023.",
+      "finding_ids": [
+        "kf-gross_margin"
+      ]
+    },
+    {
+      "text": "Free cash flow was -$1.90B in FY2024, down from -$200.0M in FY2023, driven by lower operating cash flow and higher capital spending.",
+      "finding_ids": [
+        "kf-free_cash_flow"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "latest-56fb81e1",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Latest annual revenue: $52.40B (FY ending 2024-12-31)"
+    },
+    {
+      "id": "rev-13b9cb7c",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "watch",
+      "title": "Revenue for FY ending 2023-12-31 was revised in a later filing"
+    },
+    {
+      "id": "concept-d32b93de",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "watch",
+      "title": "Revenue for FY ending 2021-12-31 appears under 2 different definitions"
+    },
+    {
+      "id": "switch-b72537e7",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Revenue switched reporting concept"
+    },
+    {
+      "id": "src-89444f25",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Sample market-data site A (fictional): $52.40B revenue vs filings (unit normalized match)"
+    },
+    {
+      "id": "src-bf41dfa4",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Sample parent-only statement (fictional): $31.80B revenue vs filings (basis)"
+    },
+    {
+      "id": "src-d917ae10",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "watch",
+      "title": "Sample news article (fictional): $13.60B revenue vs filings (period mismatch)"
+    },
+    {
+      "id": "src-c1444df4",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "watch",
+      "title": "Sample market-data site B (fictional): $48.90B revenue vs filings (stale source)"
+    },
+    {
+      "id": "latest-ffc422d7",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Latest annual net income: $4.40B (FY ending 2024-12-31)"
+    },
+    {
+      "id": "latest-72923d86",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Latest annual operating cash flow: $2.70B (FY ending 2024-12-31)"
+    },
+    {
+      "id": "risk-rev-4d530f05",
+      "category": "risk",
+      "status": "supported",
+      "severity": "info",
+      "title": "Revenue trend: +8.5% in the latest fiscal year"
+    },
+    {
+      "id": "risk-cash-4c53e173",
+      "category": "risk",
+      "status": "supported",
+      "severity": "elevated",
+      "title": "Profit rose +22.2% while operating cash flow fell -30.8% in 2024 (3 years running)"
+    },
+    {
+      "id": "risk-debt-4d530f05",
+      "category": "risk",
+      "status": "supported",
+      "severity": "watch",
+      "title": "Long-term debt $19.50B, +62.5% since 2021; 7.2 years of operating cash flow"
+    },
+    {
+      "id": "risk-liq-7e79a3af",
+      "category": "risk",
+      "status": "supported",
+      "severity": "watch",
+      "title": "Current ratio 0.91 (was 1.13)"
+    }
+  ],
+  "key_figures": [
+    {
+      "label": "Revenue",
+      "latest": "$52.40B",
+      "fiscal_year": "FY2024",
+      "change": "+8.5%",
+      "stale": false
+    },
+    {
+      "label": "Gross profit",
+      "latest": "$8.59B",
+      "fiscal_year": "FY2024",
+      "change": "+4.6%",
+      "stale": false
+    },
+    {
+      "label": "Operating income",
+      "latest": "$6.00B",
+      "fiscal_year": "FY2024",
+      "change": "+20.0%",
+      "stale": false
+    },
+    {
+      "label": "Net income",
+      "latest": "$4.40B",
+      "fiscal_year": "FY2024",
+      "change": "+22.2%",
+      "stale": false
+    },
+    {
+      "label": "Operating cash flow",
+      "latest": "$2.70B",
+      "fiscal_year": "FY2024",
+      "change": "-30.8%",
+      "stale": false
+    },
+    {
+      "label": "Capital spending",
+      "latest": "$4.60B",
+      "fiscal_year": "FY2024",
+      "change": "+12.2%",
+      "stale": false
+    },
+    {
+      "label": "R&D spending",
+      "latest": "$2.70B",
+      "fiscal_year": "FY2024",
+      "change": "+12.5%",
+      "stale": false
+    },
+    {
+      "label": "Cash and equivalents",
+      "latest": "$3.60B",
+      "fiscal_year": "FY2024",
+      "change": "-25.0%",
+      "stale": false
+    },
+    {
+      "label": "Long-term debt",
+      "latest": "$19.50B",
+      "fiscal_year": "FY2024",
+      "change": "+16.1%",
+      "stale": false
+    },
+    {
+      "label": "Share buybacks",
+      "latest": "$100.0M",
+      "fiscal_year": "FY2024",
+      "change": "-50.0%",
+      "stale": false
+    },
+    {
+      "label": "Dividends paid",
+      "latest": "$750.0M",
+      "fiscal_year": "FY2024",
+      "change": "+7.1%",
+      "stale": false
+    },
+    {
+      "label": "Gross margin",
+      "latest": "16.4%",
+      "fiscal_year": "FY2024",
+      "change": "-0.6 points",
+      "stale": false
+    },
+    {
+      "label": "Operating margin",
+      "latest": "11.5%",
+      "fiscal_year": "FY2024",
+      "change": "+1.1 points",
+      "stale": false
+    },
+    {
+      "label": "Net margin",
+      "latest": "8.4%",
+      "fiscal_year": "FY2024",
+      "change": "+0.9 points",
+      "stale": false
+    },
+    {
+      "label": "Free cash flow",
+      "latest": "-$1.90B",
+      "fiscal_year": "FY2024",
+      "change": null,
+      "stale": false
+    },
+    {
+      "label": "R&D as a share of revenue",
+      "latest": "5.2%",
+      "fiscal_year": "FY2024",
+      "change": "+0.2 points",
+      "stale": false
+    },
+    {
+      "label": "Cash minus long-term debt",
+      "latest": "-$15.90B",
+      "fiscal_year": "FY2024",
+      "change": null,
+      "stale": false
+    },
+    {
+      "label": "Buybacks plus dividends",
+      "latest": "$850.0M",
+      "fiscal_year": "FY2024",
+      "change": "-5.6%",
+      "stale": false
+    },
+    {
+      "label": "Free cash flow margin",
+      "latest": "-3.6%",
+      "fiscal_year": "FY2024",
+      "change": "-3.2 points",
+      "stale": false
+    }
+  ],
+  "model_calls": [
+    {
+      "provider": "meterless",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "purpose": "summary",
+      "duration_ms": 7913,
+      "output_accepted": true,
+      "rejection_reason": null,
+      "usage": {
+        "prompt_tokens": 4065,
+        "completion_tokens": 585,
+        "total_tokens": 4650
+      }
+    }
+  ],
+  "data_requests": {
+    "sample": {
+      "requests": 1,
+      "failed": 0,
+      "rows": 0
+    },
+    "hmem": {
+      "requests": 5,
+      "failed": 0,
+      "rows": 0
+    }
+  },
+  "memory": {
+    "recalled": 8,
+    "written": 13,
+    "conflicts": 0
+  },
+  "limitations": [
+    "The newest filing in the data is 624 days old; newer results may exist.",
+    "SEC 'fy'/'fp' fields describe the filing, not the period; Parallax labels periods by their end date."
+  ],
+  "trace": [
+    {
+      "timestamp": "2026-10-27T12:57:14Z",
+      "trace_id": "inv-4087707209d5",
+      "agent_name": "Planner",
+      "action": "read_question",
+      "input_summary": "Should I buy Northwind Motors stock?",
+      "output_summary": "Company from the chosen ticker: NWM; claim: none; focus: revenue",
+      "target_agent": "Planner",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:14Z",
+      "trace_id": "inv-4087707209d5",
+      "agent_name": "Planner",
+      "action": "plan",
+      "input_summary": "NWM, sample",
+      "output_summary": "Steps: retrieve, normalize, reconcile, investigate risks, verify; focus revenue",
+      "target_agent": "MemoryKeeper",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:14Z",
+      "trace_id": "inv-4087707209d5",
+      "agent_name": "MemoryKeeper",
+      "action": "recall",
+      "input_summary": "NWM",
+      "output_summary": "8 prior memories recalled from Meterless H-MEM",
+      "target_agent": "Retriever",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:14Z",
+      "trace_id": "inv-4087707209d5",
+      "agent_name": "Retriever",
+      "action": "load_sample",
+      "input_summary": "NWM",
+      "output_summary": "58 observations from the fictional sample filings",
+      "target_agent": "Normalizer",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:14Z",
+      "trace_id": "inv-4087707209d5",
+      "agent_name": "Normalizer",
+      "action": "classify_periods",
+      "input_summary": "58 observations",
+      "output_summary": "annual=44, instant=12, quarterly=1, ytd=1; units USD",
+      "target_agent": "Reconciler",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:14Z",
+      "trace_id": "inv-4087707209d5",
+      "agent_name": "Reconciler",
+      "action": "reconcile",
+      "input_summary": "58 observations, metrics revenue, net_income, operating_cash_flow",
+      "output_summary": "1 revised figures found",
+      "target_agent": "RiskInvestigator",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:14Z",
+      "trace_id": "inv-4087707209d5",
+      "agent_name": "RiskInvestigator",
+      "action": "run_indicators",
+      "input_summary": "4 indicators",
+      "output_summary": "3 flagged: Profit rose +22.2% while operating cash flow fell -30.8% in 2024 (3 years running); Long-term debt $19.50B, +62.5% since 2021; 7.2 years of operating cash flow; Current ratio 0.91 (was 1.13)",
+      "target_agent": "Verifier",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:14Z",
+      "trace_id": "inv-4087707209d5",
+      "agent_name": "Verifier",
+      "action": "check_evidence_links",
+      "input_summary": "14 findings",
+      "output_summary": "0 downgraded (missing or no evidence); the rest cite real observations",
+      "target_agent": "MemoryKeeper",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:14Z",
+      "trace_id": "inv-4087707209d5",
+      "agent_name": "MemoryKeeper",
+      "action": "write_facts",
+      "input_summary": "13 facts with sources",
+      "output_summary": "confirmed=13",
+      "target_agent": "Narrator",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:22Z",
+      "trace_id": "inv-4087707209d5",
+      "agent_name": "Narrator",
+      "action": "draft_answer",
+      "input_summary": "What do the filings show about Northwind Motors (SAMPLE, fictional)'s finances?",
+      "output_summary": "Draft citing 14 findings and 19 facts",
+      "target_agent": "Verifier",
+      "retry_count": 0,
+      "status": "success",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "duration_ms": 7913
+    },
+    {
+      "timestamp": "2026-10-27T12:57:22Z",
+      "trace_id": "inv-4087707209d5",
+      "agent_name": "Verifier",
+      "action": "validate_answer",
+      "input_summary": "Narrator draft",
+      "output_summary": "Passed: real citations, numbers from the evidence, correct directions, no advice",
+      "target_agent": "Orchestrator",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:22Z",
+      "trace_id": "inv-4087707209d5",
+      "agent_name": "Verifier",
+      "action": "block_advice",
+      "input_summary": "Should I buy Northwind Motors stock?",
+      "output_summary": "Investment-decision question: fixed reply, then what the filings show",
+      "target_agent": "Orchestrator",
+      "retry_count": 0,
+      "status": "overridden"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:22Z",
+      "trace_id": "inv-4087707209d5",
+      "agent_name": "Orchestrator",
+      "action": "finish",
+      "input_summary": "14 findings",
+      "output_summary": "Answer (written by meterless:nvidia/nemotron-3.5-lightning-30b-a3b): Parallax doesn't make investment decisions for you. The findings below show what the filings say, so you can judge for yourself.",
+      "target_agent": "",
+      "retry_count": 0,
+      "status": "completed"
+    }
+  ]
+}

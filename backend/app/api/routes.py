@@ -343,6 +343,15 @@ async def check_decision_now(decision_id: str) -> dict[str, Any]:
     return {"decision": d, "check": check}
 
 
+@router.get("/api/investigations/{inv_id}/trace")
+async def investigation_trace(inv_id: str) -> dict[str, Any]:
+    """The agent trace of one investigation: one entry per decision, as in logs/runs/<id>.jsonl."""
+    inv = load_investigation(inv_id)
+    if inv is None:
+        raise HTTPException(404, "investigation not found")
+    return {"trace_id": inv.id, "state": inv.state.value, "events": inv.trace}
+
+
 @router.post("/api/investigations/{inv_id}/premortem")
 async def premortem(inv_id: str) -> dict[str, Any]:
     from app.agents.narrator import Narrator, run_premortem
@@ -356,6 +365,19 @@ async def premortem(inv_id: str) -> dict[str, Any]:
     await n.select_provider()
     result, call = await run_premortem(n, inv.company or inv.ticker or "", inv.findings)
     result["created_at"] = datetime.now(timezone.utc).isoformat()
+    from app.tracing import Tracer
+
+    t = Tracer(inv.id, get_settings().log_dir, inv.trace)
+    if call and call.ok:
+        t.emit("Narrator", "voice_premortem", f"{len(inv.findings)} verified findings",
+               "Skeptic and Defender drafted", target="Verifier", model=call.model, duration_ms=call.duration_ms)
+        t.emit("Verifier", "validate_premortem", "Pre-Mortem voices",
+               "Passed: cites findings, numbers from the evidence, no verdict" if call.output_accepted
+               else f"Rejected: {call.rejection_reason}; voices assembled from the findings instead",
+               target="Orchestrator", status="success" if call.output_accepted else "fallback")
+    else:
+        t.emit("Narrator", "voice_premortem", f"{len(inv.findings)} verified findings",
+               result.get("note", "Voices assembled from findings"), target="Orchestrator", status="fallback")
     inv.premortem = result
     if call:
         inv.model_calls.append(call)

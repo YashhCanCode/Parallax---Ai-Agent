@@ -26,3 +26,6 @@ frontend-v2/playwright-report/
 .claude/
 *.db.backup
 services/hmem-sidecar/.hmem-state*/
+
+# agent traces written at run time (examples in logs/examples/ are kept)
+logs/runs/

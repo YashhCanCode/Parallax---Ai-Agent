@@ -225,4 +225,6 @@ class Investigation(BaseModel):
     premortem: Optional[dict[str, Any]] = None
     # Company profile from the SEC submissions record (industry, exchange) or the sample fixture.
     profile: Optional[dict[str, Any]] = None
+    # Agent trace: one entry per decision (also written to logs/runs/<id>.jsonl).
+    trace: list[dict[str, Any]] = Field(default_factory=list)
     error: Optional[str] = None

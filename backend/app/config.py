@@ -7,6 +7,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Optional
 
 from dotenv import load_dotenv
 
@@ -15,7 +16,8 @@ load_dotenv(REPO_ROOT / ".env", override=False)
 
 
 def _env(name: str, default: str = "") -> str:
-    return os.environ.get(name, default).strip()
+    """A setting's value; an empty value (as in a fresh copy of .env.example) means "use the default"."""
+    return os.environ.get(name, "").strip() or default
 
 
 def _bool(name: str, default: bool = False) -> bool:
@@ -23,6 +25,14 @@ def _bool(name: str, default: bool = False) -> bool:
     if not value:
         return default
     return value.lower() in {"1", "true", "yes", "on"}
+
+
+def _log_dir() -> Optional[Path]:
+    """PARALLAX_LOG_DIR unset: logs/ in the repository. Set but empty: no trace files (stdout only)."""
+    raw = os.environ.get("PARALLAX_LOG_DIR")
+    if raw is None:
+        return REPO_ROOT / "logs"
+    return Path(raw.strip()) if raw.strip() else None
 
 
 @dataclass(frozen=True)
@@ -42,6 +52,8 @@ class Settings:
     )
     cache_dir: Path = field(default_factory=lambda: Path(_env("FINSIGHT_CACHE_DIR", str(REPO_ROOT / ".cache"))))
     sample_dir: Path = field(default_factory=lambda: REPO_ROOT / "sample_data")
+    # Agent traces: logs/runs/<investigation id>.jsonl (one JSON line per decision). Empty value = stdout only.
+    log_dir: Optional[Path] = field(default_factory=lambda: _log_dir())
 
     # SEC requires a declared User-Agent: "app_name contact@email".
     sec_user_agent: str = field(default_factory=lambda: _env("SEC_USER_AGENT") or _env("ZETARIS_USER_AGENT"))

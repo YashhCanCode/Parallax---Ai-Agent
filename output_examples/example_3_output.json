@@ -1,0 +1,475 @@
+{
+  "trace_id": "inv-21580f3f08a9",
+  "question": "Is Microsoft's free cash flow positive?",
+  "company": "Microsoft Corporation",
+  "ticker": "MSFT",
+  "data_mode": "zetaris",
+  "state": "COMPLETED",
+  "answer": "Yes, Microsoft's free cash flow was $66.99B in FY2026.",
+  "answer_by": "model",
+  "written_by": "meterless:nvidia/nemotron-3.5-lightning-30b-a3b",
+  "summary": "Microsoft's free cash flow was $66.99B in FY2026, down 6.5% from $71.61B in FY2025. The filings show free cash flow is calculated as operating cash flow minus capital spending. In FY2026, operating cash flow was $182.94B and capital spending was $115.95B, resulting in free cash flow of $66.99B. Free cash flow margin was 20.2% of revenue.",
+  "key_points": [
+    {
+      "text": "Free cash flow was $66.99B in FY2026, calculated as operating cash flow minus capital spending.",
+      "finding_ids": [
+        "kf-free_cash_flow"
+      ]
+    },
+    {
+      "text": "Operating cash flow was $182.94B in FY2026, up 34.4% from FY2025.",
+      "finding_ids": [
+        "kf-operating_cash_flow"
+      ]
+    },
+    {
+      "text": "Capital spending was $115.95B in FY2026, up 79.6% from FY2025.",
+      "finding_ids": [
+        "kf-capex"
+      ]
+    },
+    {
+      "text": "Free cash flow margin was 20.2% in FY2026, down 5.2 points from FY2025.",
+      "finding_ids": [
+        "kf-fcf_margin"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "xcheck-57714b74",
+      "category": "integration",
+      "status": "supported",
+      "severity": "info",
+      "title": "Zetaris vs SEC EDGAR (direct): rows and values agree"
+    },
+    {
+      "id": "latest-728b5099",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Latest annual revenue: $331.84B (FY ending 2026-06-30)"
+    },
+    {
+      "id": "concept-de6a86d8",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "watch",
+      "title": "Revenue for FY ending 2016-06-30 appears under 2 different definitions"
+    },
+    {
+      "id": "concept-db5fa070",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "watch",
+      "title": "Revenue for FY ending 2017-06-30 appears under 2 different definitions"
+    },
+    {
+      "id": "switch-b72537e7",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Revenue switched reporting concept"
+    },
+    {
+      "id": "latest-fb31a7ce",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Latest annual net income: $133.75B (FY ending 2026-06-30)"
+    },
+    {
+      "id": "rev-bbf7555c",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "watch",
+      "title": "Net income for FY ending 2017-06-30 was revised in a later filing"
+    },
+    {
+      "id": "latest-350d3c28",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Latest annual operating cash flow: $182.94B (FY ending 2026-06-30)"
+    },
+    {
+      "id": "rev-390baa90",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "watch",
+      "title": "Operating cash flow for FY ending 2015-06-30 was revised in a later filing"
+    },
+    {
+      "id": "concept-5c9aeaa1",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Operating cash flow for FY ending 2016-06-30 appears under 2 different definitions"
+    },
+    {
+      "id": "concept-d61e77ee",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Operating cash flow for FY ending 2017-06-30 appears under 2 different definitions"
+    },
+    {
+      "id": "switch-6b2a2c31",
+      "category": "financial_truth",
+      "status": "supported",
+      "severity": "info",
+      "title": "Operating cash flow switched reporting concept"
+    },
+    {
+      "id": "risk-rev-0b326374",
+      "category": "risk",
+      "status": "supported",
+      "severity": "info",
+      "title": "Revenue trend: +17.8% in the latest fiscal year"
+    },
+    {
+      "id": "risk-cash-e1be73c9",
+      "category": "risk",
+      "status": "supported",
+      "severity": "info",
+      "title": "Profit and operating cash flow moved together in 2026 (net income +31.3%, cash flow +34.4%)"
+    },
+    {
+      "id": "risk-debt-0b326374",
+      "category": "risk",
+      "status": "supported",
+      "severity": "info",
+      "title": "Long-term debt $31.07B, -26.0% since 2023; 0.2 years of operating cash flow"
+    },
+    {
+      "id": "risk-liq-aee65577",
+      "category": "risk",
+      "status": "supported",
+      "severity": "info",
+      "title": "Current ratio 1.23 (was 1.35)"
+    }
+  ],
+  "key_figures": [
+    {
+      "label": "Revenue",
+      "latest": "$331.84B",
+      "fiscal_year": "FY2026",
+      "change": "+17.8%",
+      "stale": false
+    },
+    {
+      "label": "Gross profit",
+      "latest": "$225.47B",
+      "fiscal_year": "FY2026",
+      "change": "+16.3%",
+      "stale": false
+    },
+    {
+      "label": "Operating income",
+      "latest": "$155.24B",
+      "fiscal_year": "FY2026",
+      "change": "+20.8%",
+      "stale": false
+    },
+    {
+      "label": "Net income",
+      "latest": "$133.75B",
+      "fiscal_year": "FY2026",
+      "change": "+31.3%",
+      "stale": false
+    },
+    {
+      "label": "Operating cash flow",
+      "latest": "$182.94B",
+      "fiscal_year": "FY2026",
+      "change": "+34.4%",
+      "stale": false
+    },
+    {
+      "label": "Capital spending",
+      "latest": "$115.95B",
+      "fiscal_year": "FY2026",
+      "change": "+79.6%",
+      "stale": false
+    },
+    {
+      "label": "R&D spending",
+      "latest": "$35.56B",
+      "fiscal_year": "FY2026",
+      "change": "+9.5%",
+      "stale": false
+    },
+    {
+      "label": "Cash and equivalents",
+      "latest": "$20.93B",
+      "fiscal_year": "FY2026",
+      "change": "-30.8%",
+      "stale": false
+    },
+    {
+      "label": "Long-term debt",
+      "latest": "$31.07B",
+      "fiscal_year": "FY2026",
+      "change": "-22.6%",
+      "stale": false
+    },
+    {
+      "label": "Share buybacks",
+      "latest": "$22.27B",
+      "fiscal_year": "FY2026",
+      "change": "+20.9%",
+      "stale": false
+    },
+    {
+      "label": "Dividends paid",
+      "latest": "$26.45B",
+      "fiscal_year": "FY2026",
+      "change": "+9.8%",
+      "stale": false
+    },
+    {
+      "label": "Gross margin",
+      "latest": "67.9%",
+      "fiscal_year": "FY2026",
+      "change": "-0.9 points",
+      "stale": false
+    },
+    {
+      "label": "Operating margin",
+      "latest": "46.8%",
+      "fiscal_year": "FY2026",
+      "change": "+1.2 points",
+      "stale": false
+    },
+    {
+      "label": "Net margin",
+      "latest": "40.3%",
+      "fiscal_year": "FY2026",
+      "change": "+4.2 points",
+      "stale": false
+    },
+    {
+      "label": "Free cash flow",
+      "latest": "$66.99B",
+      "fiscal_year": "FY2026",
+      "change": "-6.5%",
+      "stale": false
+    },
+    {
+      "label": "R&D as a share of revenue",
+      "latest": "10.7%",
+      "fiscal_year": "FY2026",
+      "change": "-0.8 points",
+      "stale": false
+    },
+    {
+      "label": "Cash minus long-term debt",
+      "latest": "-$10.13B",
+      "fiscal_year": "FY2026",
+      "change": null,
+      "stale": false
+    },
+    {
+      "label": "Buybacks plus dividends",
+      "latest": "$48.72B",
+      "fiscal_year": "FY2026",
+      "change": "+14.6%",
+      "stale": false
+    },
+    {
+      "label": "Free cash flow margin",
+      "latest": "20.2%",
+      "fiscal_year": "FY2026",
+      "change": "-5.2 points",
+      "stale": false
+    }
+  ],
+  "model_calls": [
+    {
+      "provider": "meterless",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "purpose": "summary",
+      "duration_ms": 17520,
+      "output_accepted": true,
+      "rejection_reason": null,
+      "usage": {
+        "prompt_tokens": 4028,
+        "completion_tokens": 350,
+        "total_tokens": 4378
+      }
+    }
+  ],
+  "data_requests": {
+    "sec_direct": {
+      "requests": 21,
+      "failed": 0,
+      "rows": 3393
+    },
+    "zetaris": {
+      "requests": 18,
+      "failed": 0,
+      "rows": 3393
+    },
+    "hmem": {
+      "requests": 2,
+      "failed": 0,
+      "rows": 0
+    }
+  },
+  "memory": {
+    "recalled": 0,
+    "written": 18,
+    "conflicts": 0
+  },
+  "limitations": [
+    "SEC 'fy'/'fp' fields describe the filing, not the period; Parallax labels periods by their end date."
+  ],
+  "trace": [
+    {
+      "timestamp": "2026-10-27T12:57:22Z",
+      "trace_id": "inv-21580f3f08a9",
+      "agent_name": "Planner",
+      "action": "read_question",
+      "input_summary": "Is Microsoft's free cash flow positive?",
+      "output_summary": "Company from the chosen ticker: MSFT; claim: none; focus: revenue",
+      "target_agent": "Planner",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:22Z",
+      "trace_id": "inv-21580f3f08a9",
+      "agent_name": "Planner",
+      "action": "plan",
+      "input_summary": "MSFT, zetaris",
+      "output_summary": "Steps: retrieve, normalize, reconcile, investigate risks, verify; focus revenue",
+      "target_agent": "MemoryKeeper",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:22Z",
+      "trace_id": "inv-21580f3f08a9",
+      "agent_name": "MemoryKeeper",
+      "action": "recall",
+      "input_summary": "MSFT",
+      "output_summary": "0 prior memories recalled from Meterless H-MEM",
+      "target_agent": "Retriever",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:39Z",
+      "trace_id": "inv-21580f3f08a9",
+      "agent_name": "Retriever",
+      "action": "query_zetaris",
+      "input_summary": "13 figures for MSFT",
+      "output_summary": "18 SQL queries through Zetaris, 3393 rows, 0 failed; 3393 observations",
+      "target_agent": "Normalizer",
+      "retry_count": 0,
+      "status": "success",
+      "duration_ms": 16148
+    },
+    {
+      "timestamp": "2026-10-27T12:57:39Z",
+      "trace_id": "inv-21580f3f08a9",
+      "agent_name": "Retriever",
+      "action": "cross_check_sec",
+      "input_summary": "Zetaris rows vs SEC EDGAR rows",
+      "output_summary": "supported: Zetaris vs SEC EDGAR (direct): rows and values agree",
+      "target_agent": "Normalizer",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:39Z",
+      "trace_id": "inv-21580f3f08a9",
+      "agent_name": "Normalizer",
+      "action": "classify_periods",
+      "input_summary": "3393 observations",
+      "output_summary": "annual=543, instant=966, quarterly=1284, ytd=600; units USD",
+      "target_agent": "Reconciler",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:39Z",
+      "trace_id": "inv-21580f3f08a9",
+      "agent_name": "Reconciler",
+      "action": "reconcile",
+      "input_summary": "3393 observations, metrics revenue, net_income, operating_cash_flow",
+      "output_summary": "2 revised figures found",
+      "target_agent": "RiskInvestigator",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:39Z",
+      "trace_id": "inv-21580f3f08a9",
+      "agent_name": "RiskInvestigator",
+      "action": "run_indicators",
+      "input_summary": "4 indicators",
+      "output_summary": "0 flagged",
+      "target_agent": "Verifier",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:39Z",
+      "trace_id": "inv-21580f3f08a9",
+      "agent_name": "Verifier",
+      "action": "check_evidence_links",
+      "input_summary": "16 findings",
+      "output_summary": "0 downgraded (missing or no evidence); the rest cite real observations",
+      "target_agent": "MemoryKeeper",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:39Z",
+      "trace_id": "inv-21580f3f08a9",
+      "agent_name": "MemoryKeeper",
+      "action": "write_facts",
+      "input_summary": "18 facts with sources",
+      "output_summary": "new=18",
+      "target_agent": "Narrator",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:57Z",
+      "trace_id": "inv-21580f3f08a9",
+      "agent_name": "Narrator",
+      "action": "draft_answer",
+      "input_summary": "Is Microsoft's free cash flow positive?",
+      "output_summary": "Draft citing 14 findings and 19 facts",
+      "target_agent": "Verifier",
+      "retry_count": 0,
+      "status": "success",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "duration_ms": 17520
+    },
+    {
+      "timestamp": "2026-10-27T12:57:57Z",
+      "trace_id": "inv-21580f3f08a9",
+      "agent_name": "Verifier",
+      "action": "validate_answer",
+      "input_summary": "Narrator draft",
+      "output_summary": "Passed: real citations, numbers from the evidence, correct directions, no advice",
+      "target_agent": "Orchestrator",
+      "retry_count": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T12:57:57Z",
+      "trace_id": "inv-21580f3f08a9",
+      "agent_name": "Orchestrator",
+      "action": "finish",
+      "input_summary": "16 findings",
+      "output_summary": "Answer (written by meterless:nvidia/nemotron-3.5-lightning-30b-a3b): Yes, Microsoft's free cash flow was $66.99B in FY2026.",
+      "target_agent": "",
+      "retry_count": 0,
+      "status": "completed"
+    }
+  ]
+}

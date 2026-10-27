@@ -16,6 +16,7 @@ const backendEnv: Record<string, string> = {
   HMEM_URL: `http://127.0.0.1:${PORTS.hmem}`,
   FINSIGHT_DATA_MODE: "sample",
   FINSIGHT_CACHE_DIR: path.join(STATE, "cache"),
+  PARALLAX_LOG_DIR: path.join(STATE, "logs"),
   LLM_PROVIDER: "none",
   // Explicit empty values win over the repo's .env (it is loaded with override=False).
   METERLESS_RUNTIME_TOKEN: "",

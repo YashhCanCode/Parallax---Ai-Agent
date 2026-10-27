@@ -49,3 +49,17 @@ def test_sample_mode_flag_forces_sample_data(monkeypatch):
     assert Settings().data_mode == "sample"
     monkeypatch.setenv("SAMPLE_MODE", "false")
     assert Settings().data_mode == "zetaris"
+
+
+def test_empty_settings_from_a_fresh_env_example_use_the_defaults(monkeypatch):
+    """A fresh `cp .env.example .env` has empty values (DATABASE_URL=); they must mean "use the default"."""
+    from app.config import Settings
+
+    monkeypatch.setenv("DATABASE_URL", "")
+    monkeypatch.setenv("CORS_ORIGINS", "")
+    s = Settings()
+    assert s.database_url.startswith("sqlite:///") and s.cors_origins
+    monkeypatch.delenv("PARALLAX_LOG_DIR", raising=False)
+    assert Settings().log_dir is not None and Settings().log_dir.name == "logs"
+    monkeypatch.setenv("PARALLAX_LOG_DIR", "")
+    assert Settings().log_dir is None  # explicitly empty: stdout only

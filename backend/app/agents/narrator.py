@@ -13,6 +13,7 @@ from typing import Any, Optional
 
 from app.config import Settings
 from app.integrations.meterless.runtime import MeterlessRuntime, resolve_token
+from app.tracing import Tracer
 from app.models.schemas import Finding, ModelCall, Summary
 from app.analysis.key_figures import QUESTION_PATTERNS, KeyFigure, facts_lines
 from app.analysis.key_figures import directions as kf_directions
@@ -113,7 +114,7 @@ class Narrator:
             return await self._runtime.chat(system, user)
         raise RuntimeError("no model provider selected")
 
-    async def interpret_company(self, question: str) -> tuple[Optional[str], Optional[ModelCall]]:
+    async def interpret_company(self, question: str, trace: Optional[Tracer] = None) -> tuple[Optional[str], Optional[ModelCall]]:
         """Ask the model which company the question is about, as a name or ticker, then resolve it in the SEC
         directory. The answer is kept only if that company is actually mentioned in the question, so the model
         can never swap in a different company (e.g. Apple for a question about JP Morgan)."""
@@ -126,6 +127,9 @@ class Narrator:
         try:
             text, usage, model, ms = await self._complete(system, json.dumps({"question": question}), COMPANY_SCHEMA)
         except Exception as exc:  # noqa: BLE001 - any provider failure is recorded, not raised
+            if trace:
+                trace.emit("CompanyInterpreter", "name_company", question, f"Model call failed: {str(exc)[:160]}",
+                           target="Planner", status="failed")
             return None, ModelCall(provider=self.provider, model="?", purpose="question interpretation",
                                    started_at=started, duration_ms=0, ok=False, error=str(exc)[:300])
         call = ModelCall(provider=self.provider, model=model, purpose="question interpretation", started_at=started,
@@ -136,15 +140,25 @@ class Narrator:
         except json.JSONDecodeError:
             named = ""
         ticker = resolve_named_company(named, question) if named else None
+        if trace:
+            trace.emit("CompanyInterpreter", "name_company", question, f"Suggested: {named or 'no company'}",
+                       target="Verifier", model=model, duration_ms=ms)
         if ticker:
             call.output_accepted = True
+            if trace:
+                trace.emit("Verifier", "check_company", f"Suggestion '{named}'",
+                           f"Accepted {ticker}: in the SEC directory and named in the question", target="Planner")
             return ticker, call
         call.rejection_reason = (f"'{named}' is not an SEC-listed company named in the question" if named
                                  else "no company named")
+        if trace:
+            trace.emit("Verifier", "check_company", f"Suggestion '{named or 'none'}'", f"Rejected: {call.rejection_reason}",
+                       target="Planner", status="rejected")
         return None, call
 
     async def narrate(self, question: str, company: str, findings: list[Finding],
-                      key_figures: Optional[list[KeyFigure]] = None) -> tuple[Summary, Optional[ModelCall]]:
+                      key_figures: Optional[list[KeyFigure]] = None,
+                      trace: Optional[Tracer] = None) -> tuple[Summary, Optional[ModelCall]]:
         kfs = key_figures or []
         facts = facts_lines(kfs)
         ranked = sorted(findings, key=lambda f: ({"elevated": 0, "watch": 1, "info": 2}[f.severity],
@@ -155,6 +169,10 @@ class Narrator:
         deterministic = deterministic_summary(company, findings, question, kfs)
         if not self.provider:
             deterministic.note = f"No model provider available ({self.detail}). Summary assembled from findings without a model."
+            if trace:
+                trace.emit("Narrator", "draft_answer", f"{len(findings)} findings", f"No model available ({self.detail}); "
+                           f"the answer is written in code from the verified findings", target="Orchestrator",
+                           status="fallback")
             return deterministic, None
         evidence_text = question + "\n" + json.dumps(evidence) + "\n" + json.dumps(facts)
         directions = {**latest_directions(findings), **kf_directions(kfs)}
@@ -175,10 +193,26 @@ class Narrator:
                 text, usage, model, ms = await self._complete(SYSTEM, json.dumps(payload), NARRATIVE_SCHEMA)
             except Exception as exc:  # noqa: BLE001
                 deterministic.note = f"Model call failed ({str(exc)[:160]}); showing the deterministic summary."
+                if trace:
+                    trace.emit("Narrator", "draft_answer", asked, f"Model call failed: {str(exc)[:160]}; answer written "
+                               f"in code instead", target="Orchestrator", status="fallback", retry_count=attempt)
                 return deterministic, ModelCall(provider=self.provider, model="?", purpose="summary", started_at=started,
                                                 duration_ms=total_ms, ok=False, error=str(exc)[:300])
             total_ms += ms
+            if trace:
+                trace.emit("Narrator", "draft_answer", asked + (f" (retry: {reason})" if reason else ""),
+                           f"Draft citing {len(ranked)} findings and {len(facts)} facts", target="Verifier",
+                           retry_count=attempt, model=model, duration_ms=ms)
             out, reason = validate_narrative(text, citable, evidence_text, directions, question)
+            if trace:
+                if out is not None:
+                    trace.emit("Verifier", "validate_answer", "Narrator draft",
+                               "Passed: real citations, numbers from the evidence, correct directions, no advice",
+                               target="Orchestrator", retry_count=attempt)
+                else:
+                    trace.emit("Verifier", "validate_answer", "Narrator draft", f"Rejected: {reason}",
+                               target="Narrator" if attempt == 0 else "Orchestrator",
+                               status="needs_revision" if attempt == 0 else "rejected", retry_count=attempt)
             if out is not None:
                 break
         call = ModelCall(provider=self.provider, model=model, purpose="summary" + (" (after one retry)" if attempt else ""),
@@ -188,6 +222,11 @@ class Narrator:
             deterministic.note = f"Model summary rejected by verification: {reason}. Showing the deterministic summary."
             if not deterministic.answer:
                 deterministic.answer, deterministic.answer_by = NO_CHECKED_ANSWER, "computed"
+            if trace:
+                trace.emit("Verifier", "fallback_to_code", "Two rejected drafts",
+                           "Showing the answer written in code from the verified findings" if deterministic.answer != NO_CHECKED_ANSWER
+                           else "No checked answer to this exact question; saying so instead of guessing",
+                           target="Orchestrator", status="fallback", retry_count=1)
             return deterministic, call
         call.output_accepted = True
         answer = out.answer.strip()
@@ -195,6 +234,9 @@ class Narrator:
         if _ASKS_ADVICE.search(question or ""):
             # Investment-decision questions always get the fixed, safe reply, never a model-written yes or no.
             answer = computed
+            if trace:
+                trace.emit("Verifier", "block_advice", question, "Investment-decision question: fixed reply, then what "
+                           "the filings show", target="Orchestrator", status="overridden")
         else:
             # When code can settle a yes/no from the filings (direction, growth slowing), a model yes/no that
             # disagrees is replaced. A model answer without yes/no stands: its wording passed the direction checks.
@@ -202,6 +244,10 @@ class Narrator:
             fact = re.match(r"(Yes|No):", computed)
             if fact and said and said.group(1).lower() != fact.group(1).lower():
                 answer = computed
+                if trace:
+                    trace.emit("Verifier", "check_yes_no", f"Model said {said.group(1)}",
+                               f"The filings settle it the other way; replaced with: {computed}", target="Orchestrator",
+                               status="overridden")
             elif not answer and computed:
                 answer = computed
         return Summary(answer=answer, answer_by="computed" if answer == computed and answer else ("model" if answer else ""),
@@ -210,6 +256,8 @@ class Narrator:
                        note="Model-written from the cited findings; passed number-grounding and citation checks."), call
 
 
+_YES_NO_Q = re.compile(r"\s*(is|are|was|were|does|do|did|has|have|had|can|could|will|would|should|isn't|aren't|"
+                       r"wasn't|doesn't|didn't|hasn't)\b", re.I)
 _ASKS_ADVICE = re.compile(r"\b(should|would|is it (a )?good (time|idea) to)\b.{0,40}\b(buy|sell|invest|hold|short)\b|\bworth (buying|investing)\b", re.I)
 
 
@@ -228,13 +276,15 @@ def deterministic_answer(question: str, findings: list[Finding], key_figures: Op
 
     q = question or ""
     prefix = "Parallax doesn't make investment decisions for you. " if _ASKS_ADVICE.search(q) else ""
+    # Only a yes/no question ("Is…", "Did…", "Has…") gets a Yes/No; "How much did revenue grow?" gets the figures.
+    yes_no = bool(_YES_NO_Q.match(q))
     claim = next((f for f in findings if f.category == "claim_check"), None)
     if claim:
         return f"{prefix}Your claim is {claim.status.value.replace('_', ' ')}: {claim.title}."
     if prefix:
         return prefix + "The findings below show what the filings say, so you can judge for yourself."
     # "Is revenue growth slowing?" -> compare the last two year-over-year growth rates from the revenue trend.
-    if re.search(r"\b(revenue|sales)\b", q, re.I) and re.search(r"\bslow|\baccelerat|\bspeed", q, re.I):
+    if yes_no and re.search(r"\b(revenue|sales)\b", q, re.I) and re.search(r"\bslow|\baccelerat|\bspeed", q, re.I):
         rev = next((f for f in findings if f.id.startswith("risk-rev")), None)
         g = [v for v in ((rev.calculation_details or {}).get("growth") or {}).values() if isinstance(v, (int, float))] if rev else []
         if len(g) >= 2:
@@ -258,10 +308,10 @@ def deterministic_answer(question: str, findings: list[Finding], key_figures: Op
         first = by_key[named[0]]
         # "Is free cash flow positive?" -> the sign of the latest value.
         pos, neg = bool(re.search(r"\bpositive\b", q, re.I)), bool(re.search(r"\bnegative\b", q, re.I))
-        if pos != neg and first.latest:
+        if yes_no and pos != neg and first.latest:
             yes = (first.latest.value > 0) == pos
             return f"{'Yes' if yes else 'No'}: " + " ".join(lines)
-        if up != down and first.direction and not re.search(r"\bgrowth\b", q, re.I):
+        if yes_no and up != down and first.direction and not re.search(r"\bgrowth\b", q, re.I):
             yes = (first.direction == "up") == up
             return f"{'Yes' if yes else 'No'}: " + " ".join(lines)
         return " ".join(lines)
@@ -270,7 +320,7 @@ def deterministic_answer(question: str, findings: list[Finding], key_figures: Op
     directions = latest_directions(findings)
     old = [k for k, pat in _METRICS if pat.search(q)]
     up, down = bool(_UP.search(q)), bool(_DOWN.search(q))
-    if old and old[0] in directions and up != down and not re.search(r"\bgrowth\b|\bslow", q, re.I):
+    if yes_no and old and old[0] in directions and up != down and not re.search(r"\bgrowth\b|\bslow", q, re.I):
         went = directions[old[0]]
         trend = next((f.title for f in findings if f.id.startswith("risk-rev") and old[0] == "revenue"), None)
         return (f"{'Yes' if (went == 'up') == up else 'No'}: {old[0].replace('_', ' ')} {'rose' if went == 'up' else 'fell'} "
