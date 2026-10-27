@@ -39,3 +39,13 @@ def test_the_model_cannot_swap_in_a_company_the_question_does_not_mention():
     assert resolve_named_company("JPMorgan Chase", q) == "JPM"
     assert resolve_named_company("Meta Platforms", "What is Meta's margin?") == "META"
     assert resolve_named_company("NFLX", "how is NFLX doing") == "NFLX"
+
+
+def test_sample_mode_flag_forces_sample_data(monkeypatch):
+    from app.config import Settings
+
+    monkeypatch.setenv("FINSIGHT_DATA_MODE", "zetaris")
+    monkeypatch.setenv("SAMPLE_MODE", "true")
+    assert Settings().data_mode == "sample"
+    monkeypatch.setenv("SAMPLE_MODE", "false")
+    assert Settings().data_mode == "zetaris"

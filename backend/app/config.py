@@ -29,7 +29,10 @@ def _bool(name: str, default: bool = False) -> bool:
 class Settings:
     # Data mode: "sample" (offline fixtures), "sec_direct" (live SEC EDGAR API),
     # "zetaris" (SEC EDGAR federated through your Zetaris instance).
-    data_mode: str = field(default_factory=lambda: _env("FINSIGHT_DATA_MODE", "zetaris"))
+    # SAMPLE_MODE=true forces sample mode, so the app runs with nothing connected.
+    data_mode: str = field(
+        default_factory=lambda: "sample" if _bool("SAMPLE_MODE") else _env("FINSIGHT_DATA_MODE", "zetaris")
+    )
     # When true and data_mode == "zetaris", also fetch the same facts directly from
     # SEC and reconcile the two (Zetaris's own docs recommend this row-count check).
     zetaris_cross_check: bool = field(default_factory=lambda: _bool("FINSIGHT_ZETARIS_CROSS_CHECK", True))
